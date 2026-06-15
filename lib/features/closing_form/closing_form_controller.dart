@@ -95,7 +95,21 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
       return local;
     }
 
-    // 2. Fresh draft — the first save() call will sync it to the server.
+    // 2. Try server — fetch today's closing if it already exists there.
+    try {
+      final api = ref.read(closingApiServiceProvider);
+      final page = await api.list(dateFrom: today, dateTo: today, branchId: branchId);
+      if (page.items.isNotEmpty) {
+        final dc = await api.detail(page.items.first.id);
+        final e = EditableClosingMapper.fromDailyClosing(dc, branchId: branchId);
+        await store.save(e, dirty: false);
+        return e;
+      }
+    } on Object {
+      // offline — fall through to fresh draft
+    }
+
+    // 3. Fresh draft — the first save() call will sync it to the server.
     final draft = EditableClosing(
       branchId: branchId,
       date: today,
