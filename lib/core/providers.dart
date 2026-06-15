@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/local/app_database.dart';
 import '../data/local/editable_closing_store.dart';
+import '../data/models/reference_data.dart';
 import '../data/remote/auth_api.dart';
 import '../data/remote/closing_api_service.dart';
 import '../data/remote/closings_api.dart';
@@ -87,6 +88,20 @@ final reportsRepositoryProvider =
 final selectedBranchProvider = Provider<int?>((ref) {
   final user = ref.watch(authControllerProvider).value;
   return user?.branchId;
+});
+
+/// Cached reference data (branches, payment channels, expense categories, etc.).
+/// Returns the last locally cached version; null items are treated as empty lists
+/// upstream. Refreshed at login via [ReferenceRepository.refresh].
+final referenceDataProvider = FutureProvider<ReferenceData>((ref) async {
+  // Re-evaluate when the user changes (e.g. login/logout).
+  ref.watch(authControllerProvider);
+  final repo = ref.read(referenceRepositoryProvider);
+  final cached = await repo.cached();
+  if (cached != null) {
+    return cached;
+  }
+  return repo.refresh();
 });
 
 final onlineStatusProvider = StreamProvider<bool>(
