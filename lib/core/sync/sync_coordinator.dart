@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers.dart';
+import '../../features/closings/closings_list_controller.dart';
 import '../../features/dashboard/dashboard_controller.dart';
 
 /// Mounts once near the app root. Syncs dirty editable closings on startup, when
@@ -20,6 +21,7 @@ class SyncCoordinator extends ConsumerStatefulWidget {
 class _SyncCoordinatorState extends ConsumerState<SyncCoordinator>
     with WidgetsBindingObserver {
   StreamSubscription<bool>? _connectivitySubscription;
+  bool _flushing = false;
 
   @override
   void initState() {
@@ -51,21 +53,30 @@ class _SyncCoordinatorState extends ConsumerState<SyncCoordinator>
   }
 
   Future<void> _flush() async {
-    final store = ref.read(editableClosingStoreProvider);
-    final sync = ref.read(closingSyncServiceProvider);
-    final dirty = await store.dirtyClosings();
-    var synced = 0;
-    for (final c in dirty) {
-      try {
-        final fresh = await sync.sync(c);
-        await store.save(fresh, dirty: false);
-        synced++;
-      } on Object {
-        break; // network/validation — keep dirty, retry later
-      }
+    if (_flushing) {
+      return;
     }
-    if (synced > 0 && mounted) {
-      ref.invalidate(dashboardControllerProvider);
+    _flushing = true;
+    try {
+      final store = ref.read(editableClosingStoreProvider);
+      final sync = ref.read(closingSyncServiceProvider);
+      final dirty = await store.dirtyClosings();
+      var synced = 0;
+      for (final c in dirty) {
+        try {
+          final fresh = await sync.sync(c);
+          await store.save(fresh, dirty: false);
+          synced++;
+        } on Object {
+          break; // network/validation — keep dirty, retry later
+        }
+      }
+      if (synced > 0 && mounted) {
+        ref.invalidate(dashboardControllerProvider);
+        ref.invalidate(closingsListControllerProvider);
+      }
+    } finally {
+      _flushing = false;
     }
   }
 
