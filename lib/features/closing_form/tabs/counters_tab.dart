@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/money.dart';
+import '../../../core/providers.dart';
 import '../../../data/sync/closing_math.dart';
 import '../closing_form_controller.dart';
 import '../sheets/counter_sheet.dart';
@@ -20,6 +21,10 @@ class CountersTab extends ConsumerWidget {
     }
     final ctrl = ref.read(closingFormControllerProvider(arg).notifier);
     final isFinalized = closing.status.isFinalized;
+    final refData = ref.watch(referenceDataProvider);
+    final counterNames = {
+      for (final c in refData.value?.counters ?? const []) c.id: c.name
+    };
 
     return ListView(
       children: [
@@ -39,7 +44,7 @@ class CountersTab extends ConsumerWidget {
         ),
         ...closing.counterTransactions.where((t) => !t.deleted).map(
               (t) => LineCard(
-                title: 'Counter ${t.counterId}',
+                title: counterNames[t.counterId] ?? 'Counter ${t.counterId}',
                 subtitle:
                     'Sale: ${formatMoney(t.saleAmount, currencySymbol)} · Paid: ${formatMoney(t.paidAmount, currencySymbol)}',
                 amount: formatMoney(t.saleAmount - t.paidAmount, currencySymbol),
