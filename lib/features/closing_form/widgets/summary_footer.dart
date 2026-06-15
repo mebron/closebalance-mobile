@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/money.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../data/models/editable/editable_closing.dart';
 import '../../../data/sync/closing_math.dart';
 
-class SummaryFooter extends ConsumerWidget {
+class SummaryFooter extends StatelessWidget {
   const SummaryFooter({
     super.key,
     required this.closing,
@@ -18,7 +17,7 @@ class SummaryFooter extends ConsumerWidget {
   final Map<int, String> channelTypes;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final cashInHand = ClosingMath.cashInHand(closing, channelTypes);
     final expenses = ClosingMath.totalExpenses(closing);
     final net = ClosingMath.netPosition(closing);

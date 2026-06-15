@@ -21,6 +21,7 @@ class DailyClosingFormScreen extends ConsumerStatefulWidget {
 class _State extends ConsumerState<DailyClosingFormScreen>
     with SingleTickerProviderStateMixin {
   late final TabController _tabs;
+  bool _saving = false;
 
   @override
   void initState() {
@@ -35,6 +36,8 @@ class _State extends ConsumerState<DailyClosingFormScreen>
   }
 
   Future<void> _save() async {
+    if (_saving) return;
+    setState(() => _saving = true);
     try {
       await ref.read(closingFormControllerProvider(widget.arg).notifier).save();
       if (mounted) {
@@ -44,8 +47,10 @@ class _State extends ConsumerState<DailyClosingFormScreen>
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(e.toString())));
+            .showSnackBar(const SnackBar(content: Text('Failed to save. Check your connection.')));
       }
+    } finally {
+      if (mounted) setState(() => _saving = false);
     }
   }
 
@@ -74,8 +79,8 @@ class _State extends ConsumerState<DailyClosingFormScreen>
         actions: [
           if (!isFinalized)
             TextButton(
-              onPressed: _save,
-              child: const Text('Save', style: TextStyle(color: Colors.white)),
+              onPressed: _saving ? null : _save,
+              child: Text(_saving ? 'Saving…' : 'Save', style: const TextStyle(color: Colors.white)),
             ),
         ],
         bottom: TabBar(

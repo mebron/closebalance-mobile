@@ -62,11 +62,10 @@ class ChannelsTab extends ConsumerWidget {
             title: channelName,
             amount: formatMoney(s.amount, currencySymbol),
             onTap: isFinalized
-                ? () {}
+                ? null
                 : () async {
                     final result = await showSaleSheet(
                       context,
-                      ref,
                       initialChannelId: s.paymentChannelId,
                       initialAmount: s.amount,
                     );
@@ -81,7 +80,7 @@ class ChannelsTab extends ConsumerWidget {
                     }
                   },
             onDelete: isFinalized
-                ? () {}
+                ? null
                 : () {
                     ref
                         .read(closingFormControllerProvider(arg).notifier)
@@ -96,7 +95,7 @@ class ChannelsTab extends ConsumerWidget {
               icon: const Icon(Icons.add),
               label: const Text('Add channel'),
               onPressed: () async {
-                final result = await showSaleSheet(context, ref);
+                final result = await showSaleSheet(context);
                 if (result != null) {
                   await ref
                       .read(closingFormControllerProvider(arg).notifier)

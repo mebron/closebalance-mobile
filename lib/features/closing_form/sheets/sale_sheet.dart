@@ -3,8 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers.dart';
 
 Future<({int channelId, double amount})?> showSaleSheet(
-  BuildContext context,
-  WidgetRef ref, {
+  BuildContext context, {
   int? initialChannelId,
   double? initialAmount,
 }) {
@@ -12,7 +11,6 @@ Future<({int channelId, double amount})?> showSaleSheet(
     context: context,
     isScrollControlled: true,
     builder: (ctx) => _SaleSheet(
-      ref: ref,
       initialChannelId: initialChannelId,
       initialAmount: initialAmount,
     ),
@@ -20,8 +18,7 @@ Future<({int channelId, double amount})?> showSaleSheet(
 }
 
 class _SaleSheet extends ConsumerStatefulWidget {
-  const _SaleSheet({required this.ref, this.initialChannelId, this.initialAmount});
-  final WidgetRef ref;
+  const _SaleSheet({this.initialChannelId, this.initialAmount});
   final int? initialChannelId;
   final double? initialAmount;
 

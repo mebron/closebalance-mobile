@@ -14,8 +14,8 @@ class LineCard extends StatelessWidget {
   final String title;
   final String? subtitle;
   final String amount;
-  final VoidCallback onTap;
-  final VoidCallback onDelete;
+  final VoidCallback? onTap;
+  final VoidCallback? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +29,14 @@ class LineCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(amount, style: const TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(width: 8),
-            IconButton(
-              icon: const Icon(Icons.delete_outline),
-              color: AppColors.danger,
-              onPressed: onDelete,
-            ),
+            if (onDelete != null) ...[
+              const SizedBox(width: 8),
+              IconButton(
+                icon: const Icon(Icons.delete_outline),
+                color: AppColors.danger,
+                onPressed: onDelete,
+              ),
+            ],
           ],
         ),
         onTap: onTap,
