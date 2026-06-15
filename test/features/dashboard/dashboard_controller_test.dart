@@ -5,7 +5,7 @@ import 'package:closebalance_mobile/features/dashboard/dashboard_controller.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import '../../support/fake_offline_queue.dart';
+import '../../support/fake_editable_closing_store.dart';
 
 class _MockReportsRepo extends Mock implements ReportsRepository {}
 
@@ -26,7 +26,7 @@ void main() {
     final c = ProviderContainer(overrides: [
       reportsRepositoryProvider.overrideWithValue(repo),
       selectedBranchProvider.overrideWith((ref) => 2),
-      offlineQueueProvider.overrideWithValue(FakeOfflineQueue()),
+      editableClosingStoreProvider.overrideWithValue(FakeEditableClosingStore()),
     ]);
     addTearDown(c.dispose);
 

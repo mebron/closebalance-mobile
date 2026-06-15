@@ -7,10 +7,9 @@ import '../../features/shell/home_shell.dart';
 import '../../features/dashboard/dashboard_screen.dart';
 import '../../features/dashboard/more_screen.dart';
 import '../../features/closings/closings_list_screen.dart';
-import '../../features/closings/closing_detail_screen.dart';
 import '../../features/reports/reports_screen.dart';
-import '../../features/sales/quick_sale_screen.dart';
-import '../../features/expenses/quick_expense_screen.dart';
+import '../../features/closing_form/daily_closing_form_screen.dart';
+import '../../features/closing_form/closing_form_controller.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -34,12 +33,19 @@ final routerProvider = Provider<GoRouter>((ref) {
     refreshListenable: _AuthRefresh(ref),
     routes: [
       GoRoute(path: '/login', builder: (_, _) => const LoginScreen()),
-      GoRoute(path: '/sale', builder: (_, _) => const QuickSaleScreen()),
-      GoRoute(path: '/expense', builder: (_, _) => const QuickExpenseScreen()),
       GoRoute(
-        path: '/closings/:id',
-        builder: (_, state) =>
-            ClosingDetailScreen(closingId: int.parse(state.pathParameters['id']!)),
+        path: '/closing',
+        builder: (_, _) => const DailyClosingFormScreen(arg: ClosingFormArg.today()),
+      ),
+      GoRoute(
+        path: '/closing/:id',
+        builder: (_, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          final extra = state.extra as ({int branchId, String date});
+          return DailyClosingFormScreen(
+            arg: ClosingFormArg.existing(serverId: id, branchId: extra.branchId, date: extra.date),
+          );
+        },
       ),
       StatefulShellRoute.indexedStack(
         builder: (_, _, navigationShell) => HomeShell(navigationShell: navigationShell),

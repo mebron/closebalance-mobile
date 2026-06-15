@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/providers.dart';
 import '../../data/models/report_summary.dart';
-import '../../data/sync/optimistic_summary.dart';
+import '../../data/sync/closing_math.dart';
 
 String _todayIso() {
   final now = DateTime.now();
@@ -10,35 +10,37 @@ String _todayIso() {
       '${now.day.toString().padLeft(2, '0')}';
 }
 
-/// Loads today's summary for the selected branch, applying queued offline
-/// mutations as an optimistic overlay. Falls back to the cached summary offline.
+/// Loads today's summary for the selected branch. Checks the local editable
+/// closing store first; if found, derives the summary from it (local-first).
+/// Falls back to the API, then to the cached summary, then to an empty summary.
 class DashboardController extends AsyncNotifier<ReportSummary> {
   @override
   Future<ReportSummary> build() async {
     final branchId = ref.watch(selectedBranchProvider);
     final today = _todayIso();
-    final reports = ref.read(reportsRepositoryProvider);
 
-    ReportSummary base;
+    // If a local editable closing exists for today, derive the summary from it.
+    if (branchId != null) {
+      final local = await ref.read(editableClosingStoreProvider).load(branchId, today);
+      if (local != null) {
+        final refData = await ref.read(referenceRepositoryProvider).cached();
+        final types = <int, String>{
+          for (final c in refData?.paymentChannels ?? const []) c.id: c.type,
+        };
+        return ClosingMath.toSummary(local, types);
+      }
+    }
+
+    final reports = ref.read(reportsRepositoryProvider);
     try {
-      base = await reports.summary(date: today, branchId: branchId);
+      return await reports.summary(date: today, branchId: branchId);
     } on Object {
-      base = await reports.cachedSummary(date: today, branchId: branchId) ??
+      return await reports.cachedSummary(date: today, branchId: branchId) ??
           ReportSummary(
             date: today, totalSales: 0, cashInHand: 0, draftClosings: 0,
             finalizedClosings: 0, totalExpenses: 0, netPosition: 0,
           );
     }
-
-    final pendings = await ref.read(offlineQueueProvider).pending();
-    if (pendings.isEmpty) {
-      return base;
-    }
-    final refData = await ref.read(referenceRepositoryProvider).cached();
-    final channelTypes = <int, String>{
-      for (final c in refData?.paymentChannels ?? const []) c.id: c.type,
-    };
-    return applyPending(base, pendings, channelTypes);
   }
 
   Future<void> refresh() async {

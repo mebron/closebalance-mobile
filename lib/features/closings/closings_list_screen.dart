@@ -38,7 +38,7 @@ class ClosingsListScreen extends ConsumerWidget {
                     final finalized = c.statusIsFinalized;
                     return Card(
                       child: ListTile(
-                        onTap: () => context.push('/closings/${c.id}'),
+                        onTap: () => context.push('/closing/${c.id}', extra: (branchId: c.branch?.id ?? 0, date: c.date)),
                         title: Text(c.date,
                             style: const TextStyle(fontWeight: FontWeight.w700)),
                         subtitle: Text(c.branch?.name ?? ''),

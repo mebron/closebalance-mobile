@@ -1,18 +1,18 @@
 import 'package:closebalance_mobile/core/providers.dart';
 import 'package:closebalance_mobile/data/models/daily_closing.dart';
 import 'package:closebalance_mobile/data/models/paginated.dart';
-import 'package:closebalance_mobile/data/repos/closing_repository.dart';
+import 'package:closebalance_mobile/data/remote/closing_api_service.dart';
 import 'package:closebalance_mobile/features/closings/closings_list_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _MockClosingRepo extends Mock implements ClosingRepository {}
+class _MockClosingApiService extends Mock implements ClosingApiService {}
 
 void main() {
   test('loads first page for the selected branch', () async {
-    final repo = _MockClosingRepo();
-    when(() => repo.list(branchId: 1)).thenAnswer((_) async => Paginated(
+    final service = _MockClosingApiService();
+    when(() => service.list(branchId: 1)).thenAnswer((_) async => Paginated(
           items: [
             DailyClosing.fromJson({
               'id': 1,
@@ -30,7 +30,7 @@ void main() {
         ));
 
     final c = ProviderContainer(overrides: [
-      closingRepositoryProvider.overrideWithValue(repo),
+      closingApiServiceProvider.overrideWithValue(service),
       selectedBranchProvider.overrideWith((ref) => 1),
     ]);
     addTearDown(c.dispose);

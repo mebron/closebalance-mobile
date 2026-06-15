@@ -7,7 +7,7 @@ class ClosingsListController extends AsyncNotifier<List<DailyClosing>> {
   @override
   Future<List<DailyClosing>> build() async {
     final branchId = ref.watch(selectedBranchProvider);
-    final page = await ref.read(closingRepositoryProvider).list(branchId: branchId);
+    final page = await ref.read(closingApiServiceProvider).list(branchId: branchId);
     return page.items;
   }
 

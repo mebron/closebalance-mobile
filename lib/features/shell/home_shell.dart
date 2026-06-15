@@ -19,7 +19,7 @@ class HomeShell extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.green,
         foregroundColor: Colors.white,
-        onPressed: () => context.push('/sale'),
+        onPressed: () => context.push('/closing'),
         child: const Icon(Icons.add, size: 30),
       ),
       bottomNavigationBar: BottomAppBar(
