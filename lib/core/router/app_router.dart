@@ -41,10 +41,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/closing/:id',
         builder: (_, state) {
           final id = int.parse(state.pathParameters['id']!);
-          final extra = state.extra as ({int branchId, String date});
-          return DailyClosingFormScreen(
-            arg: ClosingFormArg.existing(serverId: id, branchId: extra.branchId, date: extra.date),
-          );
+          final extra = state.extra as ({int branchId, String date})?;
+          assert(extra != null, '/closing/:id requires extra ({int branchId, String date}) — do not use as a deep link entry point');
+          if (extra == null) {
+            return const DailyClosingFormScreen(arg: ClosingFormArg.today());
+          }
+          final arg = ClosingFormArg.existing(serverId: id, branchId: extra.branchId, date: extra.date);
+          return DailyClosingFormScreen(arg: arg);
         },
       ),
       StatefulShellRoute.indexedStack(

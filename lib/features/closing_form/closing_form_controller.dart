@@ -124,9 +124,22 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
   }
 
   Future<EditableClosing> _loadExisting(_ExistingArg arg) async {
+    final store = ref.read(editableClosingStoreProvider);
+
+    // Check local cache first.
+    final cached = await store.load(arg.branchId, arg.date);
+    if (cached != null && cached.serverId == arg.serverId) {
+      return cached;
+    }
+
+    // Fetch from server.
     final api = ref.read(closingApiServiceProvider);
     final dc = await api.detail(arg.serverId);
-    return EditableClosingMapper.fromDailyClosing(dc, branchId: arg.branchId);
+    final editable = EditableClosingMapper.fromDailyClosing(dc, branchId: arg.branchId);
+
+    // Cache locally (non-dirty, server is authoritative).
+    await store.save(editable, dirty: false);
+    return editable;
   }
 
   // -------------------------------------------------------------------------
