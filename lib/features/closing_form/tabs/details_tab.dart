@@ -34,7 +34,33 @@ class DetailsTab extends ConsumerWidget {
           decoration: const InputDecoration(labelText: 'Date'),
         ),
         const SizedBox(height: 12),
-        Chip(label: Text(closing.status.displayName)),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+              color: closing.status.isFinalized
+                  ? Colors.green.shade100
+                  : Colors.orange.shade100,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: closing.status.isFinalized
+                    ? Colors.green.shade400
+                    : Colors.orange.shade400,
+              ),
+            ),
+            child: Text(
+              closing.status.displayName,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: closing.status.isFinalized
+                    ? Colors.green.shade800
+                    : Colors.orange.shade800,
+              ),
+            ),
+          ),
+        ),
         const SizedBox(height: 12),
         TextFormField(
           initialValue: closing.totalSales.toStringAsFixed(2),

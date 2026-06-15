@@ -22,9 +22,10 @@ class SummaryFooter extends StatelessWidget {
     final expenses = ClosingMath.totalExpenses(closing);
     final net = ClosingMath.netPosition(closing);
 
+    final bottomInset = MediaQuery.of(context).padding.bottom;
     return Container(
       color: AppColors.navy,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: EdgeInsets.fromLTRB(16, 10, 16, 10 + bottomInset),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

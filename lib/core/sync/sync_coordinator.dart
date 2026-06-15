@@ -58,6 +58,15 @@ class _SyncCoordinatorState extends ConsumerState<SyncCoordinator>
     }
     _flushing = true;
     try {
+      // Refresh reference data (channels, counters, categories) so web-panel
+      // changes are picked up without requiring a logout/login.
+      try {
+        await ref.read(referenceRepositoryProvider).refresh();
+        if (mounted) ref.invalidate(referenceDataProvider);
+      } on Object {
+        // offline — keep stale cache, retry next foreground/connectivity event
+      }
+
       final store = ref.read(editableClosingStoreProvider);
       final sync = ref.read(closingSyncServiceProvider);
       final dirty = await store.dirtyClosings();
