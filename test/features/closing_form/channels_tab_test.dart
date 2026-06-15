@@ -22,7 +22,7 @@ void main() {
   setUpAll(() => registerFallbackValue(
       EditableClosing(branchId: 1, date: '2026-06-15', status: ClosingStatus.draft)));
 
-  _MockClosingApiService _stubEmptyApi() {
+  _MockClosingApiService stubEmptyApi() {
     final api = _MockClosingApiService();
     when(() => api.list(
           dateFrom: any(named: 'dateFrom'),
@@ -38,7 +38,7 @@ void main() {
   testWidgets('ChannelsTab shows Add channel button when empty', (tester) async {
     final store = FakeEditableClosingStore();
     final sync = _MockSync();
-    final api = _stubEmptyApi();
+    final api = stubEmptyApi();
 
     await tester.pumpWidget(ProviderScope(
       overrides: [
@@ -72,7 +72,7 @@ void main() {
   testWidgets('ChannelsTab shows line card after addSale', (tester) async {
     final store = FakeEditableClosingStore();
     final sync = _MockSync();
-    final api = _stubEmptyApi();
+    final api = stubEmptyApi();
 
     // Pre-seed the store with a closing that has a sale
     await store.save(

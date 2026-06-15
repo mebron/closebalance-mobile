@@ -96,6 +96,7 @@ void main() {
           paymentChannels: const [],
           expenseCategories: const [],
           currencySymbol: '₹',
+          counters: const [],
         ));
 
     final c = _container(auth, refRepo);
