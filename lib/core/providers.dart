@@ -84,10 +84,14 @@ final reportsRepositoryProvider =
     Provider<ReportsRepository>((ref) => ReportsRepository(ref.read(reportsApiProvider)));
 
 /// Active branch for data scoping. Defaults to the user's branch (locked users)
-/// or null (= all branches) for multi-branch users. Switcher UI arrives in Phase 4.
+/// or the first available branch for multi-branch/admin users. Switcher UI arrives in Phase 4.
 final selectedBranchProvider = Provider<int?>((ref) {
   final user = ref.watch(authControllerProvider).value;
-  return user?.branchId;
+  if (user == null) return null;
+  if (user.branchId != null) return user.branchId;
+  // Multi-branch / admin user: default to the first branch from reference data.
+  final refData = ref.watch(referenceDataProvider);
+  return refData.value?.branches.firstOrNull?.id;
 });
 
 /// Cached reference data (branches, payment channels, expense categories, etc.).
