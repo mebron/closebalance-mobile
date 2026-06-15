@@ -1,19 +1,20 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/local/app_database.dart';
-import '../data/local/offline_queue.dart';
+import '../data/local/editable_closing_store.dart';
 import '../data/remote/auth_api.dart';
 import '../data/remote/closing_api_service.dart';
 import '../data/remote/closings_api.dart';
+import '../data/remote/counter_transactions_api.dart';
+import '../data/remote/deductions_api.dart';
 import '../data/remote/expenses_api.dart';
 import '../data/remote/reference_api.dart';
 import '../data/remote/reports_api.dart';
 import '../data/remote/sales_api.dart';
 import '../data/repos/auth_repository.dart';
-import '../data/repos/closing_repository.dart';
 import '../data/repos/reference_repository.dart';
 import '../data/repos/reports_repository.dart';
-import '../data/sync/sync_service.dart';
+import '../data/sync/closing_sync_service.dart';
 import '../features/auth/auth_controller.dart';
 import 'connectivity/connectivity_service.dart';
 import 'network/dio_client.dart';
@@ -58,20 +59,25 @@ final appDatabaseProvider = Provider<AppDatabase>((ref) {
   return db;
 });
 
-final offlineQueueProvider =
-    Provider<OfflineQueue>((ref) => DriftOfflineQueue(ref.read(appDatabaseProvider)));
+final editableClosingStoreProvider = Provider<EditableClosingStore>(
+    (ref) => DriftEditableClosingStore(ref.read(appDatabaseProvider)));
+
+final deductionsApiProvider =
+    Provider<DeductionsApi>((ref) => DeductionsApi(ref.read(dioProvider)));
+
+final counterTransactionsApiProvider =
+    Provider<CounterTransactionsApi>((ref) => CounterTransactionsApi(ref.read(dioProvider)));
+
+final closingSyncServiceProvider = Provider<ClosingSyncService>((ref) => ClosingSyncService(
+      ref.read(closingsApiProvider),
+      ref.read(salesApiProvider),
+      ref.read(expensesApiProvider),
+      ref.read(deductionsApiProvider),
+      ref.read(counterTransactionsApiProvider),
+    ));
 
 final connectivityServiceProvider =
     Provider<ConnectivityService>((ref) => ConnectivityPlusService());
-
-final syncServiceProvider = Provider<SyncService>(
-    (ref) => SyncService(ref.read(offlineQueueProvider), ref.read(closingApiServiceProvider)));
-
-final closingRepositoryProvider = Provider<ClosingRepository>((ref) => ClosingRepository(
-      queue: ref.read(offlineQueueProvider),
-      sync: ref.read(syncServiceProvider),
-      api: ref.read(closingApiServiceProvider),
-    ));
 
 final reportsRepositoryProvider =
     Provider<ReportsRepository>((ref) => ReportsRepository(ref.read(reportsApiProvider)));
@@ -85,6 +91,3 @@ final selectedBranchProvider = Provider<int?>((ref) {
 
 final onlineStatusProvider = StreamProvider<bool>(
     (ref) => ref.read(connectivityServiceProvider).onlineChanges);
-
-final pendingCountProvider = FutureProvider<int>(
-    (ref) => ref.read(offlineQueueProvider).count());

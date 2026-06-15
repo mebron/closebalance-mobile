@@ -6,9 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers.dart';
 import '../../features/dashboard/dashboard_controller.dart';
 
-/// Mounts once near the app root. Flushes the offline queue on startup, when
+/// Mounts once near the app root. Syncs dirty editable closings on startup, when
 /// connectivity returns, and when the app comes to the foreground; refreshes the
-/// dashboard after a successful flush so synced entries replace the optimistic overlay.
+/// dashboard after a successful sync so synced entries are reflected in the UI.
 class SyncCoordinator extends ConsumerStatefulWidget {
   const SyncCoordinator({super.key, required this.child});
   final Widget child;
@@ -51,8 +51,20 @@ class _SyncCoordinatorState extends ConsumerState<SyncCoordinator>
   }
 
   Future<void> _flush() async {
-    final report = await ref.read(syncServiceProvider).flush();
-    if (report.synced > 0 && mounted) {
+    final store = ref.read(editableClosingStoreProvider);
+    final sync = ref.read(closingSyncServiceProvider);
+    final dirty = await store.dirtyClosings();
+    var synced = 0;
+    for (final c in dirty) {
+      try {
+        final fresh = await sync.sync(c);
+        await store.save(fresh, dirty: false);
+        synced++;
+      } on Object {
+        break; // network/validation — keep dirty, retry later
+      }
+    }
+    if (synced > 0 && mounted) {
       ref.invalidate(dashboardControllerProvider);
     }
   }
