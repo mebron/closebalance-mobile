@@ -18,6 +18,17 @@ class DailyClosingFormScreen extends ConsumerStatefulWidget {
   ConsumerState<DailyClosingFormScreen> createState() => _State();
 }
 
+String _formatDate(String iso) {
+  // "2026-06-15" → "15 Jun 2026"
+  try {
+    final d = DateTime.parse(iso);
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return '${d.day} ${months[d.month - 1]} ${d.year}';
+  } catch (_) {
+    return iso;
+  }
+}
+
 class _State extends ConsumerState<DailyClosingFormScreen>
     with SingleTickerProviderStateMixin {
   late final TabController _tabs;
@@ -74,19 +85,39 @@ class _State extends ConsumerState<DailyClosingFormScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Daily Closing · ${closing?.date ?? ''}'),
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.white,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Daily Closing',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+            if (closing?.date != null)
+              Text(
+                _formatDate(closing!.date),
+                style: const TextStyle(fontSize: 12, color: Colors.white70),
+              ),
+          ],
+        ),
         flexibleSpace: Container(decoration: const BoxDecoration(gradient: AppColors.headerGradient)),
         actions: [
           if (!isFinalized)
             TextButton(
               onPressed: _saving ? null : _save,
-              child: Text(_saving ? 'Saving…' : 'Save', style: const TextStyle(color: Colors.white)),
+              child: Text(
+                _saving ? 'Saving…' : 'Save',
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+              ),
             ),
         ],
         bottom: TabBar(
           controller: _tabs,
           labelColor: Colors.white,
+          unselectedLabelColor: Colors.white60,
           indicatorColor: AppColors.green,
+          indicatorWeight: 3,
           tabs: const [
             Tab(text: 'Details'),
             Tab(text: 'Channels'),
