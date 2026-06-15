@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/money.dart';
+import '../../../core/providers.dart';
 import '../../../data/sync/closing_math.dart';
 import '../closing_form_controller.dart';
 import '../sheets/deduction_sheet.dart';
@@ -21,6 +22,10 @@ class ExpensesTab extends ConsumerWidget {
     }
     final ctrl = ref.read(closingFormControllerProvider(arg).notifier);
     final isFinalized = closing.status.isFinalized;
+    final refData = ref.watch(referenceDataProvider);
+    final categoryNames = {
+      for (final c in refData.value?.expenseCategories ?? const []) c.id: c.name,
+    };
 
     return ListView(
       children: [
@@ -38,8 +43,8 @@ class ExpensesTab extends ConsumerWidget {
         ),
         ...closing.expenses.where((e) => !e.deleted).map(
               (e) => LineCard(
-                title: e.description ?? 'Expense',
-                subtitle: e.paymentMethod,
+                title: categoryNames[e.expenseCategoryId] ?? e.description ?? 'Expense',
+                subtitle: e.description,
                 amount: formatMoney(e.amount, currencySymbol),
                 onTap: isFinalized
                     ? null

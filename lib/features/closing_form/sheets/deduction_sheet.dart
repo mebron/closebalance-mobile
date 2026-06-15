@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/models/deduction_type.dart';
 
 Future<({String type, String description, double amount, String paymentMethod})?>
@@ -23,7 +22,7 @@ Future<({String type, String description, double amount, String paymentMethod})?
   );
 }
 
-class _DeductionSheet extends ConsumerStatefulWidget {
+class _DeductionSheet extends StatefulWidget {
   const _DeductionSheet({
     this.initialType,
     this.initialDescription,
@@ -37,10 +36,10 @@ class _DeductionSheet extends ConsumerStatefulWidget {
   final String? initialPaymentMethod;
 
   @override
-  ConsumerState<_DeductionSheet> createState() => _DeductionSheetState();
+  State<_DeductionSheet> createState() => _DeductionSheetState();
 }
 
-class _DeductionSheetState extends ConsumerState<_DeductionSheet> {
+class _DeductionSheetState extends State<_DeductionSheet> {
   String? _type;
   final _descCtrl = TextEditingController();
   final _amountCtrl = TextEditingController();
