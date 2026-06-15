@@ -7,6 +7,10 @@ import '../../data/sync/editable_closing_mapper.dart';
 
 const _uuid = Uuid();
 
+// Sentinel value used by update methods to distinguish "caller passed null to
+// clear the field" from "caller omitted the argument (leave unchanged)".
+const _kUnset = Object();
+
 String _todayIso() {
   final n = DateTime.now();
   return '${n.year.toString().padLeft(4, '0')}-'
@@ -243,7 +247,7 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
   Future<void> updateExpense({
     required String clientId,
     int? expenseCategoryId,
-    String? description,
+    Object? description = _kUnset,
     double? amount,
     String? paymentMethod,
   }) async {
@@ -257,7 +261,7 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
       }
       return e.copyWith(
         expenseCategoryId: expenseCategoryId ?? e.expenseCategoryId,
-        description: description ?? e.description,
+        description: identical(description, _kUnset) ? e.description : description as String?,
         amount: amount ?? e.amount,
         paymentMethod: paymentMethod ?? e.paymentMethod,
         dirty: true,
@@ -308,7 +312,7 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
   Future<void> updateDeduction({
     required String clientId,
     String? type,
-    String? description,
+    Object? description = _kUnset,
     double? amount,
     String? paymentMethod,
   }) async {
@@ -322,7 +326,7 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
       }
       return d.copyWith(
         type: type ?? d.type,
-        description: description ?? d.description,
+        description: identical(description, _kUnset) ? d.description : description as String?,
         amount: amount ?? d.amount,
         paymentMethod: paymentMethod ?? d.paymentMethod,
         dirty: true,
@@ -377,7 +381,7 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
     int? counterId,
     double? saleAmount,
     double? paidAmount,
-    String? remarks,
+    Object? remarks = _kUnset,
   }) async {
     final current = state.value;
     if (current == null) {
@@ -391,7 +395,7 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
         counterId: counterId ?? t.counterId,
         saleAmount: saleAmount ?? t.saleAmount,
         paidAmount: paidAmount ?? t.paidAmount,
-        remarks: remarks ?? t.remarks,
+        remarks: identical(remarks, _kUnset) ? t.remarks : remarks as String?,
         dirty: true,
       );
     }).toList();
