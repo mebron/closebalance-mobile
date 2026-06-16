@@ -4,6 +4,11 @@ import 'app.dart';
 import 'core/config/flavor_config.dart';
 
 void main() {
-  FlavorConfig.setInstance(const FlavorConfig(flavor: Flavor.juicy));
+  FlavorConfig.setInstance(const FlavorConfig(
+    flavor: Flavor.juicy,
+    primaryColor: Color(0xFFEE2B2B),
+    bgColor: Color(0xFFEE2B2B),
+    appName: 'Juicy',
+  ));
   runApp(const ProviderScope(child: CloseBalanceApp()));
 }

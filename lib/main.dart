@@ -4,6 +4,11 @@ import 'app.dart';
 import 'core/config/flavor_config.dart';
 
 void main() {
-  FlavorConfig.setInstance(const FlavorConfig(flavor: Flavor.closebalance));
+  FlavorConfig.setInstance(const FlavorConfig(
+    flavor: Flavor.closebalance,
+    primaryColor: Color(0xFF22C55E),
+    bgColor: Color(0xFF00182A),
+    appName: 'CloseBalance',
+  ));
   runApp(const ProviderScope(child: CloseBalanceApp()));
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/config/flavor_config.dart';
 import '../../core/money.dart';
 import '../../data/models/report_summary.dart';
 import '../../core/theme/app_colors.dart';
@@ -75,8 +76,18 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primary = Theme.of(context).colorScheme.primary;
+    final primaryDark = Color.alphaBlend(Colors.black.withValues(alpha: 0.25), primary);
+    final flavor = FlavorConfig.instance;
+
     return Container(
-      decoration: const BoxDecoration(gradient: AppColors.headerGradient),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [primary, primaryDark],
+        ),
+      ),
       padding: const EdgeInsets.fromLTRB(18, 0, 18, 24),
       child: SafeArea(
         bottom: false,
@@ -86,7 +97,23 @@ class _Header extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Image.asset('assets/images/logo-mobile-light.png', height: 28),
+                Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.asset(flavor.iconAsset, height: 28, width: 28, fit: BoxFit.cover),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      flavor.appName,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
                 IconButton(
                   icon: const Icon(Icons.notifications_none, color: Colors.white, size: 26),
                   onPressed: null,
@@ -195,16 +222,22 @@ class _ClosingCta extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primary = Theme.of(context).colorScheme.primary;
+    final primaryDark = Color.alphaBlend(Colors.black.withValues(alpha: 0.25), primary);
     final gradient = isClosedToday
         ? const LinearGradient(
             colors: [Color(0xFF16A34A), Color(0xFF15803D)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           )
-        : AppColors.headerGradient;
+        : LinearGradient(
+            colors: [primary, primaryDark],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          );
     final shadowColor = isClosedToday
         ? const Color(0xFF22C55E).withValues(alpha: 0.30)
-        : AppColors.navy.withValues(alpha: 0.30);
+        : primary.withValues(alpha: 0.30);
 
     return Material(
       color: Colors.transparent,

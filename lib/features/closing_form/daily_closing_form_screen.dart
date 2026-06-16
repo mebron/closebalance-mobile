@@ -101,7 +101,21 @@ class _State extends ConsumerState<DailyClosingFormScreen>
               ),
           ],
         ),
-        flexibleSpace: Container(decoration: const BoxDecoration(gradient: AppColors.headerGradient)),
+        flexibleSpace: Builder(
+          builder: (context) {
+            final primary = Theme.of(context).colorScheme.primary;
+            final primaryDark = Color.alphaBlend(Colors.black.withValues(alpha: 0.25), primary);
+            return Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [primary, primaryDark],
+                ),
+              ),
+            );
+          },
+        ),
         actions: [
           if (!isFinalized)
             TextButton(

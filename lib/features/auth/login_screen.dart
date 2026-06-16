@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/config/flavor_config.dart';
 import '../../core/error/app_exception.dart';
 import '../../core/theme/app_colors.dart';
 import 'auth_controller.dart';
@@ -40,7 +41,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             password: _password.text,
             keepSignedIn: _keepSignedIn,
           );
-      // Navigation handled by the router redirect.
     } on AppException catch (e) {
       setState(() => _formError = e.message);
     } catch (_) {
@@ -54,9 +54,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final flavor = FlavorConfig.instance;
+    final bgColor = flavor.bgColor;
+    final bgColorEnd = Color.alphaBlend(Colors.black.withValues(alpha: 0.3), bgColor);
+
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.headerGradient),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [bgColor, bgColorEnd],
+          ),
+        ),
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
@@ -69,11 +79,32 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Image.asset('assets/images/icon-dark.webp', height: 64),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.asset(
+                            flavor.iconAsset,
+                            height: 64,
+                            width: 64,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          flavor.appName,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.navy,
+                          ),
+                        ),
                         const SizedBox(height: 16),
-                        const Text('Welcome back',
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.w800)),
+                        const Text(
+                          'Welcome back',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                         const SizedBox(height: 24),
                         TextFormField(
                           controller: _email,
@@ -98,14 +129,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           contentPadding: EdgeInsets.zero,
                           title: const Text('Keep me signed in'),
                           value: _keepSignedIn,
-                          activeThumbColor: AppColors.green,
                           onChanged: (v) => setState(() => _keepSignedIn = v),
                         ),
                         if (_formError != null) ...[
                           const SizedBox(height: 8),
-                          Text(_formError!,
-                              style:
-                                  const TextStyle(color: AppColors.danger)),
+                          Text(
+                            _formError!,
+                            style: const TextStyle(color: AppColors.danger),
+                          ),
                         ],
                         const SizedBox(height: 16),
                         FilledButton(
@@ -115,7 +146,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   height: 22,
                                   width: 22,
                                   child: CircularProgressIndicator(
-                                      strokeWidth: 2, color: Colors.white))
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
                               : const Text('Sign in'),
                         ),
                       ],
