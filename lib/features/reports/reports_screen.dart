@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/error/app_exception.dart';
 import '../../core/money.dart';
 import '../../core/theme/app_colors.dart';
 import '../auth/auth_controller.dart';
@@ -41,25 +42,18 @@ class ReportsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final symbol = ref.watch(authControllerProvider).value?.company.currencySymbol ?? '₹';
     final selectedDate = ref.watch(reportSelectedDateProvider);
-    final summary = ref.watch(reportsSummaryProvider);
-    final channels = ref.watch(reportsChannelsProvider);
-    final expenses = ref.watch(reportsExpensesProvider);
-    final counters = ref.watch(reportsCountersProvider);
+    final report = ref.watch(dayReportProvider);
     final canGoForward = !_isToday(selectedDate);
 
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBar(title: const Text('Reports')),
       body: RefreshIndicator(
-        onRefresh: () async {
-          ref.invalidate(reportsSummaryProvider);
-          ref.invalidate(reportsChannelsProvider);
-          ref.invalidate(reportsExpensesProvider);
-          ref.invalidate(reportsCountersProvider);
-        },
+        onRefresh: () async => ref.invalidate(dayReportProvider),
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
+            // Date nav is always visible
             _DateNav(
               label: _fmt(selectedDate),
               onBack: () => ref
@@ -88,35 +82,35 @@ class ReportsScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
 
-            // ── Summary ──────────────────────────────────────────────────
+            // ── Summary ────────────────────────────────────────────────
             _Section(
               title: 'Summary',
-              child: summary.when(
+              child: report.when(
                 loading: () => const _Loading(),
-                error: (_, _) => const _Err(),
-                data: (s) => Column(children: [
-                  _Row(label: 'Total sales', value: formatMoney(s.totalSales, symbol)),
-                  _Row(label: 'Cash in hand', value: formatMoney(s.cashInHand, symbol)),
-                  _Row(label: 'Expenses', value: formatMoney(s.totalExpenses, symbol)),
+                error: (e, _) => _Err(e),
+                data: (r) => Column(children: [
+                  _Row(label: 'Total sales', value: formatMoney(r.totalSales, symbol)),
+                  _Row(label: 'Cash in hand', value: formatMoney(r.cashInHand, symbol)),
+                  _Row(label: 'Expenses', value: formatMoney(r.totalExpenses, symbol)),
                   _Row(
                       label: 'Net position',
-                      value: formatMoney(s.netPosition, symbol),
+                      value: formatMoney(r.netPosition, symbol),
                       green: true),
-                  _Row(label: 'Closings finalized', value: '${s.finalizedClosings}'),
+                  _Row(label: 'Closings finalized', value: '${r.finalizedClosings}'),
                 ]),
               ),
             ),
 
-            // ── Sales by Channel ─────────────────────────────────────────
+            // ── Sales by Channel ───────────────────────────────────────
             _Section(
               title: 'Sales by Channel',
-              child: channels.when(
+              child: report.when(
                 loading: () => const _Loading(),
-                error: (_, _) => const _Err(),
-                data: (list) => list.isEmpty
-                    ? const _Empty('No sales recorded')
+                error: (e, _) => _Err(e),
+                data: (r) => r.channels.isEmpty
+                    ? const _Empty('No channel sales recorded')
                     : Column(
-                        children: list
+                        children: r.channels
                             .map((c) => _Row(
                                   label: c.channel,
                                   sublabel: c.type,
@@ -127,16 +121,16 @@ class ReportsScreen extends ConsumerWidget {
               ),
             ),
 
-            // ── Counter Transactions ──────────────────────────────────────
+            // ── Counter Transactions ───────────────────────────────────
             _Section(
               title: 'Counter Transactions',
-              child: counters.when(
+              child: report.when(
                 loading: () => const _Loading(),
-                error: (_, _) => const _Err(),
-                data: (list) => list.isEmpty
+                error: (e, _) => _Err(e),
+                data: (r) => r.counters.isEmpty
                     ? const _Empty('No counter transactions')
                     : Column(
-                        children: list
+                        children: r.counters
                             .map((c) => Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -148,12 +142,8 @@ class ReportsScreen extends ConsumerWidget {
                                               color: AppColors.navy,
                                               fontSize: 13)),
                                     ),
-                                    _Row(
-                                        label: 'Sale amount',
-                                        value: formatMoney(c.saleAmount, symbol)),
-                                    _Row(
-                                        label: 'Paid amount',
-                                        value: formatMoney(c.paidAmount, symbol)),
+                                    _Row(label: 'Sale amount', value: formatMoney(c.saleAmount, symbol)),
+                                    _Row(label: 'Paid amount', value: formatMoney(c.paidAmount, symbol)),
                                     _Row(
                                         label: 'Balance',
                                         value: formatMoney(c.balance, symbol),
@@ -166,16 +156,16 @@ class ReportsScreen extends ConsumerWidget {
               ),
             ),
 
-            // ── Expenses by Category ──────────────────────────────────────
+            // ── Expenses by Category ───────────────────────────────────
             _Section(
               title: 'Expenses by Category',
-              child: expenses.when(
+              child: report.when(
                 loading: () => const _Loading(),
-                error: (_, _) => const _Err(),
-                data: (list) => list.isEmpty
+                error: (e, _) => _Err(e),
+                data: (r) => r.expenses.isEmpty
                     ? const _Empty('No expenses recorded')
                     : Column(
-                        children: list
+                        children: r.expenses
                             .map((e) => _Row(
                                   label: e.category,
                                   sublabel: '${e.count} item${e.count == 1 ? '' : 's'}',
@@ -294,11 +284,9 @@ class _Row extends StatelessWidget {
       child: Row(children: [
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(label,
-                style: const TextStyle(fontSize: 14, color: AppColors.navy)),
+            Text(label, style: const TextStyle(fontSize: 14, color: AppColors.navy)),
             if (sublabel != null)
-              Text(sublabel!,
-                  style: const TextStyle(fontSize: 11, color: AppColors.slate)),
+              Text(sublabel!, style: const TextStyle(fontSize: 11, color: AppColors.slate)),
           ]),
         ),
         Text(value,
@@ -315,14 +303,23 @@ class _Loading extends StatelessWidget {
   const _Loading();
   @override
   Widget build(BuildContext context) => const Padding(
-      padding: EdgeInsets.all(12), child: Center(child: CircularProgressIndicator()));
+      padding: EdgeInsets.all(12),
+      child: Center(child: CircularProgressIndicator(strokeWidth: 2)));
 }
 
 class _Err extends StatelessWidget {
-  const _Err();
+  const _Err(this.error);
+  final Object error;
   @override
-  Widget build(BuildContext context) =>
-      const Padding(padding: EdgeInsets.all(8), child: Text('Could not load. Pull to refresh.'));
+  Widget build(BuildContext context) {
+    final msg = error is AppException
+        ? (error as AppException).message
+        : 'Could not load. Pull to refresh.';
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Text(msg, style: const TextStyle(color: AppColors.slate, fontSize: 13)),
+    );
+  }
 }
 
 class _Empty extends StatelessWidget {
@@ -331,6 +328,5 @@ class _Empty extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      child:
-          Text(message, style: const TextStyle(color: AppColors.slate, fontSize: 13)));
+      child: Text(message, style: const TextStyle(color: AppColors.slate, fontSize: 13)));
 }

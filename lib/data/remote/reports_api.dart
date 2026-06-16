@@ -1,6 +1,7 @@
 // ignore_for_file: use_null_aware_elements
 import 'package:dio/dio.dart';
 import '../../core/network/api_guard.dart';
+import '../models/day_report.dart';
 import '../models/report_rows.dart';
 import '../models/report_summary.dart';
 
@@ -63,13 +64,13 @@ class ReportsApi {
     });
   }
 
-  Future<List<ChannelSaleTotal>> channels({String? date, int? branchId}) async {
+  Future<DayReport> day({String? date, int? branchId}) async {
     return guardApi(() async {
-      final res = await _dio.get('/reports/channels', queryParameters: {
+      final res = await _dio.get('/reports/day', queryParameters: {
         if (date != null) 'date': date,
         if (branchId != null) 'branch_id': branchId,
       });
-      return _list(res).map((e) => ChannelSaleTotal.fromJson(e)).toList();
+      return DayReport.fromJson(res.data as Map<String, dynamic>);
     });
   }
 

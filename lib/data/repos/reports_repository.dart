@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/day_report.dart';
 import '../models/report_rows.dart';
 import '../models/report_summary.dart';
 import '../remote/reports_api.dart';
@@ -47,6 +48,6 @@ class ReportsRepository {
   }) =>
       _api.counterBalance(dateFrom: dateFrom, dateTo: dateTo, branchId: branchId);
 
-  Future<List<ChannelSaleTotal>> channels({String? date, int? branchId}) =>
-      _api.channels(date: date, branchId: branchId);
+  Future<DayReport> day({String? date, int? branchId}) =>
+      _api.day(date: date, branchId: branchId);
 }
