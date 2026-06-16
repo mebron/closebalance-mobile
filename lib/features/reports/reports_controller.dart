@@ -4,11 +4,25 @@ import '../../data/models/report_summary.dart';
 
 String _todayIso() {
   final n = DateTime.now();
-  return '${n.year.toString().padLeft(4, '0')}-${n.month.toString().padLeft(2, '0')}-${n.day.toString().padLeft(2, '0')}';
+  return '${n.year.toString().padLeft(4, '0')}-'
+      '${n.month.toString().padLeft(2, '0')}-'
+      '${n.day.toString().padLeft(2, '0')}';
 }
 
-/// Today's summary for the Reports landing tab.
+/// Currently selected date on the Reports screen.
+class ReportSelectedDateNotifier extends Notifier<String> {
+  @override
+  String build() => _todayIso();
+
+  void select(String date) => state = date;
+}
+
+final reportSelectedDateProvider =
+    NotifierProvider<ReportSelectedDateNotifier, String>(ReportSelectedDateNotifier.new);
+
+/// Summary for the selected date.
 final reportsSummaryProvider = FutureProvider.autoDispose<ReportSummary>((ref) async {
   final branchId = ref.watch(selectedBranchProvider);
-  return ref.read(reportsRepositoryProvider).summary(date: _todayIso(), branchId: branchId);
+  final date = ref.watch(reportSelectedDateProvider);
+  return ref.read(reportsRepositoryProvider).summary(date: date, branchId: branchId);
 });

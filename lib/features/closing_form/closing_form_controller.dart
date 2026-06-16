@@ -159,6 +159,19 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
   // Header
   // -------------------------------------------------------------------------
 
+  Future<void> setDate(String date) async {
+    final current = state.value;
+    if (current == null || current.status.isFinalized) {
+      return;
+    }
+    final oldDate = current.date;
+    final updated = current.copyWith(date: date, headerDirty: true);
+    state = AsyncData(updated);
+    final store = ref.read(editableClosingStoreProvider);
+    await store.delete(current.branchId, oldDate);
+    await store.save(updated, dirty: true);
+  }
+
   Future<void> setTotalSales(double totalSales) async {
     final current = state.value;
     if (current == null) {

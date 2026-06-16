@@ -28,10 +28,36 @@ class DetailsTab extends ConsumerWidget {
           decoration: const InputDecoration(labelText: 'Branch'),
         ),
         const SizedBox(height: 12),
-        TextFormField(
-          initialValue: closing.date,
-          readOnly: true,
-          decoration: const InputDecoration(labelText: 'Date'),
+        InkWell(
+          onTap: isFinalized
+              ? null
+              : () async {
+                  final parsed = DateTime.tryParse(closing.date) ?? DateTime.now();
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: parsed,
+                    firstDate: DateTime(2020),
+                    lastDate: DateTime.now(),
+                  );
+                  if (picked != null && context.mounted) {
+                    final iso =
+                        '${picked.year.toString().padLeft(4, '0')}-'
+                        '${picked.month.toString().padLeft(2, '0')}-'
+                        '${picked.day.toString().padLeft(2, '0')}';
+                    ref.read(closingFormControllerProvider(arg).notifier).setDate(iso);
+                  }
+                },
+          child: IgnorePointer(
+            child: TextFormField(
+              key: ValueKey(closing.date),
+              initialValue: closing.date,
+              readOnly: true,
+              decoration: InputDecoration(
+                labelText: 'Date',
+                suffixIcon: isFinalized ? null : const Icon(Icons.calendar_today, size: 18),
+              ),
+            ),
+          ),
         ),
         const SizedBox(height: 12),
         Align(
