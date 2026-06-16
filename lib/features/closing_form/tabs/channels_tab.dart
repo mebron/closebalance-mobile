@@ -46,10 +46,16 @@ class ChannelsTab extends ConsumerWidget {
                           : 'Over ${formatMoney(-diff, currencySymbol)}',
                 ),
                 backgroundColor: diff == 0
-                    ? Colors.green[100]
+                    ? Theme.of(context).colorScheme.secondary.withValues(alpha: 0.15)
                     : diff > 0
                         ? Colors.orange[100]
                         : Colors.blue[100],
+                labelStyle: diff == 0
+                    ? TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontWeight: FontWeight.w600,
+                      )
+                    : null,
               ),
             ],
           ),

@@ -66,12 +66,12 @@ class DetailsTab extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
               color: closing.status.isFinalized
-                  ? Colors.green.shade100
+                  ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.12)
                   : Colors.orange.shade100,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: closing.status.isFinalized
-                    ? Colors.green.shade400
+                    ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)
                     : Colors.orange.shade400,
               ),
             ),
@@ -81,7 +81,7 @@ class DetailsTab extends ConsumerWidget {
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
                 color: closing.status.isFinalized
-                    ? Colors.green.shade800
+                    ? Theme.of(context).colorScheme.primary
                     : Colors.orange.shade800,
               ),
             ),

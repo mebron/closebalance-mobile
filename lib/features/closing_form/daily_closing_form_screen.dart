@@ -130,7 +130,7 @@ class _State extends ConsumerState<DailyClosingFormScreen>
           controller: _tabs,
           labelColor: Colors.white,
           unselectedLabelColor: Colors.white60,
-          indicatorColor: AppColors.green,
+          indicatorColor: Theme.of(context).colorScheme.secondary,
           indicatorWeight: 3,
           tabs: const [
             Tab(text: 'Details'),

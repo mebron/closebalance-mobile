@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/money.dart';
-import '../../../core/theme/app_colors.dart';
+
 import '../../../data/models/editable/editable_closing.dart';
 import '../../../data/sync/closing_math.dart';
 
@@ -23,8 +23,16 @@ class SummaryFooter extends StatelessWidget {
     final net = ClosingMath.netPosition(closing);
 
     final bottomInset = MediaQuery.of(context).padding.bottom;
+    final primary = Theme.of(context).colorScheme.primary;
+    final primaryDark = Color.alphaBlend(Colors.black.withValues(alpha: 0.3), primary);
     return Container(
-      color: AppColors.navy,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [primary, primaryDark],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
       padding: EdgeInsets.fromLTRB(16, 10, 16, 10 + bottomInset),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
