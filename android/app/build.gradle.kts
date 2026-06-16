@@ -38,6 +38,11 @@ android {
             applicationId = "com.closebalance.almadina"
             resValue("string", "app_name", "Al Madina Cash")
         }
+        create("juicy") {
+            dimension = "brand"
+            applicationId = "com.closebalance.juicy"
+            resValue("string", "app_name", "Juicy")
+        }
     }
 
     buildTypes {

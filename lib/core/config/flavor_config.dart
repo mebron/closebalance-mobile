@@ -1,4 +1,4 @@
-enum Flavor { closebalance, almadina }
+enum Flavor { closebalance, almadina, juicy }
 
 class FlavorConfig {
   const FlavorConfig({required this.flavor});

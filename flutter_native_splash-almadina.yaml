@@ -5,4 +5,3 @@ flutter_native_splash:
   android: true
   ios: true
   web: false
-  flavor: almadina

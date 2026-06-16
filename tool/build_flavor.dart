@@ -18,6 +18,7 @@ import 'dart:io';
 const Map<String, String> flavorSlugs = {
   'closebalance': 'closebalance',
   'almadina': 'al-madina',
+  'juicy': 'juicy',
 };
 
 const String apiBaseUrl = 'https://closebalance.com';
@@ -49,8 +50,10 @@ Future<void> main(List<String> args) async {
     // Step 2 — Download icon if available.
     final iconUrl = branding['icon_url'] as String?;
     if (iconUrl != null && iconUrl.isNotEmpty) {
-      await _downloadFile(iconUrl, 'assets/icon/$flavor/app_icon.png');
-      _log('Icon downloaded.');
+      final ok = await _downloadFile(iconUrl, 'assets/icon/$flavor/app_icon.png');
+      if (ok) {
+        _log('Icon downloaded.');
+      }
     } else {
       _log('No icon URL in branding — using existing assets/icon/$flavor/app_icon.png');
     }
@@ -113,14 +116,26 @@ Future<Map<String, dynamic>?> _fetchBranding(String slug) async {
   }
 }
 
-Future<void> _downloadFile(String url, String localPath) async {
-  final file = File(localPath);
-  await file.parent.create(recursive: true);
-  final client = HttpClient();
-  final req = await client.getUrl(Uri.parse(url));
-  final res = await req.close();
-  await res.pipe(file.openWrite());
-  client.close();
+Future<bool> _downloadFile(String url, String localPath) async {
+  try {
+    final file = File(localPath);
+    await file.parent.create(recursive: true);
+    final client = HttpClient();
+    final req = await client.getUrl(Uri.parse(url));
+    final res = await req.close();
+    final contentType = res.headers.contentType?.mimeType ?? '';
+    if (!contentType.startsWith('image/')) {
+      _log('Icon URL returned $contentType (not an image) — keeping existing file.');
+      client.close();
+      return false;
+    }
+    await res.pipe(file.openWrite());
+    client.close();
+    return true;
+  } catch (e) {
+    _log('Could not download file: $e — keeping existing file.');
+    return false;
+  }
 }
 
 Future<void> _patchIconYaml(String flavor, String adaptiveBg) async {

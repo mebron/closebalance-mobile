@@ -1,0 +1,4 @@
+#include "Debug.xcconfig"
+PRODUCT_BUNDLE_IDENTIFIER=com.closebalance.juicy
+DISPLAY_NAME=Juicy
+FLUTTER_TARGET=lib/main_juicy.dart

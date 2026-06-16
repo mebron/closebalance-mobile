@@ -1,0 +1,10 @@
+flutter_launcher_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "assets/icon/juicy/app_icon.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
+  adaptive_icon_background: "#EE2B2B"
+  adaptive_icon_foreground: "assets/icon/juicy/app_icon.png"
+  flavors:
+    - juicy
