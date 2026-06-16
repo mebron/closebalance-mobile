@@ -63,3 +63,17 @@ Map<String, dynamic> _$CounterBalanceRowToJson(_CounterBalanceRow instance) =>
       'paid_amount': instance.paidAmount,
       'balance': instance.balance,
     };
+
+_ChannelSaleTotal _$ChannelSaleTotalFromJson(Map<String, dynamic> json) =>
+    _ChannelSaleTotal(
+      channel: json['channel'] as String,
+      type: json['type'] as String,
+      total: (json['total'] as num).toDouble(),
+    );
+
+Map<String, dynamic> _$ChannelSaleTotalToJson(_ChannelSaleTotal instance) =>
+    <String, dynamic>{
+      'channel': instance.channel,
+      'type': instance.type,
+      'total': instance.total,
+    };

@@ -46,4 +46,7 @@ class ReportsRepository {
     int? branchId,
   }) =>
       _api.counterBalance(dateFrom: dateFrom, dateTo: dateTo, branchId: branchId);
+
+  Future<List<ChannelSaleTotal>> channels({String? date, int? branchId}) =>
+      _api.channels(date: date, branchId: branchId);
 }

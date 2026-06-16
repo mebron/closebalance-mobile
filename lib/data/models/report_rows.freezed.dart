@@ -860,4 +860,273 @@ as double,
 
 }
 
+
+/// @nodoc
+mixin _$ChannelSaleTotal {
+
+ String get channel; String get type; double get total;
+/// Create a copy of ChannelSaleTotal
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ChannelSaleTotalCopyWith<ChannelSaleTotal> get copyWith => _$ChannelSaleTotalCopyWithImpl<ChannelSaleTotal>(this as ChannelSaleTotal, _$identity);
+
+  /// Serializes this ChannelSaleTotal to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChannelSaleTotal&&(identical(other.channel, channel) || other.channel == channel)&&(identical(other.type, type) || other.type == type)&&(identical(other.total, total) || other.total == total));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,channel,type,total);
+
+@override
+String toString() {
+  return 'ChannelSaleTotal(channel: $channel, type: $type, total: $total)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ChannelSaleTotalCopyWith<$Res>  {
+  factory $ChannelSaleTotalCopyWith(ChannelSaleTotal value, $Res Function(ChannelSaleTotal) _then) = _$ChannelSaleTotalCopyWithImpl;
+@useResult
+$Res call({
+ String channel, String type, double total
+});
+
+
+
+
+}
+/// @nodoc
+class _$ChannelSaleTotalCopyWithImpl<$Res>
+    implements $ChannelSaleTotalCopyWith<$Res> {
+  _$ChannelSaleTotalCopyWithImpl(this._self, this._then);
+
+  final ChannelSaleTotal _self;
+  final $Res Function(ChannelSaleTotal) _then;
+
+/// Create a copy of ChannelSaleTotal
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? channel = null,Object? type = null,Object? total = null,}) {
+  return _then(_self.copyWith(
+channel: null == channel ? _self.channel : channel // ignore: cast_nullable_to_non_nullable
+as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,total: null == total ? _self.total : total // ignore: cast_nullable_to_non_nullable
+as double,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [ChannelSaleTotal].
+extension ChannelSaleTotalPatterns on ChannelSaleTotal {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _ChannelSaleTotal value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _ChannelSaleTotal() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _ChannelSaleTotal value)  $default,){
+final _that = this;
+switch (_that) {
+case _ChannelSaleTotal():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _ChannelSaleTotal value)?  $default,){
+final _that = this;
+switch (_that) {
+case _ChannelSaleTotal() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String channel,  String type,  double total)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _ChannelSaleTotal() when $default != null:
+return $default(_that.channel,_that.type,_that.total);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String channel,  String type,  double total)  $default,) {final _that = this;
+switch (_that) {
+case _ChannelSaleTotal():
+return $default(_that.channel,_that.type,_that.total);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String channel,  String type,  double total)?  $default,) {final _that = this;
+switch (_that) {
+case _ChannelSaleTotal() when $default != null:
+return $default(_that.channel,_that.type,_that.total);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _ChannelSaleTotal implements ChannelSaleTotal {
+  const _ChannelSaleTotal({required this.channel, required this.type, required this.total});
+  factory _ChannelSaleTotal.fromJson(Map<String, dynamic> json) => _$ChannelSaleTotalFromJson(json);
+
+@override final  String channel;
+@override final  String type;
+@override final  double total;
+
+/// Create a copy of ChannelSaleTotal
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ChannelSaleTotalCopyWith<_ChannelSaleTotal> get copyWith => __$ChannelSaleTotalCopyWithImpl<_ChannelSaleTotal>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$ChannelSaleTotalToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChannelSaleTotal&&(identical(other.channel, channel) || other.channel == channel)&&(identical(other.type, type) || other.type == type)&&(identical(other.total, total) || other.total == total));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,channel,type,total);
+
+@override
+String toString() {
+  return 'ChannelSaleTotal(channel: $channel, type: $type, total: $total)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ChannelSaleTotalCopyWith<$Res> implements $ChannelSaleTotalCopyWith<$Res> {
+  factory _$ChannelSaleTotalCopyWith(_ChannelSaleTotal value, $Res Function(_ChannelSaleTotal) _then) = __$ChannelSaleTotalCopyWithImpl;
+@override @useResult
+$Res call({
+ String channel, String type, double total
+});
+
+
+
+
+}
+/// @nodoc
+class __$ChannelSaleTotalCopyWithImpl<$Res>
+    implements _$ChannelSaleTotalCopyWith<$Res> {
+  __$ChannelSaleTotalCopyWithImpl(this._self, this._then);
+
+  final _ChannelSaleTotal _self;
+  final $Res Function(_ChannelSaleTotal) _then;
+
+/// Create a copy of ChannelSaleTotal
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? channel = null,Object? type = null,Object? total = null,}) {
+  return _then(_ChannelSaleTotal(
+channel: null == channel ? _self.channel : channel // ignore: cast_nullable_to_non_nullable
+as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,total: null == total ? _self.total : total // ignore: cast_nullable_to_non_nullable
+as double,
+  ));
+}
+
+
+}
+
 // dart format on

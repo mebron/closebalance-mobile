@@ -63,6 +63,16 @@ class ReportsApi {
     });
   }
 
+  Future<List<ChannelSaleTotal>> channels({String? date, int? branchId}) async {
+    return guardApi(() async {
+      final res = await _dio.get('/reports/channels', queryParameters: {
+        if (date != null) 'date': date,
+        if (branchId != null) 'branch_id': branchId,
+      });
+      return _list(res).map((e) => ChannelSaleTotal.fromJson(e)).toList();
+    });
+  }
+
   List<Map<String, dynamic>> _list(Response res) =>
       ((res.data as Map<String, dynamic>)['data'] as List).cast<Map<String, dynamic>>();
 }

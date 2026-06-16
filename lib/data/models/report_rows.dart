@@ -42,3 +42,14 @@ abstract class CounterBalanceRow with _$CounterBalanceRow {
 
   factory CounterBalanceRow.fromJson(Map<String, dynamic> json) => _$CounterBalanceRowFromJson(json);
 }
+
+@freezed
+abstract class ChannelSaleTotal with _$ChannelSaleTotal {
+  const factory ChannelSaleTotal({
+    required String channel,
+    required String type,
+    required double total,
+  }) = _ChannelSaleTotal;
+
+  factory ChannelSaleTotal.fromJson(Map<String, dynamic> json) => _$ChannelSaleTotalFromJson(json);
+}
