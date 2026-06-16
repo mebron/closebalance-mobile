@@ -7,6 +7,7 @@ void main() {
   FlavorConfig.setInstance(const FlavorConfig(
     flavor: Flavor.juicy,
     primaryColor: Color(0xFFEE2B2B),
+    accentColor: Color(0xFF000000),
     bgColor: Color(0xFFEE2B2B),
     appName: 'Juicy',
   ));

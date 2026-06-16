@@ -7,6 +7,7 @@ void main() {
   FlavorConfig.setInstance(const FlavorConfig(
     flavor: Flavor.almadina,
     primaryColor: Color(0xFF1B4D8C),
+    accentColor: Color(0xFF22C55E),
     bgColor: Color(0xFF1B4D8C),
     appName: 'Al Madina Cash',
   ));

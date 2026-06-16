@@ -16,12 +16,14 @@ class CloseBalanceApp extends ConsumerWidget {
     final branding = auth?.company.branding;
     final primaryColor =
         AppTheme.parseHex(branding?.primaryColor) ?? FlavorConfig.instance.primaryColor;
+    final accentColor =
+        AppTheme.parseHex(branding?.accentColor) ?? FlavorConfig.instance.accentColor;
 
     return SyncCoordinator(
       child: MaterialApp.router(
         title: auth?.company.name ?? FlavorConfig.instance.appName,
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.light(primaryColor: primaryColor),
+        theme: AppTheme.light(primaryColor: primaryColor, accentColor: accentColor),
         routerConfig: router,
       ),
     );

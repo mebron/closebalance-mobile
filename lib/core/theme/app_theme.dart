@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
 abstract final class AppTheme {
-  static ThemeData light({Color? primaryColor}) {
+  static ThemeData light({Color? primaryColor, Color? accentColor}) {
     final primary = primaryColor ?? AppColors.green;
+    final accent = accentColor ?? AppColors.green;
     final scheme = ColorScheme.fromSeed(
       seedColor: primary,
       primary: primary,
+      secondary: accent,
       surface: AppColors.surface,
     );
 
@@ -38,11 +40,25 @@ abstract final class AppTheme {
           borderRadius: BorderRadius.circular(14),
           borderSide: const BorderSide(color: Color(0xFFE4E9EF)),
         ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: primary, width: 1.5),
+        ),
       ),
       cardTheme: CardThemeData(
         color: AppColors.card,
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected) ? primary : null,
+        ),
+        trackColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? primary.withValues(alpha: 0.4)
+              : null,
+        ),
       ),
     );
   }

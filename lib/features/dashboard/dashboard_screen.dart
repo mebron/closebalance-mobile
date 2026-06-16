@@ -125,7 +125,11 @@ class _Header extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               'Hello, $name',
-              style: const TextStyle(color: Color(0xFF90D981), fontSize: 14, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.85),
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             const SizedBox(height: 14),
             summaryAsync.when(
@@ -178,7 +182,7 @@ class _HeroCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Today's Sales", style: TextStyle(color: Color(0xFFBCD4EC), fontSize: 12)),
+          Text("Today's Sales", style: TextStyle(color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.65), fontSize: 12)),
           Text(
             formatMoney(s.totalSales, symbol),
             style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w800),
@@ -201,17 +205,30 @@ class _HeroCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 12));
 
   Widget _stat(String label, String value, {bool green = false}) => Expanded(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(label, style: const TextStyle(color: Color(0xFF8FB0D4), fontSize: 10.5)),
-          Text(
-            value,
-            style: TextStyle(
-              color: green ? const Color(0xFF90D981) : Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-            ),
+        child: Builder(
+          builder: (context) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.6),
+                  fontSize: 10.5,
+                ),
+              ),
+              Text(
+                value,
+                style: TextStyle(
+                  color: green
+                      ? Theme.of(context).colorScheme.secondary
+                      : Theme.of(context).colorScheme.onPrimary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
           ),
-        ]),
+        ),
       );
 }
 

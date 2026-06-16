@@ -6,12 +6,14 @@ class FlavorConfig {
   const FlavorConfig({
     required this.flavor,
     required this.primaryColor,
+    required this.accentColor,
     required this.bgColor,
     required this.appName,
   });
 
   final Flavor flavor;
   final Color primaryColor;
+  final Color accentColor;
   final Color bgColor;
   final String appName;
 

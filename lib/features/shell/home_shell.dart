@@ -12,12 +12,13 @@ class HomeShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primary = Theme.of(context).colorScheme.primary;
     return Scaffold(
       body: Column(children: [const OfflineBanner(), Expanded(child: navigationShell)]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: navigationShell.currentIndex,
         onTap: _go,
-        selectedItemColor: AppColors.green,
+        selectedItemColor: primary,
         unselectedItemColor: AppColors.slate,
         backgroundColor: Colors.white,
         elevation: 8,

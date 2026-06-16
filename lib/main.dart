@@ -7,6 +7,7 @@ void main() {
   FlavorConfig.setInstance(const FlavorConfig(
     flavor: Flavor.closebalance,
     primaryColor: Color(0xFF22C55E),
+    accentColor: Color(0xFF22C55E),
     bgColor: Color(0xFF00182A),
     appName: 'CloseBalance',
   ));
