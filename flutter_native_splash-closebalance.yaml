@@ -1,0 +1,7 @@
+flutter_native_splash:
+  color: "#00182A"
+  image: assets/images/logo-mobile-light.png
+  android: true
+  ios: true
+  web: false
+  flavor: closebalance

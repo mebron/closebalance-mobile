@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
 abstract final class AppTheme {
-  static ThemeData light() {
+  static ThemeData light({Color? primaryColor}) {
+    final primary = primaryColor ?? AppColors.green;
     final scheme = ColorScheme.fromSeed(
-      seedColor: AppColors.green,
-      primary: AppColors.green,
+      seedColor: primary,
+      primary: primary,
       surface: AppColors.surface,
     );
 
@@ -20,7 +21,7 @@ abstract final class AppTheme {
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           minimumSize: const Size.fromHeight(56),
-          backgroundColor: AppColors.green,
+          backgroundColor: primary,
           foregroundColor: Colors.white,
           textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -44,5 +45,17 @@ abstract final class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       ),
     );
+  }
+
+  static Color? parseHex(String? hex) {
+    if (hex == null || hex.isEmpty) {
+      return null;
+    }
+    final v = hex.replaceAll('#', '');
+    if (v.length != 6) {
+      return null;
+    }
+    final parsed = int.tryParse('FF$v', radix: 16);
+    return parsed != null ? Color(parsed) : null;
   }
 }
