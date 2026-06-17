@@ -14,7 +14,7 @@ abstract class DailyBranchRow with _$DailyBranchRow {
     @JsonKey(name: 'total_sales') @Default(0.0) double totalSales,
     @JsonKey(name: 'total_expenses') @Default(0.0) double totalExpenses,
     @JsonKey(name: 'cash_in_hand') @Default(0.0) double cashInHand,
-    @JsonKey(name: 'net_position') @Default(0.0) double netPosition,
+    @JsonKey(name: 'net_profit') @Default(0.0) double netProfit,
   }) = _DailyBranchRow;
 
   factory DailyBranchRow.fromJson(Map<String, dynamic> json) => _$DailyBranchRowFromJson(json);

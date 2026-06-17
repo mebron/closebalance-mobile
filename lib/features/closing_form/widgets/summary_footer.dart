@@ -20,7 +20,7 @@ class SummaryFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     final cashInHand = ClosingMath.cashInHand(closing, channelTypes);
     final expenses = ClosingMath.totalExpenses(closing);
-    final net = ClosingMath.netPosition(closing);
+    final net = ClosingMath.netProfit(closing);
 
     final bottomInset = MediaQuery.of(context).padding.bottom;
     final primary = Theme.of(context).colorScheme.primary;

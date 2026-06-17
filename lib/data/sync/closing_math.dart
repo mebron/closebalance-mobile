@@ -32,7 +32,7 @@ abstract final class ClosingMath {
   static double cashInHand(EditableClosing c, Map<int, String> t) =>
       cashCollections(c, t) - counterPaid(c) - _cashExpenses(c) - _cashDeductions(c);
 
-  static double netPosition(EditableClosing c) =>
+  static double netProfit(EditableClosing c) =>
       c.totalSales - totalExpenses(c) - totalDeductions(c);
 
   static ReportSummary toSummary(EditableClosing c, Map<int, String> t) => ReportSummary(
@@ -42,6 +42,6 @@ abstract final class ClosingMath {
         draftClosings: c.status == ClosingStatus.draft ? 1 : 0,
         finalizedClosings: c.status == ClosingStatus.finalized ? 1 : 0,
         totalExpenses: totalExpenses(c),
-        netPosition: netPosition(c),
+        netProfit: netProfit(c),
       );
 }

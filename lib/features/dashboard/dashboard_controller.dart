@@ -38,7 +38,7 @@ class DashboardController extends AsyncNotifier<ReportSummary> {
       return await reports.cachedSummary(date: today, branchId: branchId) ??
           ReportSummary(
             date: today, totalSales: 0, cashInHand: 0, draftClosings: 0,
-            finalizedClosings: 0, totalExpenses: 0, netPosition: 0,
+            finalizedClosings: 0, totalExpenses: 0, netProfit: 0,
           );
     }
   }

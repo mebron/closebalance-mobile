@@ -193,7 +193,7 @@ class _HeroCard extends StatelessWidget {
             _divider(),
             _stat('Expenses', formatMoney(s.totalExpenses, symbol)),
             _divider(),
-            _stat('Net', formatMoney(s.netPosition, symbol), green: true),
+            _stat('Net Profit', formatMoney(s.netProfit, symbol), green: true),
           ]),
         ],
       ),

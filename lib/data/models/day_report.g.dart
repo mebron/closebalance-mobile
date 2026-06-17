@@ -13,7 +13,7 @@ _DayReport _$DayReportFromJson(Map<String, dynamic> json) => _DayReport(
   draftClosings: (json['draft_closings'] as num).toInt(),
   finalizedClosings: (json['finalized_closings'] as num).toInt(),
   totalExpenses: (json['total_expenses'] as num).toDouble(),
-  netPosition: (json['net_position'] as num).toDouble(),
+  netProfit: (json['net_profit'] as num).toDouble(),
   channels:
       (json['channels'] as List<dynamic>?)
           ?.map((e) => ChannelSaleTotal.fromJson(e as Map<String, dynamic>))
@@ -39,7 +39,7 @@ Map<String, dynamic> _$DayReportToJson(_DayReport instance) =>
       'draft_closings': instance.draftClosings,
       'finalized_closings': instance.finalizedClosings,
       'total_expenses': instance.totalExpenses,
-      'net_position': instance.netPosition,
+      'net_profit': instance.netProfit,
       'channels': instance.channels.map((e) => e.toJson()).toList(),
       'expenses': instance.expenses.map((e) => e.toJson()).toList(),
       'counters': instance.counters.map((e) => e.toJson()).toList(),

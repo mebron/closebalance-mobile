@@ -14,7 +14,7 @@ _ReportSummary _$ReportSummaryFromJson(Map<String, dynamic> json) =>
       draftClosings: (json['draft_closings'] as num).toInt(),
       finalizedClosings: (json['finalized_closings'] as num).toInt(),
       totalExpenses: (json['total_expenses'] as num).toDouble(),
-      netPosition: (json['net_position'] as num).toDouble(),
+      netProfit: (json['net_profit'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$ReportSummaryToJson(_ReportSummary instance) =>
@@ -25,5 +25,5 @@ Map<String, dynamic> _$ReportSummaryToJson(_ReportSummary instance) =>
       'draft_closings': instance.draftClosings,
       'finalized_closings': instance.finalizedClosings,
       'total_expenses': instance.totalExpenses,
-      'net_position': instance.netPosition,
+      'net_profit': instance.netProfit,
     };

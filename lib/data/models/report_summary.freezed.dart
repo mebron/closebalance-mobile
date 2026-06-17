@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ReportSummary {
 
- String get date;@JsonKey(name: 'total_sales') double get totalSales;@JsonKey(name: 'cash_in_hand') double get cashInHand;@JsonKey(name: 'draft_closings') int get draftClosings;@JsonKey(name: 'finalized_closings') int get finalizedClosings;@JsonKey(name: 'total_expenses') double get totalExpenses;@JsonKey(name: 'net_position') double get netPosition;
+ String get date;@JsonKey(name: 'total_sales') double get totalSales;@JsonKey(name: 'cash_in_hand') double get cashInHand;@JsonKey(name: 'draft_closings') int get draftClosings;@JsonKey(name: 'finalized_closings') int get finalizedClosings;@JsonKey(name: 'total_expenses') double get totalExpenses;@JsonKey(name: 'net_profit') double get netProfit;
 /// Create a copy of ReportSummary
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ReportSummaryCopyWith<ReportSummary> get copyWith => _$ReportSummaryCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReportSummary&&(identical(other.date, date) || other.date == date)&&(identical(other.totalSales, totalSales) || other.totalSales == totalSales)&&(identical(other.cashInHand, cashInHand) || other.cashInHand == cashInHand)&&(identical(other.draftClosings, draftClosings) || other.draftClosings == draftClosings)&&(identical(other.finalizedClosings, finalizedClosings) || other.finalizedClosings == finalizedClosings)&&(identical(other.totalExpenses, totalExpenses) || other.totalExpenses == totalExpenses)&&(identical(other.netPosition, netPosition) || other.netPosition == netPosition));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReportSummary&&(identical(other.date, date) || other.date == date)&&(identical(other.totalSales, totalSales) || other.totalSales == totalSales)&&(identical(other.cashInHand, cashInHand) || other.cashInHand == cashInHand)&&(identical(other.draftClosings, draftClosings) || other.draftClosings == draftClosings)&&(identical(other.finalizedClosings, finalizedClosings) || other.finalizedClosings == finalizedClosings)&&(identical(other.totalExpenses, totalExpenses) || other.totalExpenses == totalExpenses)&&(identical(other.netProfit, netProfit) || other.netProfit == netProfit));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,date,totalSales,cashInHand,draftClosings,finalizedClosings,totalExpenses,netPosition);
+int get hashCode => Object.hash(runtimeType,date,totalSales,cashInHand,draftClosings,finalizedClosings,totalExpenses,netProfit);
 
 @override
 String toString() {
-  return 'ReportSummary(date: $date, totalSales: $totalSales, cashInHand: $cashInHand, draftClosings: $draftClosings, finalizedClosings: $finalizedClosings, totalExpenses: $totalExpenses, netPosition: $netPosition)';
+  return 'ReportSummary(date: $date, totalSales: $totalSales, cashInHand: $cashInHand, draftClosings: $draftClosings, finalizedClosings: $finalizedClosings, totalExpenses: $totalExpenses, netProfit: $netProfit)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $ReportSummaryCopyWith<$Res>  {
   factory $ReportSummaryCopyWith(ReportSummary value, $Res Function(ReportSummary) _then) = _$ReportSummaryCopyWithImpl;
 @useResult
 $Res call({
- String date,@JsonKey(name: 'total_sales') double totalSales,@JsonKey(name: 'cash_in_hand') double cashInHand,@JsonKey(name: 'draft_closings') int draftClosings,@JsonKey(name: 'finalized_closings') int finalizedClosings,@JsonKey(name: 'total_expenses') double totalExpenses,@JsonKey(name: 'net_position') double netPosition
+ String date,@JsonKey(name: 'total_sales') double totalSales,@JsonKey(name: 'cash_in_hand') double cashInHand,@JsonKey(name: 'draft_closings') int draftClosings,@JsonKey(name: 'finalized_closings') int finalizedClosings,@JsonKey(name: 'total_expenses') double totalExpenses,@JsonKey(name: 'net_profit') double netProfit
 });
 
 
@@ -65,7 +65,7 @@ class _$ReportSummaryCopyWithImpl<$Res>
 
 /// Create a copy of ReportSummary
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? date = null,Object? totalSales = null,Object? cashInHand = null,Object? draftClosings = null,Object? finalizedClosings = null,Object? totalExpenses = null,Object? netPosition = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? date = null,Object? totalSales = null,Object? cashInHand = null,Object? draftClosings = null,Object? finalizedClosings = null,Object? totalExpenses = null,Object? netProfit = null,}) {
   return _then(_self.copyWith(
 date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as String,totalSales: null == totalSales ? _self.totalSales : totalSales // ignore: cast_nullable_to_non_nullable
@@ -73,7 +73,7 @@ as double,cashInHand: null == cashInHand ? _self.cashInHand : cashInHand // igno
 as double,draftClosings: null == draftClosings ? _self.draftClosings : draftClosings // ignore: cast_nullable_to_non_nullable
 as int,finalizedClosings: null == finalizedClosings ? _self.finalizedClosings : finalizedClosings // ignore: cast_nullable_to_non_nullable
 as int,totalExpenses: null == totalExpenses ? _self.totalExpenses : totalExpenses // ignore: cast_nullable_to_non_nullable
-as double,netPosition: null == netPosition ? _self.netPosition : netPosition // ignore: cast_nullable_to_non_nullable
+as double,netProfit: null == netProfit ? _self.netProfit : netProfit // ignore: cast_nullable_to_non_nullable
 as double,
   ));
 }
@@ -159,10 +159,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String date, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'draft_closings')  int draftClosings, @JsonKey(name: 'finalized_closings')  int finalizedClosings, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'net_position')  double netPosition)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String date, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'draft_closings')  int draftClosings, @JsonKey(name: 'finalized_closings')  int finalizedClosings, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'net_profit')  double netProfit)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ReportSummary() when $default != null:
-return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings,_that.finalizedClosings,_that.totalExpenses,_that.netPosition);case _:
+return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings,_that.finalizedClosings,_that.totalExpenses,_that.netProfit);case _:
   return orElse();
 
 }
@@ -180,10 +180,10 @@ return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String date, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'draft_closings')  int draftClosings, @JsonKey(name: 'finalized_closings')  int finalizedClosings, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'net_position')  double netPosition)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String date, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'draft_closings')  int draftClosings, @JsonKey(name: 'finalized_closings')  int finalizedClosings, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'net_profit')  double netProfit)  $default,) {final _that = this;
 switch (_that) {
 case _ReportSummary():
-return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings,_that.finalizedClosings,_that.totalExpenses,_that.netPosition);case _:
+return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings,_that.finalizedClosings,_that.totalExpenses,_that.netProfit);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +200,10 @@ return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String date, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'draft_closings')  int draftClosings, @JsonKey(name: 'finalized_closings')  int finalizedClosings, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'net_position')  double netPosition)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String date, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'draft_closings')  int draftClosings, @JsonKey(name: 'finalized_closings')  int finalizedClosings, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'net_profit')  double netProfit)?  $default,) {final _that = this;
 switch (_that) {
 case _ReportSummary() when $default != null:
-return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings,_that.finalizedClosings,_that.totalExpenses,_that.netPosition);case _:
+return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings,_that.finalizedClosings,_that.totalExpenses,_that.netProfit);case _:
   return null;
 
 }
@@ -215,7 +215,7 @@ return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings
 @JsonSerializable()
 
 class _ReportSummary implements ReportSummary {
-  const _ReportSummary({required this.date, @JsonKey(name: 'total_sales') required this.totalSales, @JsonKey(name: 'cash_in_hand') required this.cashInHand, @JsonKey(name: 'draft_closings') required this.draftClosings, @JsonKey(name: 'finalized_closings') required this.finalizedClosings, @JsonKey(name: 'total_expenses') required this.totalExpenses, @JsonKey(name: 'net_position') required this.netPosition});
+  const _ReportSummary({required this.date, @JsonKey(name: 'total_sales') required this.totalSales, @JsonKey(name: 'cash_in_hand') required this.cashInHand, @JsonKey(name: 'draft_closings') required this.draftClosings, @JsonKey(name: 'finalized_closings') required this.finalizedClosings, @JsonKey(name: 'total_expenses') required this.totalExpenses, @JsonKey(name: 'net_profit') required this.netProfit});
   factory _ReportSummary.fromJson(Map<String, dynamic> json) => _$ReportSummaryFromJson(json);
 
 @override final  String date;
@@ -224,7 +224,7 @@ class _ReportSummary implements ReportSummary {
 @override@JsonKey(name: 'draft_closings') final  int draftClosings;
 @override@JsonKey(name: 'finalized_closings') final  int finalizedClosings;
 @override@JsonKey(name: 'total_expenses') final  double totalExpenses;
-@override@JsonKey(name: 'net_position') final  double netPosition;
+@override@JsonKey(name: 'net_profit') final  double netProfit;
 
 /// Create a copy of ReportSummary
 /// with the given fields replaced by the non-null parameter values.
@@ -239,16 +239,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReportSummary&&(identical(other.date, date) || other.date == date)&&(identical(other.totalSales, totalSales) || other.totalSales == totalSales)&&(identical(other.cashInHand, cashInHand) || other.cashInHand == cashInHand)&&(identical(other.draftClosings, draftClosings) || other.draftClosings == draftClosings)&&(identical(other.finalizedClosings, finalizedClosings) || other.finalizedClosings == finalizedClosings)&&(identical(other.totalExpenses, totalExpenses) || other.totalExpenses == totalExpenses)&&(identical(other.netPosition, netPosition) || other.netPosition == netPosition));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReportSummary&&(identical(other.date, date) || other.date == date)&&(identical(other.totalSales, totalSales) || other.totalSales == totalSales)&&(identical(other.cashInHand, cashInHand) || other.cashInHand == cashInHand)&&(identical(other.draftClosings, draftClosings) || other.draftClosings == draftClosings)&&(identical(other.finalizedClosings, finalizedClosings) || other.finalizedClosings == finalizedClosings)&&(identical(other.totalExpenses, totalExpenses) || other.totalExpenses == totalExpenses)&&(identical(other.netProfit, netProfit) || other.netProfit == netProfit));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,date,totalSales,cashInHand,draftClosings,finalizedClosings,totalExpenses,netPosition);
+int get hashCode => Object.hash(runtimeType,date,totalSales,cashInHand,draftClosings,finalizedClosings,totalExpenses,netProfit);
 
 @override
 String toString() {
-  return 'ReportSummary(date: $date, totalSales: $totalSales, cashInHand: $cashInHand, draftClosings: $draftClosings, finalizedClosings: $finalizedClosings, totalExpenses: $totalExpenses, netPosition: $netPosition)';
+  return 'ReportSummary(date: $date, totalSales: $totalSales, cashInHand: $cashInHand, draftClosings: $draftClosings, finalizedClosings: $finalizedClosings, totalExpenses: $totalExpenses, netProfit: $netProfit)';
 }
 
 
@@ -259,7 +259,7 @@ abstract mixin class _$ReportSummaryCopyWith<$Res> implements $ReportSummaryCopy
   factory _$ReportSummaryCopyWith(_ReportSummary value, $Res Function(_ReportSummary) _then) = __$ReportSummaryCopyWithImpl;
 @override @useResult
 $Res call({
- String date,@JsonKey(name: 'total_sales') double totalSales,@JsonKey(name: 'cash_in_hand') double cashInHand,@JsonKey(name: 'draft_closings') int draftClosings,@JsonKey(name: 'finalized_closings') int finalizedClosings,@JsonKey(name: 'total_expenses') double totalExpenses,@JsonKey(name: 'net_position') double netPosition
+ String date,@JsonKey(name: 'total_sales') double totalSales,@JsonKey(name: 'cash_in_hand') double cashInHand,@JsonKey(name: 'draft_closings') int draftClosings,@JsonKey(name: 'finalized_closings') int finalizedClosings,@JsonKey(name: 'total_expenses') double totalExpenses,@JsonKey(name: 'net_profit') double netProfit
 });
 
 
@@ -276,7 +276,7 @@ class __$ReportSummaryCopyWithImpl<$Res>
 
 /// Create a copy of ReportSummary
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? date = null,Object? totalSales = null,Object? cashInHand = null,Object? draftClosings = null,Object? finalizedClosings = null,Object? totalExpenses = null,Object? netPosition = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? date = null,Object? totalSales = null,Object? cashInHand = null,Object? draftClosings = null,Object? finalizedClosings = null,Object? totalExpenses = null,Object? netProfit = null,}) {
   return _then(_ReportSummary(
 date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as String,totalSales: null == totalSales ? _self.totalSales : totalSales // ignore: cast_nullable_to_non_nullable
@@ -284,7 +284,7 @@ as double,cashInHand: null == cashInHand ? _self.cashInHand : cashInHand // igno
 as double,draftClosings: null == draftClosings ? _self.draftClosings : draftClosings // ignore: cast_nullable_to_non_nullable
 as int,finalizedClosings: null == finalizedClosings ? _self.finalizedClosings : finalizedClosings // ignore: cast_nullable_to_non_nullable
 as int,totalExpenses: null == totalExpenses ? _self.totalExpenses : totalExpenses // ignore: cast_nullable_to_non_nullable
-as double,netPosition: null == netPosition ? _self.netPosition : netPosition // ignore: cast_nullable_to_non_nullable
+as double,netProfit: null == netProfit ? _self.netProfit : netProfit // ignore: cast_nullable_to_non_nullable
 as double,
   ));
 }

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DailyBranchRow {
 
- int get id; String get date; String get status; Branch? get branch;@JsonKey(name: 'total_sales') double get totalSales;@JsonKey(name: 'total_expenses') double get totalExpenses;@JsonKey(name: 'cash_in_hand') double get cashInHand;@JsonKey(name: 'net_position') double get netPosition;
+ int get id; String get date; String get status; Branch? get branch;@JsonKey(name: 'total_sales') double get totalSales;@JsonKey(name: 'total_expenses') double get totalExpenses;@JsonKey(name: 'cash_in_hand') double get cashInHand;@JsonKey(name: 'net_profit') double get netProfit;
 /// Create a copy of DailyBranchRow
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $DailyBranchRowCopyWith<DailyBranchRow> get copyWith => _$DailyBranchRowCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DailyBranchRow&&(identical(other.id, id) || other.id == id)&&(identical(other.date, date) || other.date == date)&&(identical(other.status, status) || other.status == status)&&(identical(other.branch, branch) || other.branch == branch)&&(identical(other.totalSales, totalSales) || other.totalSales == totalSales)&&(identical(other.totalExpenses, totalExpenses) || other.totalExpenses == totalExpenses)&&(identical(other.cashInHand, cashInHand) || other.cashInHand == cashInHand)&&(identical(other.netPosition, netPosition) || other.netPosition == netPosition));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DailyBranchRow&&(identical(other.id, id) || other.id == id)&&(identical(other.date, date) || other.date == date)&&(identical(other.status, status) || other.status == status)&&(identical(other.branch, branch) || other.branch == branch)&&(identical(other.totalSales, totalSales) || other.totalSales == totalSales)&&(identical(other.totalExpenses, totalExpenses) || other.totalExpenses == totalExpenses)&&(identical(other.cashInHand, cashInHand) || other.cashInHand == cashInHand)&&(identical(other.netProfit, netProfit) || other.netProfit == netProfit));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,date,status,branch,totalSales,totalExpenses,cashInHand,netPosition);
+int get hashCode => Object.hash(runtimeType,id,date,status,branch,totalSales,totalExpenses,cashInHand,netProfit);
 
 @override
 String toString() {
-  return 'DailyBranchRow(id: $id, date: $date, status: $status, branch: $branch, totalSales: $totalSales, totalExpenses: $totalExpenses, cashInHand: $cashInHand, netPosition: $netPosition)';
+  return 'DailyBranchRow(id: $id, date: $date, status: $status, branch: $branch, totalSales: $totalSales, totalExpenses: $totalExpenses, cashInHand: $cashInHand, netProfit: $netProfit)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $DailyBranchRowCopyWith<$Res>  {
   factory $DailyBranchRowCopyWith(DailyBranchRow value, $Res Function(DailyBranchRow) _then) = _$DailyBranchRowCopyWithImpl;
 @useResult
 $Res call({
- int id, String date, String status, Branch? branch,@JsonKey(name: 'total_sales') double totalSales,@JsonKey(name: 'total_expenses') double totalExpenses,@JsonKey(name: 'cash_in_hand') double cashInHand,@JsonKey(name: 'net_position') double netPosition
+ int id, String date, String status, Branch? branch,@JsonKey(name: 'total_sales') double totalSales,@JsonKey(name: 'total_expenses') double totalExpenses,@JsonKey(name: 'cash_in_hand') double cashInHand,@JsonKey(name: 'net_profit') double netProfit
 });
 
 
@@ -65,7 +65,7 @@ class _$DailyBranchRowCopyWithImpl<$Res>
 
 /// Create a copy of DailyBranchRow
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? date = null,Object? status = null,Object? branch = freezed,Object? totalSales = null,Object? totalExpenses = null,Object? cashInHand = null,Object? netPosition = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? date = null,Object? status = null,Object? branch = freezed,Object? totalSales = null,Object? totalExpenses = null,Object? cashInHand = null,Object? netProfit = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
@@ -74,7 +74,7 @@ as String,branch: freezed == branch ? _self.branch : branch // ignore: cast_null
 as Branch?,totalSales: null == totalSales ? _self.totalSales : totalSales // ignore: cast_nullable_to_non_nullable
 as double,totalExpenses: null == totalExpenses ? _self.totalExpenses : totalExpenses // ignore: cast_nullable_to_non_nullable
 as double,cashInHand: null == cashInHand ? _self.cashInHand : cashInHand // ignore: cast_nullable_to_non_nullable
-as double,netPosition: null == netPosition ? _self.netPosition : netPosition // ignore: cast_nullable_to_non_nullable
+as double,netProfit: null == netProfit ? _self.netProfit : netProfit // ignore: cast_nullable_to_non_nullable
 as double,
   ));
 }
@@ -172,10 +172,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String date,  String status,  Branch? branch, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'net_position')  double netPosition)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String date,  String status,  Branch? branch, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'net_profit')  double netProfit)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DailyBranchRow() when $default != null:
-return $default(_that.id,_that.date,_that.status,_that.branch,_that.totalSales,_that.totalExpenses,_that.cashInHand,_that.netPosition);case _:
+return $default(_that.id,_that.date,_that.status,_that.branch,_that.totalSales,_that.totalExpenses,_that.cashInHand,_that.netProfit);case _:
   return orElse();
 
 }
@@ -193,10 +193,10 @@ return $default(_that.id,_that.date,_that.status,_that.branch,_that.totalSales,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String date,  String status,  Branch? branch, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'net_position')  double netPosition)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String date,  String status,  Branch? branch, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'net_profit')  double netProfit)  $default,) {final _that = this;
 switch (_that) {
 case _DailyBranchRow():
-return $default(_that.id,_that.date,_that.status,_that.branch,_that.totalSales,_that.totalExpenses,_that.cashInHand,_that.netPosition);case _:
+return $default(_that.id,_that.date,_that.status,_that.branch,_that.totalSales,_that.totalExpenses,_that.cashInHand,_that.netProfit);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -213,10 +213,10 @@ return $default(_that.id,_that.date,_that.status,_that.branch,_that.totalSales,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String date,  String status,  Branch? branch, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'net_position')  double netPosition)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String date,  String status,  Branch? branch, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'net_profit')  double netProfit)?  $default,) {final _that = this;
 switch (_that) {
 case _DailyBranchRow() when $default != null:
-return $default(_that.id,_that.date,_that.status,_that.branch,_that.totalSales,_that.totalExpenses,_that.cashInHand,_that.netPosition);case _:
+return $default(_that.id,_that.date,_that.status,_that.branch,_that.totalSales,_that.totalExpenses,_that.cashInHand,_that.netProfit);case _:
   return null;
 
 }
@@ -228,7 +228,7 @@ return $default(_that.id,_that.date,_that.status,_that.branch,_that.totalSales,_
 @JsonSerializable()
 
 class _DailyBranchRow implements DailyBranchRow {
-  const _DailyBranchRow({required this.id, required this.date, required this.status, this.branch, @JsonKey(name: 'total_sales') this.totalSales = 0.0, @JsonKey(name: 'total_expenses') this.totalExpenses = 0.0, @JsonKey(name: 'cash_in_hand') this.cashInHand = 0.0, @JsonKey(name: 'net_position') this.netPosition = 0.0});
+  const _DailyBranchRow({required this.id, required this.date, required this.status, this.branch, @JsonKey(name: 'total_sales') this.totalSales = 0.0, @JsonKey(name: 'total_expenses') this.totalExpenses = 0.0, @JsonKey(name: 'cash_in_hand') this.cashInHand = 0.0, @JsonKey(name: 'net_profit') this.netProfit = 0.0});
   factory _DailyBranchRow.fromJson(Map<String, dynamic> json) => _$DailyBranchRowFromJson(json);
 
 @override final  int id;
@@ -238,7 +238,7 @@ class _DailyBranchRow implements DailyBranchRow {
 @override@JsonKey(name: 'total_sales') final  double totalSales;
 @override@JsonKey(name: 'total_expenses') final  double totalExpenses;
 @override@JsonKey(name: 'cash_in_hand') final  double cashInHand;
-@override@JsonKey(name: 'net_position') final  double netPosition;
+@override@JsonKey(name: 'net_profit') final  double netProfit;
 
 /// Create a copy of DailyBranchRow
 /// with the given fields replaced by the non-null parameter values.
@@ -253,16 +253,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DailyBranchRow&&(identical(other.id, id) || other.id == id)&&(identical(other.date, date) || other.date == date)&&(identical(other.status, status) || other.status == status)&&(identical(other.branch, branch) || other.branch == branch)&&(identical(other.totalSales, totalSales) || other.totalSales == totalSales)&&(identical(other.totalExpenses, totalExpenses) || other.totalExpenses == totalExpenses)&&(identical(other.cashInHand, cashInHand) || other.cashInHand == cashInHand)&&(identical(other.netPosition, netPosition) || other.netPosition == netPosition));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DailyBranchRow&&(identical(other.id, id) || other.id == id)&&(identical(other.date, date) || other.date == date)&&(identical(other.status, status) || other.status == status)&&(identical(other.branch, branch) || other.branch == branch)&&(identical(other.totalSales, totalSales) || other.totalSales == totalSales)&&(identical(other.totalExpenses, totalExpenses) || other.totalExpenses == totalExpenses)&&(identical(other.cashInHand, cashInHand) || other.cashInHand == cashInHand)&&(identical(other.netProfit, netProfit) || other.netProfit == netProfit));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,date,status,branch,totalSales,totalExpenses,cashInHand,netPosition);
+int get hashCode => Object.hash(runtimeType,id,date,status,branch,totalSales,totalExpenses,cashInHand,netProfit);
 
 @override
 String toString() {
-  return 'DailyBranchRow(id: $id, date: $date, status: $status, branch: $branch, totalSales: $totalSales, totalExpenses: $totalExpenses, cashInHand: $cashInHand, netPosition: $netPosition)';
+  return 'DailyBranchRow(id: $id, date: $date, status: $status, branch: $branch, totalSales: $totalSales, totalExpenses: $totalExpenses, cashInHand: $cashInHand, netProfit: $netProfit)';
 }
 
 
@@ -273,7 +273,7 @@ abstract mixin class _$DailyBranchRowCopyWith<$Res> implements $DailyBranchRowCo
   factory _$DailyBranchRowCopyWith(_DailyBranchRow value, $Res Function(_DailyBranchRow) _then) = __$DailyBranchRowCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String date, String status, Branch? branch,@JsonKey(name: 'total_sales') double totalSales,@JsonKey(name: 'total_expenses') double totalExpenses,@JsonKey(name: 'cash_in_hand') double cashInHand,@JsonKey(name: 'net_position') double netPosition
+ int id, String date, String status, Branch? branch,@JsonKey(name: 'total_sales') double totalSales,@JsonKey(name: 'total_expenses') double totalExpenses,@JsonKey(name: 'cash_in_hand') double cashInHand,@JsonKey(name: 'net_profit') double netProfit
 });
 
 
@@ -290,7 +290,7 @@ class __$DailyBranchRowCopyWithImpl<$Res>
 
 /// Create a copy of DailyBranchRow
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? date = null,Object? status = null,Object? branch = freezed,Object? totalSales = null,Object? totalExpenses = null,Object? cashInHand = null,Object? netPosition = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? date = null,Object? status = null,Object? branch = freezed,Object? totalSales = null,Object? totalExpenses = null,Object? cashInHand = null,Object? netProfit = null,}) {
   return _then(_DailyBranchRow(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
@@ -299,7 +299,7 @@ as String,branch: freezed == branch ? _self.branch : branch // ignore: cast_null
 as Branch?,totalSales: null == totalSales ? _self.totalSales : totalSales // ignore: cast_nullable_to_non_nullable
 as double,totalExpenses: null == totalExpenses ? _self.totalExpenses : totalExpenses // ignore: cast_nullable_to_non_nullable
 as double,cashInHand: null == cashInHand ? _self.cashInHand : cashInHand // ignore: cast_nullable_to_non_nullable
-as double,netPosition: null == netPosition ? _self.netPosition : netPosition // ignore: cast_nullable_to_non_nullable
+as double,netProfit: null == netProfit ? _self.netProfit : netProfit // ignore: cast_nullable_to_non_nullable
 as double,
   ));
 }
