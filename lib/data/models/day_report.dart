@@ -13,9 +13,11 @@ abstract class DayReport with _$DayReport {
     @JsonKey(name: 'draft_closings') required int draftClosings,
     @JsonKey(name: 'finalized_closings') required int finalizedClosings,
     @JsonKey(name: 'total_expenses') required double totalExpenses,
+    @JsonKey(name: 'total_deductions') @Default(0.0) double totalDeductions,
     @JsonKey(name: 'net_profit') required double netProfit,
     @Default([]) List<ChannelSaleTotal> channels,
     @Default([]) List<ExpenseCategoryTotal> expenses,
+    @Default([]) List<DeductionTypeTotal> deductions,
     @Default([]) List<CounterBalanceRow> counters,
   }) = _DayReport;
 

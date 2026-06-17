@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DayReport {
 
- String get date;@JsonKey(name: 'total_sales') double get totalSales;@JsonKey(name: 'cash_in_hand') double get cashInHand;@JsonKey(name: 'draft_closings') int get draftClosings;@JsonKey(name: 'finalized_closings') int get finalizedClosings;@JsonKey(name: 'total_expenses') double get totalExpenses;@JsonKey(name: 'net_profit') double get netProfit; List<ChannelSaleTotal> get channels; List<ExpenseCategoryTotal> get expenses; List<CounterBalanceRow> get counters;
+ String get date;@JsonKey(name: 'total_sales') double get totalSales;@JsonKey(name: 'cash_in_hand') double get cashInHand;@JsonKey(name: 'draft_closings') int get draftClosings;@JsonKey(name: 'finalized_closings') int get finalizedClosings;@JsonKey(name: 'total_expenses') double get totalExpenses;@JsonKey(name: 'total_deductions') double get totalDeductions;@JsonKey(name: 'net_profit') double get netProfit; List<ChannelSaleTotal> get channels; List<ExpenseCategoryTotal> get expenses; List<DeductionTypeTotal> get deductions; List<CounterBalanceRow> get counters;
 /// Create a copy of DayReport
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $DayReportCopyWith<DayReport> get copyWith => _$DayReportCopyWithImpl<DayReport>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DayReport&&(identical(other.date, date) || other.date == date)&&(identical(other.totalSales, totalSales) || other.totalSales == totalSales)&&(identical(other.cashInHand, cashInHand) || other.cashInHand == cashInHand)&&(identical(other.draftClosings, draftClosings) || other.draftClosings == draftClosings)&&(identical(other.finalizedClosings, finalizedClosings) || other.finalizedClosings == finalizedClosings)&&(identical(other.totalExpenses, totalExpenses) || other.totalExpenses == totalExpenses)&&(identical(other.netProfit, netProfit) || other.netProfit == netProfit)&&const DeepCollectionEquality().equals(other.channels, channels)&&const DeepCollectionEquality().equals(other.expenses, expenses)&&const DeepCollectionEquality().equals(other.counters, counters));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DayReport&&(identical(other.date, date) || other.date == date)&&(identical(other.totalSales, totalSales) || other.totalSales == totalSales)&&(identical(other.cashInHand, cashInHand) || other.cashInHand == cashInHand)&&(identical(other.draftClosings, draftClosings) || other.draftClosings == draftClosings)&&(identical(other.finalizedClosings, finalizedClosings) || other.finalizedClosings == finalizedClosings)&&(identical(other.totalExpenses, totalExpenses) || other.totalExpenses == totalExpenses)&&(identical(other.totalDeductions, totalDeductions) || other.totalDeductions == totalDeductions)&&(identical(other.netProfit, netProfit) || other.netProfit == netProfit)&&const DeepCollectionEquality().equals(other.channels, channels)&&const DeepCollectionEquality().equals(other.expenses, expenses)&&const DeepCollectionEquality().equals(other.deductions, deductions)&&const DeepCollectionEquality().equals(other.counters, counters));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,date,totalSales,cashInHand,draftClosings,finalizedClosings,totalExpenses,netProfit,const DeepCollectionEquality().hash(channels),const DeepCollectionEquality().hash(expenses),const DeepCollectionEquality().hash(counters));
+int get hashCode => Object.hash(runtimeType,date,totalSales,cashInHand,draftClosings,finalizedClosings,totalExpenses,totalDeductions,netProfit,const DeepCollectionEquality().hash(channels),const DeepCollectionEquality().hash(expenses),const DeepCollectionEquality().hash(deductions),const DeepCollectionEquality().hash(counters));
 
 @override
 String toString() {
-  return 'DayReport(date: $date, totalSales: $totalSales, cashInHand: $cashInHand, draftClosings: $draftClosings, finalizedClosings: $finalizedClosings, totalExpenses: $totalExpenses, netProfit: $netProfit, channels: $channels, expenses: $expenses, counters: $counters)';
+  return 'DayReport(date: $date, totalSales: $totalSales, cashInHand: $cashInHand, draftClosings: $draftClosings, finalizedClosings: $finalizedClosings, totalExpenses: $totalExpenses, totalDeductions: $totalDeductions, netProfit: $netProfit, channels: $channels, expenses: $expenses, deductions: $deductions, counters: $counters)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $DayReportCopyWith<$Res>  {
   factory $DayReportCopyWith(DayReport value, $Res Function(DayReport) _then) = _$DayReportCopyWithImpl;
 @useResult
 $Res call({
- String date,@JsonKey(name: 'total_sales') double totalSales,@JsonKey(name: 'cash_in_hand') double cashInHand,@JsonKey(name: 'draft_closings') int draftClosings,@JsonKey(name: 'finalized_closings') int finalizedClosings,@JsonKey(name: 'total_expenses') double totalExpenses,@JsonKey(name: 'net_profit') double netProfit, List<ChannelSaleTotal> channels, List<ExpenseCategoryTotal> expenses, List<CounterBalanceRow> counters
+ String date,@JsonKey(name: 'total_sales') double totalSales,@JsonKey(name: 'cash_in_hand') double cashInHand,@JsonKey(name: 'draft_closings') int draftClosings,@JsonKey(name: 'finalized_closings') int finalizedClosings,@JsonKey(name: 'total_expenses') double totalExpenses,@JsonKey(name: 'total_deductions') double totalDeductions,@JsonKey(name: 'net_profit') double netProfit, List<ChannelSaleTotal> channels, List<ExpenseCategoryTotal> expenses, List<DeductionTypeTotal> deductions, List<CounterBalanceRow> counters
 });
 
 
@@ -65,7 +65,7 @@ class _$DayReportCopyWithImpl<$Res>
 
 /// Create a copy of DayReport
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? date = null,Object? totalSales = null,Object? cashInHand = null,Object? draftClosings = null,Object? finalizedClosings = null,Object? totalExpenses = null,Object? netProfit = null,Object? channels = null,Object? expenses = null,Object? counters = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? date = null,Object? totalSales = null,Object? cashInHand = null,Object? draftClosings = null,Object? finalizedClosings = null,Object? totalExpenses = null,Object? totalDeductions = null,Object? netProfit = null,Object? channels = null,Object? expenses = null,Object? deductions = null,Object? counters = null,}) {
   return _then(_self.copyWith(
 date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as String,totalSales: null == totalSales ? _self.totalSales : totalSales // ignore: cast_nullable_to_non_nullable
@@ -73,10 +73,12 @@ as double,cashInHand: null == cashInHand ? _self.cashInHand : cashInHand // igno
 as double,draftClosings: null == draftClosings ? _self.draftClosings : draftClosings // ignore: cast_nullable_to_non_nullable
 as int,finalizedClosings: null == finalizedClosings ? _self.finalizedClosings : finalizedClosings // ignore: cast_nullable_to_non_nullable
 as int,totalExpenses: null == totalExpenses ? _self.totalExpenses : totalExpenses // ignore: cast_nullable_to_non_nullable
+as double,totalDeductions: null == totalDeductions ? _self.totalDeductions : totalDeductions // ignore: cast_nullable_to_non_nullable
 as double,netProfit: null == netProfit ? _self.netProfit : netProfit // ignore: cast_nullable_to_non_nullable
 as double,channels: null == channels ? _self.channels : channels // ignore: cast_nullable_to_non_nullable
 as List<ChannelSaleTotal>,expenses: null == expenses ? _self.expenses : expenses // ignore: cast_nullable_to_non_nullable
-as List<ExpenseCategoryTotal>,counters: null == counters ? _self.counters : counters // ignore: cast_nullable_to_non_nullable
+as List<ExpenseCategoryTotal>,deductions: null == deductions ? _self.deductions : deductions // ignore: cast_nullable_to_non_nullable
+as List<DeductionTypeTotal>,counters: null == counters ? _self.counters : counters // ignore: cast_nullable_to_non_nullable
 as List<CounterBalanceRow>,
   ));
 }
@@ -162,10 +164,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String date, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'draft_closings')  int draftClosings, @JsonKey(name: 'finalized_closings')  int finalizedClosings, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'net_profit')  double netProfit,  List<ChannelSaleTotal> channels,  List<ExpenseCategoryTotal> expenses,  List<CounterBalanceRow> counters)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String date, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'draft_closings')  int draftClosings, @JsonKey(name: 'finalized_closings')  int finalizedClosings, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'total_deductions')  double totalDeductions, @JsonKey(name: 'net_profit')  double netProfit,  List<ChannelSaleTotal> channels,  List<ExpenseCategoryTotal> expenses,  List<DeductionTypeTotal> deductions,  List<CounterBalanceRow> counters)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DayReport() when $default != null:
-return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings,_that.finalizedClosings,_that.totalExpenses,_that.netProfit,_that.channels,_that.expenses,_that.counters);case _:
+return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings,_that.finalizedClosings,_that.totalExpenses,_that.totalDeductions,_that.netProfit,_that.channels,_that.expenses,_that.deductions,_that.counters);case _:
   return orElse();
 
 }
@@ -183,10 +185,10 @@ return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String date, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'draft_closings')  int draftClosings, @JsonKey(name: 'finalized_closings')  int finalizedClosings, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'net_profit')  double netProfit,  List<ChannelSaleTotal> channels,  List<ExpenseCategoryTotal> expenses,  List<CounterBalanceRow> counters)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String date, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'draft_closings')  int draftClosings, @JsonKey(name: 'finalized_closings')  int finalizedClosings, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'total_deductions')  double totalDeductions, @JsonKey(name: 'net_profit')  double netProfit,  List<ChannelSaleTotal> channels,  List<ExpenseCategoryTotal> expenses,  List<DeductionTypeTotal> deductions,  List<CounterBalanceRow> counters)  $default,) {final _that = this;
 switch (_that) {
 case _DayReport():
-return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings,_that.finalizedClosings,_that.totalExpenses,_that.netProfit,_that.channels,_that.expenses,_that.counters);case _:
+return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings,_that.finalizedClosings,_that.totalExpenses,_that.totalDeductions,_that.netProfit,_that.channels,_that.expenses,_that.deductions,_that.counters);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -203,10 +205,10 @@ return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String date, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'draft_closings')  int draftClosings, @JsonKey(name: 'finalized_closings')  int finalizedClosings, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'net_profit')  double netProfit,  List<ChannelSaleTotal> channels,  List<ExpenseCategoryTotal> expenses,  List<CounterBalanceRow> counters)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String date, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'draft_closings')  int draftClosings, @JsonKey(name: 'finalized_closings')  int finalizedClosings, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'total_deductions')  double totalDeductions, @JsonKey(name: 'net_profit')  double netProfit,  List<ChannelSaleTotal> channels,  List<ExpenseCategoryTotal> expenses,  List<DeductionTypeTotal> deductions,  List<CounterBalanceRow> counters)?  $default,) {final _that = this;
 switch (_that) {
 case _DayReport() when $default != null:
-return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings,_that.finalizedClosings,_that.totalExpenses,_that.netProfit,_that.channels,_that.expenses,_that.counters);case _:
+return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings,_that.finalizedClosings,_that.totalExpenses,_that.totalDeductions,_that.netProfit,_that.channels,_that.expenses,_that.deductions,_that.counters);case _:
   return null;
 
 }
@@ -218,7 +220,7 @@ return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings
 @JsonSerializable()
 
 class _DayReport implements DayReport {
-  const _DayReport({required this.date, @JsonKey(name: 'total_sales') required this.totalSales, @JsonKey(name: 'cash_in_hand') required this.cashInHand, @JsonKey(name: 'draft_closings') required this.draftClosings, @JsonKey(name: 'finalized_closings') required this.finalizedClosings, @JsonKey(name: 'total_expenses') required this.totalExpenses, @JsonKey(name: 'net_profit') required this.netProfit, final  List<ChannelSaleTotal> channels = const [], final  List<ExpenseCategoryTotal> expenses = const [], final  List<CounterBalanceRow> counters = const []}): _channels = channels,_expenses = expenses,_counters = counters;
+  const _DayReport({required this.date, @JsonKey(name: 'total_sales') required this.totalSales, @JsonKey(name: 'cash_in_hand') required this.cashInHand, @JsonKey(name: 'draft_closings') required this.draftClosings, @JsonKey(name: 'finalized_closings') required this.finalizedClosings, @JsonKey(name: 'total_expenses') required this.totalExpenses, @JsonKey(name: 'total_deductions') this.totalDeductions = 0.0, @JsonKey(name: 'net_profit') required this.netProfit, final  List<ChannelSaleTotal> channels = const [], final  List<ExpenseCategoryTotal> expenses = const [], final  List<DeductionTypeTotal> deductions = const [], final  List<CounterBalanceRow> counters = const []}): _channels = channels,_expenses = expenses,_deductions = deductions,_counters = counters;
   factory _DayReport.fromJson(Map<String, dynamic> json) => _$DayReportFromJson(json);
 
 @override final  String date;
@@ -227,6 +229,7 @@ class _DayReport implements DayReport {
 @override@JsonKey(name: 'draft_closings') final  int draftClosings;
 @override@JsonKey(name: 'finalized_closings') final  int finalizedClosings;
 @override@JsonKey(name: 'total_expenses') final  double totalExpenses;
+@override@JsonKey(name: 'total_deductions') final  double totalDeductions;
 @override@JsonKey(name: 'net_profit') final  double netProfit;
  final  List<ChannelSaleTotal> _channels;
 @override@JsonKey() List<ChannelSaleTotal> get channels {
@@ -240,6 +243,13 @@ class _DayReport implements DayReport {
   if (_expenses is EqualUnmodifiableListView) return _expenses;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_expenses);
+}
+
+ final  List<DeductionTypeTotal> _deductions;
+@override@JsonKey() List<DeductionTypeTotal> get deductions {
+  if (_deductions is EqualUnmodifiableListView) return _deductions;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_deductions);
 }
 
  final  List<CounterBalanceRow> _counters;
@@ -263,16 +273,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DayReport&&(identical(other.date, date) || other.date == date)&&(identical(other.totalSales, totalSales) || other.totalSales == totalSales)&&(identical(other.cashInHand, cashInHand) || other.cashInHand == cashInHand)&&(identical(other.draftClosings, draftClosings) || other.draftClosings == draftClosings)&&(identical(other.finalizedClosings, finalizedClosings) || other.finalizedClosings == finalizedClosings)&&(identical(other.totalExpenses, totalExpenses) || other.totalExpenses == totalExpenses)&&(identical(other.netProfit, netProfit) || other.netProfit == netProfit)&&const DeepCollectionEquality().equals(other._channels, _channels)&&const DeepCollectionEquality().equals(other._expenses, _expenses)&&const DeepCollectionEquality().equals(other._counters, _counters));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DayReport&&(identical(other.date, date) || other.date == date)&&(identical(other.totalSales, totalSales) || other.totalSales == totalSales)&&(identical(other.cashInHand, cashInHand) || other.cashInHand == cashInHand)&&(identical(other.draftClosings, draftClosings) || other.draftClosings == draftClosings)&&(identical(other.finalizedClosings, finalizedClosings) || other.finalizedClosings == finalizedClosings)&&(identical(other.totalExpenses, totalExpenses) || other.totalExpenses == totalExpenses)&&(identical(other.totalDeductions, totalDeductions) || other.totalDeductions == totalDeductions)&&(identical(other.netProfit, netProfit) || other.netProfit == netProfit)&&const DeepCollectionEquality().equals(other._channels, _channels)&&const DeepCollectionEquality().equals(other._expenses, _expenses)&&const DeepCollectionEquality().equals(other._deductions, _deductions)&&const DeepCollectionEquality().equals(other._counters, _counters));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,date,totalSales,cashInHand,draftClosings,finalizedClosings,totalExpenses,netProfit,const DeepCollectionEquality().hash(_channels),const DeepCollectionEquality().hash(_expenses),const DeepCollectionEquality().hash(_counters));
+int get hashCode => Object.hash(runtimeType,date,totalSales,cashInHand,draftClosings,finalizedClosings,totalExpenses,totalDeductions,netProfit,const DeepCollectionEquality().hash(_channels),const DeepCollectionEquality().hash(_expenses),const DeepCollectionEquality().hash(_deductions),const DeepCollectionEquality().hash(_counters));
 
 @override
 String toString() {
-  return 'DayReport(date: $date, totalSales: $totalSales, cashInHand: $cashInHand, draftClosings: $draftClosings, finalizedClosings: $finalizedClosings, totalExpenses: $totalExpenses, netProfit: $netProfit, channels: $channels, expenses: $expenses, counters: $counters)';
+  return 'DayReport(date: $date, totalSales: $totalSales, cashInHand: $cashInHand, draftClosings: $draftClosings, finalizedClosings: $finalizedClosings, totalExpenses: $totalExpenses, totalDeductions: $totalDeductions, netProfit: $netProfit, channels: $channels, expenses: $expenses, deductions: $deductions, counters: $counters)';
 }
 
 
@@ -283,7 +293,7 @@ abstract mixin class _$DayReportCopyWith<$Res> implements $DayReportCopyWith<$Re
   factory _$DayReportCopyWith(_DayReport value, $Res Function(_DayReport) _then) = __$DayReportCopyWithImpl;
 @override @useResult
 $Res call({
- String date,@JsonKey(name: 'total_sales') double totalSales,@JsonKey(name: 'cash_in_hand') double cashInHand,@JsonKey(name: 'draft_closings') int draftClosings,@JsonKey(name: 'finalized_closings') int finalizedClosings,@JsonKey(name: 'total_expenses') double totalExpenses,@JsonKey(name: 'net_profit') double netProfit, List<ChannelSaleTotal> channels, List<ExpenseCategoryTotal> expenses, List<CounterBalanceRow> counters
+ String date,@JsonKey(name: 'total_sales') double totalSales,@JsonKey(name: 'cash_in_hand') double cashInHand,@JsonKey(name: 'draft_closings') int draftClosings,@JsonKey(name: 'finalized_closings') int finalizedClosings,@JsonKey(name: 'total_expenses') double totalExpenses,@JsonKey(name: 'total_deductions') double totalDeductions,@JsonKey(name: 'net_profit') double netProfit, List<ChannelSaleTotal> channels, List<ExpenseCategoryTotal> expenses, List<DeductionTypeTotal> deductions, List<CounterBalanceRow> counters
 });
 
 
@@ -300,7 +310,7 @@ class __$DayReportCopyWithImpl<$Res>
 
 /// Create a copy of DayReport
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? date = null,Object? totalSales = null,Object? cashInHand = null,Object? draftClosings = null,Object? finalizedClosings = null,Object? totalExpenses = null,Object? netProfit = null,Object? channels = null,Object? expenses = null,Object? counters = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? date = null,Object? totalSales = null,Object? cashInHand = null,Object? draftClosings = null,Object? finalizedClosings = null,Object? totalExpenses = null,Object? totalDeductions = null,Object? netProfit = null,Object? channels = null,Object? expenses = null,Object? deductions = null,Object? counters = null,}) {
   return _then(_DayReport(
 date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as String,totalSales: null == totalSales ? _self.totalSales : totalSales // ignore: cast_nullable_to_non_nullable
@@ -308,10 +318,12 @@ as double,cashInHand: null == cashInHand ? _self.cashInHand : cashInHand // igno
 as double,draftClosings: null == draftClosings ? _self.draftClosings : draftClosings // ignore: cast_nullable_to_non_nullable
 as int,finalizedClosings: null == finalizedClosings ? _self.finalizedClosings : finalizedClosings // ignore: cast_nullable_to_non_nullable
 as int,totalExpenses: null == totalExpenses ? _self.totalExpenses : totalExpenses // ignore: cast_nullable_to_non_nullable
+as double,totalDeductions: null == totalDeductions ? _self.totalDeductions : totalDeductions // ignore: cast_nullable_to_non_nullable
 as double,netProfit: null == netProfit ? _self.netProfit : netProfit // ignore: cast_nullable_to_non_nullable
 as double,channels: null == channels ? _self._channels : channels // ignore: cast_nullable_to_non_nullable
 as List<ChannelSaleTotal>,expenses: null == expenses ? _self._expenses : expenses // ignore: cast_nullable_to_non_nullable
-as List<ExpenseCategoryTotal>,counters: null == counters ? _self._counters : counters // ignore: cast_nullable_to_non_nullable
+as List<ExpenseCategoryTotal>,deductions: null == deductions ? _self._deductions : deductions // ignore: cast_nullable_to_non_nullable
+as List<DeductionTypeTotal>,counters: null == counters ? _self._counters : counters // ignore: cast_nullable_to_non_nullable
 as List<CounterBalanceRow>,
   ));
 }

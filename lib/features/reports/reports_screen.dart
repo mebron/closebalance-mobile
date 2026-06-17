@@ -92,6 +92,7 @@ class ReportsScreen extends ConsumerWidget {
                   _Row(label: 'Total sales', value: formatMoney(r.totalSales, symbol)),
                   _Row(label: 'Cash in hand', value: formatMoney(r.cashInHand, symbol)),
                   _Row(label: 'Expenses', value: formatMoney(r.totalExpenses, symbol)),
+                  _Row(label: 'Deductions', value: formatMoney(r.totalDeductions, symbol)),
                   _Row(
                       label: 'Net Profit',
                       value: formatMoney(r.netProfit, symbol),
@@ -115,6 +116,26 @@ class ReportsScreen extends ConsumerWidget {
                                   label: c.channel,
                                   sublabel: c.type,
                                   value: formatMoney(c.total, symbol),
+                                ))
+                            .toList(),
+                      ),
+              ),
+            ),
+
+            // ── Deductions ────────────────────────────────────────────
+            _Section(
+              title: 'Deductions',
+              child: report.when(
+                loading: () => const _Loading(),
+                error: (e, _) => _Err(e),
+                data: (r) => r.deductions.isEmpty
+                    ? const _Empty('No deductions recorded')
+                    : Column(
+                        children: r.deductions
+                            .map((d) => _Row(
+                                  label: d.type,
+                                  sublabel: '${d.count} item${d.count == 1 ? '' : 's'}',
+                                  value: formatMoney(d.total, symbol),
                                 ))
                             .toList(),
                       ),

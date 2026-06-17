@@ -64,6 +64,20 @@ Map<String, dynamic> _$CounterBalanceRowToJson(_CounterBalanceRow instance) =>
       'balance': instance.balance,
     };
 
+_DeductionTypeTotal _$DeductionTypeTotalFromJson(Map<String, dynamic> json) =>
+    _DeductionTypeTotal(
+      type: json['type'] as String,
+      total: (json['total'] as num).toDouble(),
+      count: (json['count'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$DeductionTypeTotalToJson(_DeductionTypeTotal instance) =>
+    <String, dynamic>{
+      'type': instance.type,
+      'total': instance.total,
+      'count': instance.count,
+    };
+
 _ChannelSaleTotal _$ChannelSaleTotalFromJson(Map<String, dynamic> json) =>
     _ChannelSaleTotal(
       channel: json['channel'] as String,

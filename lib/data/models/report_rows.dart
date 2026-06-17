@@ -44,6 +44,17 @@ abstract class CounterBalanceRow with _$CounterBalanceRow {
 }
 
 @freezed
+abstract class DeductionTypeTotal with _$DeductionTypeTotal {
+  const factory DeductionTypeTotal({
+    required String type,
+    required double total,
+    required int count,
+  }) = _DeductionTypeTotal;
+
+  factory DeductionTypeTotal.fromJson(Map<String, dynamic> json) => _$DeductionTypeTotalFromJson(json);
+}
+
+@freezed
 abstract class ChannelSaleTotal with _$ChannelSaleTotal {
   const factory ChannelSaleTotal({
     required String channel,
