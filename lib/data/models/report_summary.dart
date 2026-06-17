@@ -12,7 +12,7 @@ abstract class ReportSummary with _$ReportSummary {
     @JsonKey(name: 'draft_closings') required int draftClosings,
     @JsonKey(name: 'finalized_closings') required int finalizedClosings,
     @JsonKey(name: 'total_expenses') required double totalExpenses,
-    @JsonKey(name: 'net_profit') required double netProfit,
+    @JsonKey(name: 'net_profit') @Default(0.0) double netProfit,
   }) = _ReportSummary;
 
   factory ReportSummary.fromJson(Map<String, dynamic> json) => _$ReportSummaryFromJson(json);
