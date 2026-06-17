@@ -55,7 +55,7 @@ class CountersTab extends ConsumerWidget {
                           context,
                           initialCounterId: t.counterId,
                           initialSaleAmount: t.saleAmount,
-                          initialPaidAmount: t.paidAmount,
+                          initialPayments: t.payments,
                           initialRemarks: t.remarks,
                         );
                         if (result != null) {
@@ -63,7 +63,7 @@ class CountersTab extends ConsumerWidget {
                             clientId: t.clientId,
                             counterId: result.counterId,
                             saleAmount: result.saleAmount,
-                            paidAmount: result.paidAmount,
+                            payments: result.payments,
                             remarks: result.remarks,
                           );
                         }
@@ -83,7 +83,7 @@ class CountersTab extends ConsumerWidget {
                   await ctrl.addCounterTxn(
                     counterId: result.counterId,
                     saleAmount: result.saleAmount,
-                    paidAmount: result.paidAmount,
+                    payments: result.payments,
                     remarks: result.remarks,
                   );
                 }

@@ -50,7 +50,9 @@ abstract final class EditableClosingMapper {
                 serverId: t.id,
                 counterId: t.counterId,
                 saleAmount: t.saleAmount,
-                paidAmount: t.paidAmount,
+                payments: t.payments
+                    .map((p) => EditablePayment(amount: p.amount, paymentMethod: p.method))
+                    .toList(),
                 remarks: t.remarks,
               ))
           .toList(),

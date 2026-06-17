@@ -74,13 +74,29 @@ Map<String, dynamic> _$EditableDeductionToJson(_EditableDeduction instance) =>
       'deleted': instance.deleted,
     };
 
+_EditablePayment _$EditablePaymentFromJson(Map<String, dynamic> json) =>
+    _EditablePayment(
+      amount: (json['amount'] as num).toDouble(),
+      paymentMethod: json['payment_method'] as String,
+    );
+
+Map<String, dynamic> _$EditablePaymentToJson(_EditablePayment instance) =>
+    <String, dynamic>{
+      'amount': instance.amount,
+      'payment_method': instance.paymentMethod,
+    };
+
 _EditableCounterTxn _$EditableCounterTxnFromJson(Map<String, dynamic> json) =>
     _EditableCounterTxn(
       clientId: json['clientId'] as String,
       serverId: (json['server_id'] as num?)?.toInt(),
       counterId: (json['counter_id'] as num).toInt(),
       saleAmount: (json['sale_amount'] as num).toDouble(),
-      paidAmount: (json['paid_amount'] as num).toDouble(),
+      payments:
+          (json['payments'] as List<dynamic>?)
+              ?.map((e) => EditablePayment.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const <EditablePayment>[],
       remarks: json['remarks'] as String?,
       dirty: json['dirty'] as bool? ?? false,
       deleted: json['deleted'] as bool? ?? false,
@@ -92,7 +108,7 @@ Map<String, dynamic> _$EditableCounterTxnToJson(_EditableCounterTxn instance) =>
       'server_id': instance.serverId,
       'counter_id': instance.counterId,
       'sale_amount': instance.saleAmount,
-      'paid_amount': instance.paidAmount,
+      'payments': instance.payments.map((e) => e.toJson()).toList(),
       'remarks': instance.remarks,
       'dirty': instance.dirty,
       'deleted': instance.deleted,

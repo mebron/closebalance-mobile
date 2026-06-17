@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers.dart';
 
-Future<({int categoryId, String description, double amount, String paymentMethod})?>
+Future<({int categoryId, String? description, double amount, String paymentMethod})?>
     showExpenseSheet(
   BuildContext context, {
   int? initialCategoryId,
@@ -11,7 +11,7 @@ Future<({int categoryId, String description, double amount, String paymentMethod
   String? initialPaymentMethod,
 }) {
   return showModalBottomSheet<
-      ({int categoryId, String description, double amount, String paymentMethod})>(
+      ({int categoryId, String? description, double amount, String paymentMethod})>(
     context: context,
     isScrollControlled: true,
     builder: (ctx) => _ExpenseSheet(
@@ -97,8 +97,7 @@ class _ExpenseSheetState extends ConsumerState<_ExpenseSheet> {
             const SizedBox(height: 12),
             TextFormField(
               controller: _descCtrl,
-              decoration: const InputDecoration(labelText: 'Description'),
-              validator: (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
+              decoration: const InputDecoration(labelText: 'Description (optional)'),
             ),
             const SizedBox(height: 12),
             TextFormField(
@@ -123,9 +122,10 @@ class _ExpenseSheetState extends ConsumerState<_ExpenseSheet> {
             ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
+                  final desc = _descCtrl.text.trim();
                   Navigator.of(context).pop((
                     categoryId: _categoryId!,
-                    description: _descCtrl.text.trim(),
+                    description: desc.isEmpty ? null : desc,
                     amount: double.parse(_amountCtrl.text),
                     paymentMethod: _paymentMethod,
                   ));

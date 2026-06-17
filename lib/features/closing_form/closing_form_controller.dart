@@ -124,22 +124,23 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
   }
 
   Future<EditableClosing> _loadExisting(_ExistingArg arg) async {
-    final store = ref.read(editableClosingStoreProvider);
-
-    // Check local cache first.
-    final cached = await store.load(arg.branchId, arg.date);
-    if (cached != null && cached.serverId == arg.serverId) {
-      return cached;
+    // Always fetch fresh from server — stale cache would show outdated totals.
+    try {
+      final api = ref.read(closingApiServiceProvider);
+      final dc = await api.detail(arg.serverId);
+      final editable = EditableClosingMapper.fromDailyClosing(dc, branchId: arg.branchId);
+      final store = ref.read(editableClosingStoreProvider);
+      await store.save(editable, dirty: false);
+      return editable;
+    } on Object {
+      // Offline — fall back to local cache.
+      final store = ref.read(editableClosingStoreProvider);
+      final cached = await store.load(arg.branchId, arg.date);
+      if (cached != null && cached.serverId == arg.serverId) {
+        return cached;
+      }
+      rethrow;
     }
-
-    // Fetch from server.
-    final api = ref.read(closingApiServiceProvider);
-    final dc = await api.detail(arg.serverId);
-    final editable = EditableClosingMapper.fromDailyClosing(dc, branchId: arg.branchId);
-
-    // Cache locally (non-dirty, server is authoritative).
-    await store.save(editable, dirty: false);
-    return editable;
   }
 
   // -------------------------------------------------------------------------
@@ -382,7 +383,7 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
   Future<void> addCounterTxn({
     required int counterId,
     required double saleAmount,
-    required double paidAmount,
+    required List<EditablePayment> payments,
     String? remarks,
   }) async {
     final current = state.value;
@@ -393,7 +394,7 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
       clientId: _uuid.v4(),
       counterId: counterId,
       saleAmount: saleAmount,
-      paidAmount: paidAmount,
+      payments: payments,
       remarks: remarks,
       dirty: true,
     );
@@ -406,7 +407,7 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
     required String clientId,
     int? counterId,
     double? saleAmount,
-    double? paidAmount,
+    List<EditablePayment>? payments,
     Object? remarks = _kUnset,
   }) async {
     final current = state.value;
@@ -420,7 +421,7 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
       return t.copyWith(
         counterId: counterId ?? t.counterId,
         saleAmount: saleAmount ?? t.saleAmount,
-        paidAmount: paidAmount ?? t.paidAmount,
+        payments: payments ?? t.payments,
         remarks: identical(remarks, _kUnset) ? t.remarks : remarks as String?,
         dirty: true,
       );

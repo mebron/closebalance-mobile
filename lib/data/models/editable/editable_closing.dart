@@ -51,18 +51,31 @@ abstract class EditableDeduction with _$EditableDeduction {
 }
 
 @freezed
+abstract class EditablePayment with _$EditablePayment {
+  const factory EditablePayment({
+    required double amount,
+    @JsonKey(name: 'payment_method') required String paymentMethod,
+  }) = _EditablePayment;
+  factory EditablePayment.fromJson(Map<String, dynamic> json) => _$EditablePaymentFromJson(json);
+}
+
+@freezed
 abstract class EditableCounterTxn with _$EditableCounterTxn {
+  const EditableCounterTxn._();
+
   const factory EditableCounterTxn({
     required String clientId,
     @JsonKey(name: 'server_id') int? serverId,
     @JsonKey(name: 'counter_id') required int counterId,
     @JsonKey(name: 'sale_amount') required double saleAmount,
-    @JsonKey(name: 'paid_amount') required double paidAmount,
+    @Default(<EditablePayment>[]) List<EditablePayment> payments,
     String? remarks,
     @Default(false) bool dirty,
     @Default(false) bool deleted,
   }) = _EditableCounterTxn;
   factory EditableCounterTxn.fromJson(Map<String, dynamic> json) => _$EditableCounterTxnFromJson(json);
+
+  double get paidAmount => payments.fold(0.0, (s, p) => s + p.amount);
 }
 
 @freezed

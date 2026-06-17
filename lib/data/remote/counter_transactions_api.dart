@@ -2,6 +2,7 @@
 import 'package:dio/dio.dart';
 import '../../core/network/api_guard.dart';
 import '../models/counter_transaction.dart';
+import '../models/editable/editable_closing.dart';
 
 class CounterTransactionsApi {
   CounterTransactionsApi(this._dio);
@@ -12,7 +13,7 @@ class CounterTransactionsApi {
     required int counterId,
     required String date,
     required num saleAmount,
-    required num paidAmount,
+    required List<EditablePayment> payments,
     String? remarks,
   }) =>
       guardApi(() async {
@@ -20,7 +21,7 @@ class CounterTransactionsApi {
           'counter_id': counterId,
           'date': date,
           'sale_amount': saleAmount,
-          'paid_amount': paidAmount,
+          'payments': payments.map((p) => {'amount': p.amount, 'method': p.paymentMethod}).toList(),
           if (remarks != null) 'remarks': remarks,
         });
         return CounterTransaction.fromJson(
@@ -33,7 +34,7 @@ class CounterTransactionsApi {
     required int counterId,
     required String date,
     required num saleAmount,
-    required num paidAmount,
+    required List<EditablePayment> payments,
     String? remarks,
   }) =>
       guardApi(() async {
@@ -41,7 +42,7 @@ class CounterTransactionsApi {
           'counter_id': counterId,
           'date': date,
           'sale_amount': saleAmount,
-          'paid_amount': paidAmount,
+          'payments': payments.map((p) => {'amount': p.amount, 'method': p.paymentMethod}).toList(),
           if (remarks != null) 'remarks': remarks,
         });
         return CounterTransaction.fromJson(

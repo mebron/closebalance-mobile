@@ -66,7 +66,7 @@ class ClosingSyncService {
         await _expenses.create(
             closingId: serverId,
             expenseCategoryId: e.expenseCategoryId,
-            description: e.description ?? '',
+            description: e.description,
             amount: e.amount,
             paymentMethod: e.paymentMethod);
       } else if (e.dirty) {
@@ -74,7 +74,7 @@ class ClosingSyncService {
             closingId: serverId,
             expenseId: e.serverId!,
             expenseCategoryId: e.expenseCategoryId,
-            description: e.description ?? '',
+            description: e.description,
             amount: e.amount,
             paymentMethod: e.paymentMethod);
       }
@@ -112,7 +112,7 @@ class ClosingSyncService {
             counterId: t.counterId,
             date: c.date,
             saleAmount: t.saleAmount,
-            paidAmount: t.paidAmount,
+            payments: t.payments,
             remarks: t.remarks);
       } else if (t.dirty) {
         await _counters.update(
@@ -121,7 +121,7 @@ class ClosingSyncService {
             counterId: t.counterId,
             date: c.date,
             saleAmount: t.saleAmount,
-            paidAmount: t.paidAmount,
+            payments: t.payments,
             remarks: t.remarks);
       }
     }

@@ -11,7 +11,19 @@ abstract class CounterRef with _$CounterRef {
 }
 
 @freezed
+abstract class CounterPayment with _$CounterPayment {
+  const factory CounterPayment({
+    required double amount,
+    required String method,
+  }) = _CounterPayment;
+
+  factory CounterPayment.fromJson(Map<String, dynamic> json) => _$CounterPaymentFromJson(json);
+}
+
+@freezed
 abstract class CounterTransaction with _$CounterTransaction {
+  const CounterTransaction._();
+
   const factory CounterTransaction({
     required int id,
     @JsonKey(name: 'counter_id') required int counterId,
@@ -19,6 +31,7 @@ abstract class CounterTransaction with _$CounterTransaction {
     required String date,
     @JsonKey(name: 'sale_amount') required double saleAmount,
     @JsonKey(name: 'paid_amount') required double paidAmount,
+    @Default(<CounterPayment>[]) List<CounterPayment> payments,
     required double balance,
     String? remarks,
   }) = _CounterTransaction;

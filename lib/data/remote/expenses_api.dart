@@ -10,7 +10,7 @@ class ExpensesApi {
   Future<ExpenseLine> create({
     required int closingId,
     required int expenseCategoryId,
-    required String description,
+    String? description,
     required num amount,
     required String paymentMethod,
     String? remarks,
@@ -18,7 +18,7 @@ class ExpensesApi {
     return guardApi(() async {
       final res = await _dio.post('/daily-closings/$closingId/expenses', data: {
         'expense_category_id': expenseCategoryId,
-        'description': description,
+        if (description != null && description.isNotEmpty) 'description': description,
         'amount': amount,
         'payment_method': paymentMethod,
         if (remarks != null) 'remarks': remarks,
@@ -32,7 +32,7 @@ class ExpensesApi {
     required int closingId,
     required int expenseId,
     required int expenseCategoryId,
-    required String description,
+    String? description,
     required num amount,
     required String paymentMethod,
     String? remarks,
