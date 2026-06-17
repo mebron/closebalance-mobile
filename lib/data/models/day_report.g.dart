@@ -14,7 +14,7 @@ _DayReport _$DayReportFromJson(Map<String, dynamic> json) => _DayReport(
   finalizedClosings: (json['finalized_closings'] as num).toInt(),
   totalExpenses: (json['total_expenses'] as num).toDouble(),
   totalDeductions: (json['total_deductions'] as num?)?.toDouble() ?? 0.0,
-  netProfit: (json['net_profit'] as num).toDouble(),
+  netProfit: (json['net_profit'] as num?)?.toDouble() ?? 0.0,
   channels:
       (json['channels'] as List<dynamic>?)
           ?.map((e) => ChannelSaleTotal.fromJson(e as Map<String, dynamic>))

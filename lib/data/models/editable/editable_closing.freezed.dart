@@ -494,7 +494,7 @@ return $default(_that.clientId,_that.serverId,_that.expenseCategoryId,_that.desc
 @JsonSerializable()
 
 class _EditableExpense implements EditableExpense {
-  const _EditableExpense({required this.clientId, @JsonKey(name: 'server_id') this.serverId, @JsonKey(name: 'expense_category_id') required this.expenseCategoryId, this.description, required this.amount, @JsonKey(name: 'payment_method') required this.paymentMethod, this.dirty = false, this.deleted = false});
+  const _EditableExpense({required this.clientId, @JsonKey(name: 'server_id') this.serverId, @JsonKey(name: 'expense_category_id') required this.expenseCategoryId, this.description, required this.amount, @JsonKey(name: 'payment_method') this.paymentMethod = 'cash', this.dirty = false, this.deleted = false});
   factory _EditableExpense.fromJson(Map<String, dynamic> json) => _$EditableExpenseFromJson(json);
 
 @override final  String clientId;
@@ -778,7 +778,7 @@ return $default(_that.clientId,_that.serverId,_that.type,_that.description,_that
 @JsonSerializable()
 
 class _EditableDeduction implements EditableDeduction {
-  const _EditableDeduction({required this.clientId, @JsonKey(name: 'server_id') this.serverId, required this.type, this.description, required this.amount, @JsonKey(name: 'payment_method') required this.paymentMethod, this.dirty = false, this.deleted = false});
+  const _EditableDeduction({required this.clientId, @JsonKey(name: 'server_id') this.serverId, required this.type, this.description, required this.amount, @JsonKey(name: 'payment_method') this.paymentMethod = 'cash', this.dirty = false, this.deleted = false});
   factory _EditableDeduction.fromJson(Map<String, dynamic> json) => _$EditableDeductionFromJson(json);
 
 @override final  String clientId;
@@ -1056,7 +1056,7 @@ return $default(_that.amount,_that.paymentMethod);case _:
 @JsonSerializable()
 
 class _EditablePayment implements EditablePayment {
-  const _EditablePayment({required this.amount, @JsonKey(name: 'payment_method') required this.paymentMethod});
+  const _EditablePayment({required this.amount, @JsonKey(name: 'payment_method') this.paymentMethod = 'cash'});
   factory _EditablePayment.fromJson(Map<String, dynamic> json) => _$EditablePaymentFromJson(json);
 
 @override final  double amount;

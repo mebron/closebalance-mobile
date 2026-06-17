@@ -213,7 +213,7 @@ return $default(_that.id,_that.type,_that.description,_that.amount,_that.payment
 @JsonSerializable()
 
 class _Deduction implements Deduction {
-  const _Deduction({required this.id, required this.type, this.description, required this.amount, @JsonKey(name: 'payment_method') required this.paymentMethod});
+  const _Deduction({required this.id, required this.type, this.description, required this.amount, @JsonKey(name: 'payment_method') this.paymentMethod = 'cash'});
   factory _Deduction.fromJson(Map<String, dynamic> json) => _$DeductionFromJson(json);
 
 @override final  int id;

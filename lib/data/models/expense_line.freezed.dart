@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ExpenseLine {
 
- int get id;@JsonKey(name: 'expense_category_id') int get expenseCategoryId; ExpenseCategory? get category; String get description; double get amount;@JsonKey(name: 'payment_method') String get paymentMethod; String? get remarks;
+ int get id;@JsonKey(name: 'expense_category_id') int get expenseCategoryId; ExpenseCategory? get category; String? get description; double get amount;@JsonKey(name: 'payment_method') String get paymentMethod; String? get remarks;
 /// Create a copy of ExpenseLine
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $ExpenseLineCopyWith<$Res>  {
   factory $ExpenseLineCopyWith(ExpenseLine value, $Res Function(ExpenseLine) _then) = _$ExpenseLineCopyWithImpl;
 @useResult
 $Res call({
- int id,@JsonKey(name: 'expense_category_id') int expenseCategoryId, ExpenseCategory? category, String description, double amount,@JsonKey(name: 'payment_method') String paymentMethod, String? remarks
+ int id,@JsonKey(name: 'expense_category_id') int expenseCategoryId, ExpenseCategory? category, String? description, double amount,@JsonKey(name: 'payment_method') String paymentMethod, String? remarks
 });
 
 
@@ -65,13 +65,13 @@ class _$ExpenseLineCopyWithImpl<$Res>
 
 /// Create a copy of ExpenseLine
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? expenseCategoryId = null,Object? category = freezed,Object? description = null,Object? amount = null,Object? paymentMethod = null,Object? remarks = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? expenseCategoryId = null,Object? category = freezed,Object? description = freezed,Object? amount = null,Object? paymentMethod = null,Object? remarks = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,expenseCategoryId: null == expenseCategoryId ? _self.expenseCategoryId : expenseCategoryId // ignore: cast_nullable_to_non_nullable
 as int,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
-as ExpenseCategory?,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
+as ExpenseCategory?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as double,paymentMethod: null == paymentMethod ? _self.paymentMethod : paymentMethod // ignore: cast_nullable_to_non_nullable
 as String,remarks: freezed == remarks ? _self.remarks : remarks // ignore: cast_nullable_to_non_nullable
 as String?,
@@ -171,7 +171,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'expense_category_id')  int expenseCategoryId,  ExpenseCategory? category,  String description,  double amount, @JsonKey(name: 'payment_method')  String paymentMethod,  String? remarks)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'expense_category_id')  int expenseCategoryId,  ExpenseCategory? category,  String? description,  double amount, @JsonKey(name: 'payment_method')  String paymentMethod,  String? remarks)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ExpenseLine() when $default != null:
 return $default(_that.id,_that.expenseCategoryId,_that.category,_that.description,_that.amount,_that.paymentMethod,_that.remarks);case _:
@@ -192,7 +192,7 @@ return $default(_that.id,_that.expenseCategoryId,_that.category,_that.descriptio
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'expense_category_id')  int expenseCategoryId,  ExpenseCategory? category,  String description,  double amount, @JsonKey(name: 'payment_method')  String paymentMethod,  String? remarks)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'expense_category_id')  int expenseCategoryId,  ExpenseCategory? category,  String? description,  double amount, @JsonKey(name: 'payment_method')  String paymentMethod,  String? remarks)  $default,) {final _that = this;
 switch (_that) {
 case _ExpenseLine():
 return $default(_that.id,_that.expenseCategoryId,_that.category,_that.description,_that.amount,_that.paymentMethod,_that.remarks);case _:
@@ -212,7 +212,7 @@ return $default(_that.id,_that.expenseCategoryId,_that.category,_that.descriptio
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(name: 'expense_category_id')  int expenseCategoryId,  ExpenseCategory? category,  String description,  double amount, @JsonKey(name: 'payment_method')  String paymentMethod,  String? remarks)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(name: 'expense_category_id')  int expenseCategoryId,  ExpenseCategory? category,  String? description,  double amount, @JsonKey(name: 'payment_method')  String paymentMethod,  String? remarks)?  $default,) {final _that = this;
 switch (_that) {
 case _ExpenseLine() when $default != null:
 return $default(_that.id,_that.expenseCategoryId,_that.category,_that.description,_that.amount,_that.paymentMethod,_that.remarks);case _:
@@ -227,13 +227,13 @@ return $default(_that.id,_that.expenseCategoryId,_that.category,_that.descriptio
 @JsonSerializable()
 
 class _ExpenseLine implements ExpenseLine {
-  const _ExpenseLine({required this.id, @JsonKey(name: 'expense_category_id') required this.expenseCategoryId, this.category, required this.description, required this.amount, @JsonKey(name: 'payment_method') required this.paymentMethod, this.remarks});
+  const _ExpenseLine({required this.id, @JsonKey(name: 'expense_category_id') required this.expenseCategoryId, this.category, this.description, required this.amount, @JsonKey(name: 'payment_method') this.paymentMethod = 'cash', this.remarks});
   factory _ExpenseLine.fromJson(Map<String, dynamic> json) => _$ExpenseLineFromJson(json);
 
 @override final  int id;
 @override@JsonKey(name: 'expense_category_id') final  int expenseCategoryId;
 @override final  ExpenseCategory? category;
-@override final  String description;
+@override final  String? description;
 @override final  double amount;
 @override@JsonKey(name: 'payment_method') final  String paymentMethod;
 @override final  String? remarks;
@@ -271,7 +271,7 @@ abstract mixin class _$ExpenseLineCopyWith<$Res> implements $ExpenseLineCopyWith
   factory _$ExpenseLineCopyWith(_ExpenseLine value, $Res Function(_ExpenseLine) _then) = __$ExpenseLineCopyWithImpl;
 @override @useResult
 $Res call({
- int id,@JsonKey(name: 'expense_category_id') int expenseCategoryId, ExpenseCategory? category, String description, double amount,@JsonKey(name: 'payment_method') String paymentMethod, String? remarks
+ int id,@JsonKey(name: 'expense_category_id') int expenseCategoryId, ExpenseCategory? category, String? description, double amount,@JsonKey(name: 'payment_method') String paymentMethod, String? remarks
 });
 
 
@@ -288,13 +288,13 @@ class __$ExpenseLineCopyWithImpl<$Res>
 
 /// Create a copy of ExpenseLine
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? expenseCategoryId = null,Object? category = freezed,Object? description = null,Object? amount = null,Object? paymentMethod = null,Object? remarks = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? expenseCategoryId = null,Object? category = freezed,Object? description = freezed,Object? amount = null,Object? paymentMethod = null,Object? remarks = freezed,}) {
   return _then(_ExpenseLine(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,expenseCategoryId: null == expenseCategoryId ? _self.expenseCategoryId : expenseCategoryId // ignore: cast_nullable_to_non_nullable
 as int,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
-as ExpenseCategory?,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
+as ExpenseCategory?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as double,paymentMethod: null == paymentMethod ? _self.paymentMethod : paymentMethod // ignore: cast_nullable_to_non_nullable
 as String,remarks: freezed == remarks ? _self.remarks : remarks // ignore: cast_nullable_to_non_nullable
 as String?,

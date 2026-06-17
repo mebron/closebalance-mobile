@@ -12,9 +12,9 @@ _ExpenseLine _$ExpenseLineFromJson(Map<String, dynamic> json) => _ExpenseLine(
   category: json['category'] == null
       ? null
       : ExpenseCategory.fromJson(json['category'] as Map<String, dynamic>),
-  description: json['description'] as String,
+  description: json['description'] as String?,
   amount: (json['amount'] as num).toDouble(),
-  paymentMethod: json['payment_method'] as String,
+  paymentMethod: json['payment_method'] as String? ?? 'cash',
   remarks: json['remarks'] as String?,
 );
 

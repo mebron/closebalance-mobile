@@ -215,7 +215,7 @@ return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings
 @JsonSerializable()
 
 class _ReportSummary implements ReportSummary {
-  const _ReportSummary({required this.date, @JsonKey(name: 'total_sales') required this.totalSales, @JsonKey(name: 'cash_in_hand') required this.cashInHand, @JsonKey(name: 'draft_closings') required this.draftClosings, @JsonKey(name: 'finalized_closings') required this.finalizedClosings, @JsonKey(name: 'total_expenses') required this.totalExpenses, @JsonKey(name: 'net_profit') required this.netProfit});
+  const _ReportSummary({required this.date, @JsonKey(name: 'total_sales') required this.totalSales, @JsonKey(name: 'cash_in_hand') required this.cashInHand, @JsonKey(name: 'draft_closings') required this.draftClosings, @JsonKey(name: 'finalized_closings') required this.finalizedClosings, @JsonKey(name: 'total_expenses') required this.totalExpenses, @JsonKey(name: 'net_profit') this.netProfit = 0.0});
   factory _ReportSummary.fromJson(Map<String, dynamic> json) => _$ReportSummaryFromJson(json);
 
 @override final  String date;

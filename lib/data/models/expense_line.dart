@@ -10,9 +10,9 @@ abstract class ExpenseLine with _$ExpenseLine {
     required int id,
     @JsonKey(name: 'expense_category_id') required int expenseCategoryId,
     ExpenseCategory? category,
-    required String description,
+    String? description,
     required double amount,
-    @JsonKey(name: 'payment_method') required String paymentMethod,
+    @JsonKey(name: 'payment_method') @Default('cash') String paymentMethod,
     String? remarks,
   }) = _ExpenseLine;
 
