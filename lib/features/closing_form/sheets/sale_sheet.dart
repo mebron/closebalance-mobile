@@ -49,7 +49,7 @@ class _SaleSheetState extends ConsumerState<_SaleSheet> {
   @override
   Widget build(BuildContext context) {
     final refData = ref.watch(referenceDataProvider);
-    final channels = refData.value?.paymentChannels ?? const [];
+    final channels = refData.value?.paymentChannels;
 
     return Padding(
       padding: EdgeInsets.only(
@@ -66,15 +66,18 @@ class _SaleSheetState extends ConsumerState<_SaleSheet> {
           children: [
             Text('Sale Entry', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 16),
-            DropdownButtonFormField<int>(
-              initialValue: _channelId,
-              decoration: const InputDecoration(labelText: 'Payment Channel'),
-              items: channels
-                  .map((c) => DropdownMenuItem(value: c.id, child: Text(c.name)))
-                  .toList(),
-              onChanged: (v) => setState(() => _channelId = v),
-              validator: (v) => v == null ? 'Select a channel' : null,
-            ),
+            if (channels == null)
+              const LinearProgressIndicator()
+            else
+              DropdownButtonFormField<int>(
+                initialValue: _channelId,
+                decoration: const InputDecoration(labelText: 'Payment Channel'),
+                items: channels
+                    .map((c) => DropdownMenuItem(value: c.id, child: Text(c.name)))
+                    .toList(),
+                onChanged: (v) => setState(() => _channelId = v),
+                validator: (v) => v == null ? 'Select a channel' : null,
+              ),
             const SizedBox(height: 12),
             TextFormField(
               controller: _amountCtrl,

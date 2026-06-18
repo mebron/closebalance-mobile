@@ -120,7 +120,7 @@ class _CounterSheetState extends ConsumerState<_CounterSheet> {
   @override
   Widget build(BuildContext context) {
     final refData = ref.watch(referenceDataProvider);
-    final counters = refData.value?.counters ?? const [];
+    final counters = refData.value?.counters;
     final currencySymbol = refData.value?.currencySymbol ?? '';
 
     return Padding(
@@ -139,15 +139,18 @@ class _CounterSheetState extends ConsumerState<_CounterSheet> {
             children: [
               Text('Counter Transaction', style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 16),
-              DropdownButtonFormField<int>(
-                value: _counterId,
-                decoration: const InputDecoration(labelText: 'Counter'),
-                items: counters
-                    .map((c) => DropdownMenuItem(value: c.id, child: Text(c.name)))
-                    .toList(),
-                onChanged: (v) => setState(() => _counterId = v),
-                validator: (v) => v == null ? 'Select a counter' : null,
-              ),
+              if (counters == null)
+                const LinearProgressIndicator()
+              else
+                DropdownButtonFormField<int>(
+                  initialValue: _counterId,
+                  decoration: const InputDecoration(labelText: 'Counter'),
+                  items: counters
+                      .map((c) => DropdownMenuItem(value: c.id, child: Text(c.name)))
+                      .toList(),
+                  onChanged: (v) => setState(() => _counterId = v),
+                  validator: (v) => v == null ? 'Select a counter' : null,
+                ),
               const SizedBox(height: 12),
               TextFormField(
                 controller: _saleCtrl,
@@ -198,7 +201,7 @@ class _CounterSheetState extends ConsumerState<_CounterSheet> {
                       Expanded(
                         flex: 4,
                         child: DropdownButtonFormField<String>(
-                          value: p.method,
+                          initialValue: p.method,
                           decoration: const InputDecoration(labelText: 'Paid Via'),
                           items: const [
                             DropdownMenuItem(value: 'cash', child: Text('Cash')),

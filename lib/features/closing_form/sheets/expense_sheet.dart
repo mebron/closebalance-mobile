@@ -68,7 +68,9 @@ class _ExpenseSheetState extends ConsumerState<_ExpenseSheet> {
   @override
   Widget build(BuildContext context) {
     final refData = ref.watch(referenceDataProvider);
-    final categories = refData.value?.expenseCategories ?? const [];
+    // null means still loading — don't pass an empty list to DropdownButton,
+    // which would disable its tap handler and make the dropdown unresponsive.
+    final categories = refData.value?.expenseCategories;
 
     return Padding(
       padding: EdgeInsets.only(
@@ -85,15 +87,18 @@ class _ExpenseSheetState extends ConsumerState<_ExpenseSheet> {
           children: [
             Text('Expense', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 16),
-            DropdownButtonFormField<int>(
-              initialValue: _categoryId,
-              decoration: const InputDecoration(labelText: 'Category'),
-              items: categories
-                  .map((c) => DropdownMenuItem(value: c.id, child: Text(c.name)))
-                  .toList(),
-              onChanged: (v) => setState(() => _categoryId = v),
-              validator: (v) => v == null ? 'Select a category' : null,
-            ),
+            if (categories == null)
+              const LinearProgressIndicator()
+            else
+              DropdownButtonFormField<int>(
+                initialValue: _categoryId,
+                decoration: const InputDecoration(labelText: 'Category'),
+                items: categories
+                    .map((c) => DropdownMenuItem(value: c.id, child: Text(c.name)))
+                    .toList(),
+                onChanged: (v) => setState(() => _categoryId = v),
+                validator: (v) => v == null ? 'Select a category' : null,
+              ),
             const SizedBox(height: 12),
             TextFormField(
               controller: _descCtrl,
