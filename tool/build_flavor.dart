@@ -90,6 +90,7 @@ Future<void> main(List<String> args) async {
     'build', 'apk',
     '--flavor', flavor,
     '-t', 'lib/main_${flavor == 'closebalance' ? '' : flavor}.dart'.replaceAll('main_.dart', 'main.dart'),
+    '--dart-define=API_BASE_URL=$apiBaseUrl',
     if (isRelease) '--release',
   ];
   _log('Building APK: flutter ${buildArgs.join(' ')}');
