@@ -73,7 +73,7 @@ class _State extends ConsumerState<DailyClosingFormScreen>
       builder: (ctx) => AlertDialog(
         title: const Text('Close Day?'),
         content: const Text(
-          'This will finalize the closing. No further edits will be possible.',
+          'Once closed, no entries can be added or edited. This cannot be undone.',
         ),
         actions: [
           TextButton(
@@ -82,6 +82,10 @@ class _State extends ConsumerState<DailyClosingFormScreen>
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.green,
+              foregroundColor: Colors.white,
+            ),
             child: const Text('Close Day'),
           ),
         ],
@@ -201,37 +205,59 @@ class _State extends ConsumerState<DailyClosingFormScreen>
               ),
             ),
             if (!isFinalized && canFinalize)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: ElevatedButton(
-                    onPressed: _finalizing ? null : _finalize,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.green,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
+              Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.07),
+                      blurRadius: 10,
+                      offset: const Offset(0, -3),
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      height: 52,
+                      child: ElevatedButton.icon(
+                        onPressed: _finalizing ? null : _finalize,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.green,
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                        ),
+                        icon: _finalizing
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Icon(Icons.lock_outline, size: 20),
+                        label: Text(
+                          _finalizing ? 'Closing…' : 'Close Day',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
                       ),
                     ),
-                    child: _finalizing
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const Text(
-                            'Close Day',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                  ),
+                    const SizedBox(height: 5),
+                    Text(
+                      'All entries will be locked after closing',
+                      style: TextStyle(fontSize: 12, color: AppColors.slate),
+                    ),
+                  ],
                 ),
               ),
             SummaryFooter(
