@@ -458,6 +458,21 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
     await store.save(fresh, dirty: false);
     state = AsyncData(fresh);
   }
+
+  Future<void> finalize() async {
+    // Push any pending edits first so the server has the latest data.
+    await save();
+    final current = state.value;
+    if (current == null) return;
+    final serverId = current.serverId;
+    if (serverId == null) throw StateError('Closing has no server ID after save');
+    final api = ref.read(closingApiServiceProvider);
+    final finalized = await api.finalize(serverId);
+    final updated = EditableClosingMapper.fromDailyClosing(finalized, branchId: current.branchId);
+    final store = ref.read(editableClosingStoreProvider);
+    await store.save(updated, dirty: false);
+    state = AsyncData(updated);
+  }
 }
 
 final closingFormControllerProvider = AsyncNotifierProvider.autoDispose

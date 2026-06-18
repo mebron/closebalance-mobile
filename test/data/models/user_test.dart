@@ -33,4 +33,24 @@ void main() {
     expect(user.isBranchLocked, isTrue);
     expect(user.branchId, 3);
   });
+
+  test('canFinalize is true for admin and manager roles', () {
+    for (final role in ['super_admin', 'admin', 'manager']) {
+      final user = User.fromJson({
+        'id': 1, 'name': 'U', 'email': 'u@x.com', 'branch_id': null,
+        'roles': [role],
+        'company': {'id': 1, 'name': 'C', 'currency_symbol': '₹'},
+      });
+      expect(user.canFinalize, isTrue, reason: 'role: $role');
+    }
+  });
+
+  test('canFinalize is false for data_entry_operator', () {
+    final user = User.fromJson({
+      'id': 1, 'name': 'U', 'email': 'u@x.com', 'branch_id': null,
+      'roles': ['data_entry_operator'],
+      'company': {'id': 1, 'name': 'C', 'currency_symbol': '₹'},
+    });
+    expect(user.canFinalize, isFalse);
+  });
 }

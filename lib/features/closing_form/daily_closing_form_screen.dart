@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/providers.dart';
 import '../../core/theme/app_colors.dart';
+import '../../features/auth/auth_controller.dart';
 import 'closing_form_controller.dart';
 import 'tabs/channels_tab.dart';
 import 'tabs/counters_tab.dart';
@@ -33,6 +34,7 @@ class _State extends ConsumerState<DailyClosingFormScreen>
     with SingleTickerProviderStateMixin {
   late final TabController _tabs;
   bool _saving = false;
+  bool _finalizing = false;
 
   @override
   void initState() {
@@ -65,10 +67,52 @@ class _State extends ConsumerState<DailyClosingFormScreen>
     }
   }
 
+  Future<void> _finalize() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Close Day?'),
+        content: const Text(
+          'This will finalize the closing. No further edits will be possible.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Close Day'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    setState(() => _finalizing = true);
+    try {
+      await ref.read(closingFormControllerProvider(widget.arg).notifier).finalize();
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Closing finalized')));
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to finalize. Check your connection.')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _finalizing = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(closingFormControllerProvider(widget.arg));
     final closing = state.value;
+
+    final user = ref.watch(authControllerProvider).value;
+    final canFinalize = user?.canFinalize ?? false;
 
     final refData = ref.watch(referenceDataProvider);
     final currencySymbol = refData.value?.currencySymbol ?? '';
@@ -156,6 +200,40 @@ class _State extends ConsumerState<DailyClosingFormScreen>
                 ],
               ),
             ),
+            if (!isFinalized && canFinalize)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: ElevatedButton(
+                    onPressed: _finalizing ? null : _finalize,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.green,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                    child: _finalizing
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Text(
+                            'Close Day',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                  ),
+                ),
+              ),
             SummaryFooter(
               closing: c,
               currencySymbol: currencySymbol,

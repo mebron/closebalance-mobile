@@ -1,5 +1,6 @@
 import 'package:closebalance_mobile/core/providers.dart';
 import 'package:closebalance_mobile/data/models/closing_status.dart';
+import 'package:closebalance_mobile/data/models/daily_closing.dart';
 import 'package:closebalance_mobile/data/models/editable/editable_closing.dart';
 import 'package:closebalance_mobile/data/models/paginated.dart';
 import 'package:closebalance_mobile/data/remote/closing_api_service.dart';
@@ -15,8 +16,8 @@ class _MockSync extends Mock implements ClosingSyncService {}
 class _MockClosingApiService extends Mock implements ClosingApiService {}
 
 void main() {
-  setUpAll(() => registerFallbackValue(EditableClosing(
-      branchId: 1, date: '2026-06-15', status: ClosingStatus.draft)));
+  setUpAll(() => registerFallbackValue(
+      EditableClosing(branchId: 1, date: '2026-06-15', status: ClosingStatus.draft)));
 
   test('loads-or-creates today, addSale marks dirty and persists', () async {
     final store = FakeEditableClosingStore();
@@ -49,5 +50,54 @@ void main() {
     // persisted dirty
     final saved = await store.load(1, state.date);
     expect(saved!.sales.single.amount, 500);
+  });
+
+  test('finalize saves first then calls API and marks state finalized', () async {
+    const today = '2026-06-15';
+    final store = FakeEditableClosingStore();
+    final sync = _MockSync();
+    final api = _MockClosingApiService();
+
+    when(() => api.list(
+          dateFrom: any(named: 'dateFrom'),
+          dateTo: any(named: 'dateTo'),
+          branchId: any(named: 'branchId'),
+        )).thenAnswer((_) async => Paginated(
+          items: [],
+          meta: PageMeta(currentPage: 1, lastPage: 1, perPage: 15, total: 0),
+        ));
+
+    // sync returns a closing with serverId set (simulates successful push)
+    when(() => sync.sync(any())).thenAnswer((_) async => EditableClosing(
+          serverId: 9,
+          branchId: 1,
+          date: today,
+          status: ClosingStatus.draft,
+        ));
+
+    when(() => api.finalize(9)).thenAnswer((_) async => const DailyClosing(
+          id: 9,
+          date: today,
+          status: ClosingStatus.finalized,
+        ));
+
+    final c = ProviderContainer(overrides: [
+      editableClosingStoreProvider.overrideWithValue(store),
+      closingSyncServiceProvider.overrideWithValue(sync),
+      closingApiServiceProvider.overrideWithValue(api),
+      selectedBranchProvider.overrideWith((ref) => 1),
+    ]);
+    addTearDown(c.dispose);
+
+    final ctrl = c.read(closingFormControllerProvider(const ClosingFormArg.today()).notifier);
+    await c.read(closingFormControllerProvider(const ClosingFormArg.today()).future);
+
+    await ctrl.finalize();
+
+    final result = c.read(closingFormControllerProvider(const ClosingFormArg.today())).value!;
+    expect(result.status, ClosingStatus.finalized);
+    expect(result.serverId, 9);
+    verify(() => sync.sync(any())).called(1);
+    verify(() => api.finalize(9)).called(1);
   });
 }

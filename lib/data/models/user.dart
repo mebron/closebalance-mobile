@@ -21,4 +21,7 @@ abstract class User with _$User {
 
   /// Branch-locked users only ever see their own branch and never see the switcher.
   bool get isBranchLocked => branchId != null;
+
+  /// Mirrors Filament's rule: everyone except data_entry_operator can finalize.
+  bool get canFinalize => !roles.contains('data_entry_operator');
 }
