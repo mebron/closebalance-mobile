@@ -1,5 +1,5 @@
 flutter_native_splash:
-  color: "#EE2B2B"
+  color: "#CF6679"
   image: assets/icon/juicy/app_icon.png
   android: true
   ios: true

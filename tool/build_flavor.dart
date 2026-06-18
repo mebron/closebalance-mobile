@@ -17,7 +17,6 @@ import 'dart:io';
 // Map flavor name → company slug on the backend.
 const Map<String, String> flavorSlugs = {
   'closebalance': 'closebalance',
-  'almadina': 'al-madina',
   'juicy': 'juicy',
 };
 

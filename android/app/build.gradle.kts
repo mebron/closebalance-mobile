@@ -33,11 +33,6 @@ android {
             applicationId = "com.closebalance"
             resValue("string", "app_name", "CloseBalance")
         }
-        create("almadina") {
-            dimension = "brand"
-            applicationId = "com.closebalance.almadina"
-            resValue("string", "app_name", "Al Madina Cash")
-        }
         create("juicy") {
             dimension = "brand"
             applicationId = "com.closebalance.juicy"

@@ -1,7 +1,0 @@
-flutter_native_splash:
-  # Update color and image to Al Madina's brand assets when available
-  color: "#FFFFFF"
-  image: assets/icon/almadina/app_icon.png
-  android: true
-  ios: true
-  web: false

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum Flavor { closebalance, almadina, juicy }
+enum Flavor { closebalance, juicy }
 
 class FlavorConfig {
   const FlavorConfig({
