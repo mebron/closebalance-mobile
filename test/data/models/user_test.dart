@@ -45,12 +45,21 @@ void main() {
     }
   });
 
-  test('canFinalize is false for data_entry_operator', () {
+  test('canFinalize is false for data_entry_operator only', () {
     final user = User.fromJson({
       'id': 1, 'name': 'U', 'email': 'u@x.com', 'branch_id': null,
       'roles': ['data_entry_operator'],
       'company': {'id': 1, 'name': 'C', 'currency_symbol': '₹'},
     });
     expect(user.canFinalize, isFalse);
+  });
+
+  test('canFinalize is true for multi-role user with admin + data_entry_operator', () {
+    final user = User.fromJson({
+      'id': 1, 'name': 'U', 'email': 'u@x.com', 'branch_id': null,
+      'roles': ['admin', 'data_entry_operator', 'panel_user', 'manager'],
+      'company': {'id': 1, 'name': 'C', 'currency_symbol': '₹'},
+    });
+    expect(user.canFinalize, isTrue);
   });
 }
