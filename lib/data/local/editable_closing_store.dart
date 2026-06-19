@@ -1,11 +1,16 @@
 import 'dart:convert';
+
 import 'package:drift/drift.dart';
+
 import '../models/editable/editable_closing.dart';
 import 'app_database.dart';
 
 abstract interface class EditableClosingStore {
+  /// Loads the closing and its dirty flag in a single DB query.
+  Future<({EditableClosing? closing, bool dirty})> loadWithMeta(
+      int branchId, String date);
+
   Future<EditableClosing?> load(int branchId, String date);
-  Future<bool> isDirty(int branchId, String date);
   Future<void> save(EditableClosing closing, {required bool dirty});
   Future<List<EditableClosing>> dirtyClosings();
   Future<void> delete(int branchId, String date);
@@ -19,25 +24,26 @@ class DriftEditableClosingStore implements EditableClosingStore {
       EditableClosing.fromJson(jsonDecode(r.document) as Map<String, dynamic>);
 
   @override
-  Future<EditableClosing?> load(int branchId, String date) async {
+  Future<({EditableClosing? closing, bool dirty})> loadWithMeta(
+      int branchId, String date) async {
     final row = await (_db.select(_db.editableClosings)
           ..where((t) => t.branchId.equals(branchId) & t.date.equals(date)))
         .getSingleOrNull();
-    return row == null ? null : _decode(row);
+    if (row == null) return (closing: null, dirty: false);
+    return (closing: _decode(row), dirty: row.dirty);
   }
 
   @override
-  Future<bool> isDirty(int branchId, String date) async {
-    final row = await (_db.select(_db.editableClosings)
-          ..where((t) => t.branchId.equals(branchId) & t.date.equals(date)))
-        .getSingleOrNull();
-    return row?.dirty ?? false;
+  Future<EditableClosing?> load(int branchId, String date) async {
+    final (:closing, dirty: _) = await loadWithMeta(branchId, date);
+    return closing;
   }
 
   @override
   Future<void> save(EditableClosing closing, {required bool dirty}) async {
     final existing = await (_db.select(_db.editableClosings)
-          ..where((t) => t.branchId.equals(closing.branchId) & t.date.equals(closing.date)))
+          ..where((t) =>
+              t.branchId.equals(closing.branchId) & t.date.equals(closing.date)))
         .getSingleOrNull();
     final companion = EditableClosingsCompanion(
       id: existing == null ? const Value.absent() : Value(existing.id),
@@ -51,17 +57,23 @@ class DriftEditableClosingStore implements EditableClosingStore {
     if (existing == null) {
       await _db.into(_db.editableClosings).insert(companion);
     } else {
-      await (_db.update(_db.editableClosings)..where((t) => t.id.equals(existing.id))).write(companion);
+      await (_db.update(_db.editableClosings)
+            ..where((t) => t.id.equals(existing.id)))
+          .write(companion);
     }
   }
 
   @override
   Future<List<EditableClosing>> dirtyClosings() async {
-    final rows = await (_db.select(_db.editableClosings)..where((t) => t.dirty.equals(true))).get();
+    final rows = await (_db.select(_db.editableClosings)
+          ..where((t) => t.dirty.equals(true)))
+        .get();
     return rows.map(_decode).toList();
   }
 
   @override
   Future<void> delete(int branchId, String date) =>
-      (_db.delete(_db.editableClosings)..where((t) => t.branchId.equals(branchId) & t.date.equals(date))).go();
+      (_db.delete(_db.editableClosings)
+            ..where((t) => t.branchId.equals(branchId) & t.date.equals(date)))
+          .go();
 }

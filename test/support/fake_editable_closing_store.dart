@@ -6,6 +6,14 @@ class FakeEditableClosingStore implements EditableClosingStore {
   String _k(int b, String d) => '$b|$d';
 
   @override
+  Future<({EditableClosing? closing, bool dirty})> loadWithMeta(
+      int branchId, String date) async {
+    final entry = _byKey[_k(branchId, date)];
+    if (entry == null) return (closing: null, dirty: false);
+    return (closing: entry.closing, dirty: entry.dirty);
+  }
+
+  @override
   Future<EditableClosing?> load(int branchId, String date) async => _byKey[_k(branchId, date)]?.closing;
 
   @override

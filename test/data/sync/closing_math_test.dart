@@ -18,7 +18,12 @@ EditableClosing _c() => EditableClosing(
         EditableDeduction(clientId: 'g', type: 'incentive', amount: 100, paymentMethod: 'cash'),
       ],
       counterTransactions: const [
-        EditableCounterTxn(clientId: 'h', counterId: 2, saleAmount: 500, paidAmount: 150),
+        EditableCounterTxn(
+          clientId: 'h',
+          counterId: 2,
+          saleAmount: 500,
+          payments: [EditablePayment(amount: 150, paymentMethod: 'cash')],
+        ),
       ],
     );
 
@@ -43,6 +48,6 @@ void main() {
 
   test('cash in hand and net position', () {
     expect(ClosingMath.cashInHand(_c(), channelTypes), 10750);
-    expect(ClosingMath.netPosition(_c()), 23700);
+    expect(ClosingMath.netProfit(_c()), 23700);
   });
 }

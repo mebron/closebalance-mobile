@@ -8,19 +8,67 @@ import '../sheets/deduction_sheet.dart';
 import '../sheets/expense_sheet.dart';
 import '../widgets/line_card.dart';
 
-class ExpensesTab extends ConsumerWidget {
+class ExpensesTab extends ConsumerStatefulWidget {
   const ExpensesTab({super.key, required this.arg, required this.currencySymbol});
 
   final ClosingFormArg arg;
   final String currencySymbol;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final closing = ref.watch(closingFormControllerProvider(arg)).value;
+  ConsumerState<ExpensesTab> createState() => _ExpensesTabState();
+}
+
+class _ExpensesTabState extends ConsumerState<ExpensesTab> {
+  bool _addingExpense = false;
+  bool _addingDeduction = false;
+
+  Future<void> _addExpense(BuildContext context) async {
+    if (_addingExpense) return;
+    setState(() => _addingExpense = true);
+    try {
+      final result = await showExpenseSheet(context);
+      if (result != null && mounted) {
+        await ref
+            .read(closingFormControllerProvider(widget.arg).notifier)
+            .addExpense(
+              expenseCategoryId: result.categoryId,
+              description: result.description,
+              amount: result.amount,
+              paymentMethod: result.paymentMethod,
+            );
+      }
+    } finally {
+      if (mounted) setState(() => _addingExpense = false);
+    }
+  }
+
+  Future<void> _addDeduction(BuildContext context) async {
+    if (_addingDeduction) return;
+    setState(() => _addingDeduction = true);
+    try {
+      final result = await showDeductionSheet(context);
+      if (result != null && mounted) {
+        await ref
+            .read(closingFormControllerProvider(widget.arg).notifier)
+            .addDeduction(
+              type: result.type,
+              description: result.description,
+              amount: result.amount,
+              paymentMethod: result.paymentMethod,
+            );
+      }
+    } finally {
+      if (mounted) setState(() => _addingDeduction = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final closing = ref.watch(closingFormControllerProvider(widget.arg)).value;
     if (closing == null) {
       return const SizedBox.shrink();
     }
-    final ctrl = ref.read(closingFormControllerProvider(arg).notifier);
+    final ctrl = ref.read(closingFormControllerProvider(widget.arg).notifier);
     final isFinalized = closing.status.isFinalized;
     final refData = ref.watch(referenceDataProvider);
     final categoryNames = {
@@ -37,7 +85,7 @@ class ExpensesTab extends ConsumerWidget {
               Expanded(
                 child: Text('Expenses', style: Theme.of(context).textTheme.titleMedium),
               ),
-              Text('Total: ${formatMoney(ClosingMath.totalExpenses(closing), currencySymbol)}'),
+              Text('Total: ${formatMoney(ClosingMath.totalExpenses(closing), widget.currencySymbol)}'),
             ],
           ),
         ),
@@ -45,7 +93,7 @@ class ExpensesTab extends ConsumerWidget {
               (e) => LineCard(
                 title: categoryNames[e.expenseCategoryId] ?? e.description ?? 'Expense',
                 subtitle: e.description,
-                amount: formatMoney(e.amount, currencySymbol),
+                amount: formatMoney(e.amount, widget.currencySymbol),
                 onTap: isFinalized
                     ? null
                     : () async {
@@ -56,7 +104,7 @@ class ExpensesTab extends ConsumerWidget {
                           initialAmount: e.amount,
                           initialPaymentMethod: e.paymentMethod,
                         );
-                        if (result != null) {
+                        if (result != null && mounted) {
                           await ctrl.updateExpense(
                             clientId: e.clientId,
                             expenseCategoryId: result.categoryId,
@@ -75,17 +123,7 @@ class ExpensesTab extends ConsumerWidget {
             child: OutlinedButton.icon(
               icon: const Icon(Icons.add),
               label: const Text('Add expense'),
-              onPressed: () async {
-                final result = await showExpenseSheet(context);
-                if (result != null) {
-                  await ctrl.addExpense(
-                    expenseCategoryId: result.categoryId,
-                    description: result.description,
-                    amount: result.amount,
-                    paymentMethod: result.paymentMethod,
-                  );
-                }
-              },
+              onPressed: _addingExpense ? null : () => _addExpense(context),
             ),
           ),
         const Divider(height: 24),
@@ -97,7 +135,7 @@ class ExpensesTab extends ConsumerWidget {
               Expanded(
                 child: Text('Deductions', style: Theme.of(context).textTheme.titleMedium),
               ),
-              Text('Total: ${formatMoney(ClosingMath.totalDeductions(closing), currencySymbol)}'),
+              Text('Total: ${formatMoney(ClosingMath.totalDeductions(closing), widget.currencySymbol)}'),
             ],
           ),
         ),
@@ -105,7 +143,7 @@ class ExpensesTab extends ConsumerWidget {
               (d) => LineCard(
                 title: d.description ?? d.type,
                 subtitle: d.paymentMethod,
-                amount: formatMoney(d.amount, currencySymbol),
+                amount: formatMoney(d.amount, widget.currencySymbol),
                 onTap: isFinalized
                     ? null
                     : () async {
@@ -116,7 +154,7 @@ class ExpensesTab extends ConsumerWidget {
                           initialAmount: d.amount,
                           initialPaymentMethod: d.paymentMethod,
                         );
-                        if (result != null) {
+                        if (result != null && mounted) {
                           await ctrl.updateDeduction(
                             clientId: d.clientId,
                             type: result.type,
@@ -135,17 +173,7 @@ class ExpensesTab extends ConsumerWidget {
             child: OutlinedButton.icon(
               icon: const Icon(Icons.add),
               label: const Text('Add deduction'),
-              onPressed: () async {
-                final result = await showDeductionSheet(context);
-                if (result != null) {
-                  await ctrl.addDeduction(
-                    type: result.type,
-                    description: result.description,
-                    amount: result.amount,
-                    paymentMethod: result.paymentMethod,
-                  );
-                }
-              },
+              onPressed: _addingDeduction ? null : () => _addDeduction(context),
             ),
           ),
       ],

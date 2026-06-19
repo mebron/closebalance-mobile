@@ -12,8 +12,9 @@ class ClosingsListController extends AsyncNotifier<List<DailyClosing>> {
   }
 
   Future<void> refresh() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() => build());
+    // Don't clear to AsyncLoading — keep existing items visible during refresh.
+    final next = await AsyncValue.guard(build);
+    state = next;
   }
 }
 

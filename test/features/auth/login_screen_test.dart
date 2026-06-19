@@ -1,3 +1,4 @@
+import 'package:closebalance_mobile/core/config/flavor_config.dart';
 import 'package:closebalance_mobile/core/error/app_exception.dart';
 import 'package:closebalance_mobile/core/providers.dart';
 import 'package:closebalance_mobile/data/repos/auth_repository.dart';
@@ -23,7 +24,16 @@ Widget _app(_MockAuthRepo auth, _MockReferenceRepo refRepo) {
 }
 
 void main() {
-  setUpAll(() => registerFallbackValue(''));
+  setUpAll(() {
+    registerFallbackValue('');
+    FlavorConfig.setInstance(const FlavorConfig(
+      flavor: Flavor.closebalance,
+      primaryColor: Color(0xFF1A56DB),
+      accentColor: Color(0xFF1A56DB),
+      bgColor: Color(0xFF1A56DB),
+      appName: 'Test',
+    ));
+  });
 
   late _MockAuthRepo auth;
   late _MockReferenceRepo refRepo;

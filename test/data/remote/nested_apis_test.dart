@@ -1,3 +1,4 @@
+import 'package:closebalance_mobile/data/models/editable/editable_closing.dart';
 import 'package:closebalance_mobile/data/remote/counter_transactions_api.dart';
 import 'package:closebalance_mobile/data/remote/deductions_api.dart';
 import 'package:closebalance_mobile/data/remote/expenses_api.dart';
@@ -36,11 +37,17 @@ void main() {
   test('CounterTransactionsApi.create POSTs the body', () async {
     when(() => dio.post('/daily-closings/9/counter-transactions', data: any(named: 'data'))).thenAnswer((_) async =>
         _res('/x', {'data': {'id': 1, 'counter_id': 2, 'date': '2026-06-15', 'sale_amount': 500.0, 'paid_amount': 150.0, 'balance': 350.0}}, 201));
+    final payments = [const EditablePayment(amount: 150, paymentMethod: 'cash')];
     final t = await CounterTransactionsApi(dio).create(
-        closingId: 9, counterId: 2, date: '2026-06-15', saleAmount: 500, paidAmount: 150);
+        closingId: 9, counterId: 2, date: '2026-06-15', saleAmount: 500, payments: payments);
     expect(t.balance, 350.0);
     verify(() => dio.post('/daily-closings/9/counter-transactions',
-        data: {'counter_id': 2, 'date': '2026-06-15', 'sale_amount': 500, 'paid_amount': 150})).called(1);
+        data: {
+          'counter_id': 2,
+          'date': '2026-06-15',
+          'sale_amount': 500,
+          'payments': [{'amount': 150, 'method': 'cash'}],
+        })).called(1);
   });
 
   test('ExpensesApi.update PUTs fields', () async {

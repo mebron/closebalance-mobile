@@ -22,6 +22,8 @@ class _SyncCoordinatorState extends ConsumerState<SyncCoordinator>
     with WidgetsBindingObserver {
   StreamSubscription<bool>? _connectivitySubscription;
   bool _flushing = false;
+  DateTime? _lastRefreshAt;
+  static const _refRefreshInterval = Duration(minutes: 5);
 
   @override
   void initState() {
@@ -58,13 +60,18 @@ class _SyncCoordinatorState extends ConsumerState<SyncCoordinator>
     }
     _flushing = true;
     try {
-      // Refresh reference data (channels, counters, categories) so web-panel
-      // changes are picked up without requiring a logout/login.
-      try {
-        await ref.read(referenceRepositoryProvider).refresh();
-        if (mounted) ref.invalidate(referenceDataProvider);
-      } on Object {
-        // offline — keep stale cache, retry next foreground/connectivity event
+      // Throttle reference data refresh — network is not free.
+      final now = DateTime.now();
+      final shouldRefresh = _lastRefreshAt == null ||
+          now.difference(_lastRefreshAt!) > _refRefreshInterval;
+      if (shouldRefresh) {
+        try {
+          await ref.read(referenceRepositoryProvider).refresh();
+          _lastRefreshAt = now;
+          if (mounted) ref.invalidate(referenceDataProvider);
+        } on Object {
+          // offline — keep stale cache, retry next foreground/connectivity event
+        }
       }
 
       final store = ref.read(editableClosingStoreProvider);

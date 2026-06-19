@@ -20,8 +20,10 @@ import '../features/auth/auth_controller.dart';
 import 'connectivity/connectivity_service.dart';
 import 'network/dio_client.dart';
 import 'storage/secure_token_store.dart';
+import 'storage/user_cache_service.dart';
 
 final tokenStoreProvider = Provider<TokenStore>((ref) => SecureTokenStore());
+final userCacheProvider = Provider<UserCacheService>((ref) => UserCacheService());
 
 final dioProvider = Provider<Dio>((ref) {
   return buildDio(
@@ -36,7 +38,11 @@ final referenceApiProvider =
     Provider<ReferenceApi>((ref) => ReferenceApi(ref.read(dioProvider)));
 
 final authRepositoryProvider = Provider<AuthRepository>(
-  (ref) => AuthRepository(ref.read(authApiProvider), ref.read(tokenStoreProvider)),
+  (ref) => AuthRepository(
+    ref.read(authApiProvider),
+    ref.read(tokenStoreProvider),
+    ref.read(userCacheProvider),
+  ),
 );
 
 final referenceRepositoryProvider = Provider<ReferenceRepository>(

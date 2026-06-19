@@ -1,4 +1,5 @@
 import 'package:closebalance_mobile/core/storage/secure_token_store.dart';
+import 'package:closebalance_mobile/core/storage/user_cache_service.dart';
 import 'package:closebalance_mobile/data/models/user.dart';
 import 'package:closebalance_mobile/data/remote/auth_api.dart';
 import 'package:closebalance_mobile/data/repos/auth_repository.dart';
@@ -17,6 +18,16 @@ class _FakeTokenStore implements TokenStore {
   Future<void> write(String token) async => _token = token;
 }
 
+class _FakeUserCache extends Fake implements UserCacheService {
+  User? _user;
+  @override
+  Future<User?> load() async => _user;
+  @override
+  Future<void> save(User user) async => _user = user;
+  @override
+  Future<void> clear() async => _user = null;
+}
+
 User _user() => User.fromJson({
       'id': 1,
       'name': 'Mujeeb',
@@ -29,12 +40,14 @@ User _user() => User.fromJson({
 void main() {
   late _MockAuthApi api;
   late _FakeTokenStore store;
+  late _FakeUserCache userCache;
   late AuthRepository repo;
 
   setUp(() {
     api = _MockAuthApi();
     store = _FakeTokenStore();
-    repo = AuthRepository(api, store);
+    userCache = _FakeUserCache();
+    repo = AuthRepository(api, store, userCache);
   });
 
   test('login stores the token and returns the user', () async {

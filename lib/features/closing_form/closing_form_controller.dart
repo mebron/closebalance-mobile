@@ -1,14 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
+
 import '../../core/providers.dart';
 import '../../data/models/closing_status.dart';
 import '../../data/models/editable/editable_closing.dart';
 import '../../data/sync/editable_closing_mapper.dart';
 
 const _uuid = Uuid();
-
-// Sentinel value used by update methods to distinguish "caller passed null to
-// clear the field" from "caller omitted the argument (leave unchanged)".
 const _kUnset = Object();
 
 String _todayIso() {
@@ -22,7 +22,6 @@ String _todayIso() {
 // Arg
 // ---------------------------------------------------------------------------
 
-/// Identifies which closing the form edits.
 sealed class ClosingFormArg {
   const ClosingFormArg();
   const factory ClosingFormArg.today() = _TodayArg;
@@ -35,10 +34,8 @@ sealed class ClosingFormArg {
 
 final class _TodayArg extends ClosingFormArg {
   const _TodayArg();
-
   @override
   bool operator ==(Object other) => other is _TodayArg;
-
   @override
   int get hashCode => 0;
 }
@@ -49,18 +46,15 @@ final class _ExistingArg extends ClosingFormArg {
     required this.branchId,
     required this.date,
   });
-
   final int serverId;
   final int branchId;
   final String date;
-
   @override
   bool operator ==(Object other) =>
       other is _ExistingArg &&
       other.serverId == serverId &&
       other.branchId == branchId &&
       other.date == date;
-
   @override
   int get hashCode => Object.hash(serverId, branchId, date);
 }
@@ -74,76 +68,94 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
 
   final ClosingFormArg _arg;
 
+  /// Guards save() and finalize() against concurrent calls.
+  bool _syncing = false;
+
   @override
   Future<EditableClosing> build() async {
     final arg = _arg;
-    if (arg is _TodayArg) {
-      return _loadOrCreateToday();
-    } else if (arg is _ExistingArg) {
-      return _loadExisting(arg);
-    }
+    if (arg is _TodayArg) return _loadOrCreateToday();
+    if (arg is _ExistingArg) return _loadExisting(arg);
     throw StateError('Unknown ClosingFormArg: $arg');
   }
 
+  // -------------------------------------------------------------------------
+  // Loading
+  // -------------------------------------------------------------------------
+
   Future<EditableClosing> _loadOrCreateToday() async {
     final branchId = ref.read(selectedBranchProvider);
-    if (branchId == null) {
-      throw StateError('No branch selected');
-    }
+    if (branchId == null) throw StateError('No branch selected');
+
     final today = _todayIso();
     final store = ref.read(editableClosingStoreProvider);
+    final (:closing, :dirty) = await store.loadWithMeta(branchId, today);
 
-    // If there are unsaved local edits, return them immediately — don't
-    // overwrite with server data and lose the user's in-progress changes.
-    final hasDirty = await store.isDirty(branchId, today);
-    if (hasDirty) {
-      final local = await store.load(branchId, today);
-      if (local != null) return local;
+    // Unsaved edits: return immediately — never overwrite in-progress work.
+    if (dirty && closing != null) return closing;
+
+    // Has a known server record: return cached instantly and refresh behind
+    // the scenes so web-panel changes (new expenses, sales, etc.) appear
+    // without blocking the UI.
+    if (closing?.serverId != null) {
+      unawaited(_refreshTodayInBackground(closing!.serverId!, branchId, today));
+      return closing;
     }
 
-    // Always fetch fresh from server so entries added via the web panel
-    // (expenses, sales, etc.) appear without requiring a logout/login.
+    // No local or no server ID yet — must reach the network first.
+    return _fetchOrCreateToday(branchId, today, fallback: closing);
+  }
+
+  Future<void> _refreshTodayInBackground(
+      int serverId, int branchId, String date) async {
     try {
       final api = ref.read(closingApiServiceProvider);
-      final page = await api.list(dateFrom: today, dateTo: today, branchId: branchId);
+      final store = ref.read(editableClosingStoreProvider);
+      final dc = await api.detail(serverId);
+      final fresh = EditableClosingMapper.fromDailyClosing(dc, branchId: branchId);
+      await store.save(fresh, dirty: false);
+      state = AsyncData(fresh);
+    } catch (_) {
+      // Network error or provider disposed — the cached data is still valid.
+    }
+  }
+
+  Future<EditableClosing> _fetchOrCreateToday(int branchId, String today,
+      {EditableClosing? fallback}) async {
+    try {
+      final api = ref.read(closingApiServiceProvider);
+      final page =
+          await api.list(dateFrom: today, dateTo: today, branchId: branchId);
       if (page.items.isNotEmpty) {
         final dc = await api.detail(page.items.first.id);
         final e = EditableClosingMapper.fromDailyClosing(dc, branchId: branchId);
-        await store.save(e, dirty: false);
+        await ref.read(editableClosingStoreProvider).save(e, dirty: false);
         return e;
       }
+      if (fallback != null) return fallback;
     } on Object {
-      // Offline — fall back to local cache if available.
-      final local = await store.load(branchId, today);
-      if (local != null) return local;
+      if (fallback != null) return fallback;
     }
-
-    // No closing on server and no local cache — create a fresh draft.
     final draft = EditableClosing(
-      branchId: branchId,
-      date: today,
-      status: ClosingStatus.draft,
-    );
-    await store.save(draft, dirty: false);
+        branchId: branchId, date: today, status: ClosingStatus.draft);
+    await ref.read(editableClosingStoreProvider).save(draft, dirty: false);
     return draft;
   }
 
   Future<EditableClosing> _loadExisting(_ExistingArg arg) async {
-    // Always fetch fresh from server — stale cache would show outdated totals.
+    // Always fetch fresh — stale cache would show outdated totals.
     try {
       final api = ref.read(closingApiServiceProvider);
       final dc = await api.detail(arg.serverId);
-      final editable = EditableClosingMapper.fromDailyClosing(dc, branchId: arg.branchId);
-      final store = ref.read(editableClosingStoreProvider);
-      await store.save(editable, dirty: false);
+      final editable =
+          EditableClosingMapper.fromDailyClosing(dc, branchId: arg.branchId);
+      await ref.read(editableClosingStoreProvider).save(editable, dirty: false);
       return editable;
     } on Object {
-      // Offline — fall back to local cache.
-      final store = ref.read(editableClosingStoreProvider);
-      final cached = await store.load(arg.branchId, arg.date);
-      if (cached != null && cached.serverId == arg.serverId) {
-        return cached;
-      }
+      final cached = await ref
+          .read(editableClosingStoreProvider)
+          .load(arg.branchId, arg.date);
+      if (cached != null && cached.serverId == arg.serverId) return cached;
       rethrow;
     }
   }
@@ -167,9 +179,7 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
 
   Future<void> setDate(String date) async {
     final current = state.value;
-    if (current == null || current.status.isFinalized) {
-      return;
-    }
+    if (current == null || current.status.isFinalized) return;
     final oldDate = current.date;
     final updated = current.copyWith(date: date, headerDirty: true);
     state = AsyncData(updated);
@@ -180,17 +190,13 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
 
   Future<void> setTotalSales(double totalSales) async {
     final current = state.value;
-    if (current == null) {
-      return;
-    }
+    if (current == null) return;
     await _update(current.copyWith(totalSales: totalSales, headerDirty: true));
   }
 
   Future<void> setNotes(String? notes) async {
     final current = state.value;
-    if (current == null) {
-      return;
-    }
+    if (current == null) return;
     await _update(current.copyWith(notes: notes, headerDirty: true));
   }
 
@@ -198,57 +204,39 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
   // Sales
   // -------------------------------------------------------------------------
 
-  Future<void> addSale({
-    required int paymentChannelId,
-    required double amount,
-  }) async {
+  Future<void> addSale({required int paymentChannelId, required double amount}) async {
     final current = state.value;
-    if (current == null) {
-      return;
-    }
-    final sale = EditableSale(
-      clientId: _uuid.v4(),
-      paymentChannelId: paymentChannelId,
-      amount: amount,
-      dirty: true,
-    );
-    await _update(current.copyWith(sales: [...current.sales, sale]));
+    if (current == null) return;
+    await _update(current.copyWith(sales: [
+      ...current.sales,
+      EditableSale(
+          clientId: _uuid.v4(),
+          paymentChannelId: paymentChannelId,
+          amount: amount,
+          dirty: true),
+    ]));
   }
 
-  Future<void> updateSale({
-    required String clientId,
-    int? paymentChannelId,
-    double? amount,
-  }) async {
+  Future<void> updateSale(
+      {required String clientId, int? paymentChannelId, double? amount}) async {
     final current = state.value;
-    if (current == null) {
-      return;
-    }
-    final sales = current.sales.map((s) {
-      if (s.clientId != clientId) {
-        return s;
-      }
-      return s.copyWith(
-        paymentChannelId: paymentChannelId ?? s.paymentChannelId,
-        amount: amount ?? s.amount,
-        dirty: true,
-      );
-    }).toList();
-    await _update(current.copyWith(sales: sales));
+    if (current == null) return;
+    await _update(current.copyWith(
+        sales: current.sales.map((s) => s.clientId != clientId
+            ? s
+            : s.copyWith(
+                paymentChannelId: paymentChannelId ?? s.paymentChannelId,
+                amount: amount ?? s.amount,
+                dirty: true)).toList()));
   }
 
   Future<void> deleteSale(String clientId) async {
     final current = state.value;
-    if (current == null) {
-      return;
-    }
-    final sales = current.sales.map((s) {
-      if (s.clientId != clientId) {
-        return s;
-      }
-      return s.copyWith(deleted: true, dirty: true);
-    }).toList();
-    await _update(current.copyWith(sales: sales));
+    if (current == null) return;
+    await _update(current.copyWith(
+        sales: current.sales.map((s) => s.clientId != clientId
+            ? s
+            : s.copyWith(deleted: true, dirty: true)).toList()));
   }
 
   // -------------------------------------------------------------------------
@@ -262,18 +250,17 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
     required String paymentMethod,
   }) async {
     final current = state.value;
-    if (current == null) {
-      return;
-    }
-    final expense = EditableExpense(
-      clientId: _uuid.v4(),
-      expenseCategoryId: expenseCategoryId,
-      description: description,
-      amount: amount,
-      paymentMethod: paymentMethod,
-      dirty: true,
-    );
-    await _update(current.copyWith(expenses: [...current.expenses, expense]));
+    if (current == null) return;
+    await _update(current.copyWith(expenses: [
+      ...current.expenses,
+      EditableExpense(
+          clientId: _uuid.v4(),
+          expenseCategoryId: expenseCategoryId,
+          description: description,
+          amount: amount,
+          paymentMethod: paymentMethod,
+          dirty: true),
+    ]));
   }
 
   Future<void> updateExpense({
@@ -284,36 +271,27 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
     String? paymentMethod,
   }) async {
     final current = state.value;
-    if (current == null) {
-      return;
-    }
-    final expenses = current.expenses.map((e) {
-      if (e.clientId != clientId) {
-        return e;
-      }
-      return e.copyWith(
-        expenseCategoryId: expenseCategoryId ?? e.expenseCategoryId,
-        description: identical(description, _kUnset) ? e.description : description as String?,
-        amount: amount ?? e.amount,
-        paymentMethod: paymentMethod ?? e.paymentMethod,
-        dirty: true,
-      );
-    }).toList();
-    await _update(current.copyWith(expenses: expenses));
+    if (current == null) return;
+    await _update(current.copyWith(
+        expenses: current.expenses.map((e) => e.clientId != clientId
+            ? e
+            : e.copyWith(
+                expenseCategoryId: expenseCategoryId ?? e.expenseCategoryId,
+                description: identical(description, _kUnset)
+                    ? e.description
+                    : description as String?,
+                amount: amount ?? e.amount,
+                paymentMethod: paymentMethod ?? e.paymentMethod,
+                dirty: true)).toList()));
   }
 
   Future<void> deleteExpense(String clientId) async {
     final current = state.value;
-    if (current == null) {
-      return;
-    }
-    final expenses = current.expenses.map((e) {
-      if (e.clientId != clientId) {
-        return e;
-      }
-      return e.copyWith(deleted: true, dirty: true);
-    }).toList();
-    await _update(current.copyWith(expenses: expenses));
+    if (current == null) return;
+    await _update(current.copyWith(
+        expenses: current.expenses.map((e) => e.clientId != clientId
+            ? e
+            : e.copyWith(deleted: true, dirty: true)).toList()));
   }
 
   // -------------------------------------------------------------------------
@@ -327,18 +305,17 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
     required String paymentMethod,
   }) async {
     final current = state.value;
-    if (current == null) {
-      return;
-    }
-    final deduction = EditableDeduction(
-      clientId: _uuid.v4(),
-      type: type,
-      description: description,
-      amount: amount,
-      paymentMethod: paymentMethod,
-      dirty: true,
-    );
-    await _update(current.copyWith(deductions: [...current.deductions, deduction]));
+    if (current == null) return;
+    await _update(current.copyWith(deductions: [
+      ...current.deductions,
+      EditableDeduction(
+          clientId: _uuid.v4(),
+          type: type,
+          description: description,
+          amount: amount,
+          paymentMethod: paymentMethod,
+          dirty: true),
+    ]));
   }
 
   Future<void> updateDeduction({
@@ -349,36 +326,27 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
     String? paymentMethod,
   }) async {
     final current = state.value;
-    if (current == null) {
-      return;
-    }
-    final deductions = current.deductions.map((d) {
-      if (d.clientId != clientId) {
-        return d;
-      }
-      return d.copyWith(
-        type: type ?? d.type,
-        description: identical(description, _kUnset) ? d.description : description as String?,
-        amount: amount ?? d.amount,
-        paymentMethod: paymentMethod ?? d.paymentMethod,
-        dirty: true,
-      );
-    }).toList();
-    await _update(current.copyWith(deductions: deductions));
+    if (current == null) return;
+    await _update(current.copyWith(
+        deductions: current.deductions.map((d) => d.clientId != clientId
+            ? d
+            : d.copyWith(
+                type: type ?? d.type,
+                description: identical(description, _kUnset)
+                    ? d.description
+                    : description as String?,
+                amount: amount ?? d.amount,
+                paymentMethod: paymentMethod ?? d.paymentMethod,
+                dirty: true)).toList()));
   }
 
   Future<void> deleteDeduction(String clientId) async {
     final current = state.value;
-    if (current == null) {
-      return;
-    }
-    final deductions = current.deductions.map((d) {
-      if (d.clientId != clientId) {
-        return d;
-      }
-      return d.copyWith(deleted: true, dirty: true);
-    }).toList();
-    await _update(current.copyWith(deductions: deductions));
+    if (current == null) return;
+    await _update(current.copyWith(
+        deductions: current.deductions.map((d) => d.clientId != clientId
+            ? d
+            : d.copyWith(deleted: true, dirty: true)).toList()));
   }
 
   // -------------------------------------------------------------------------
@@ -392,20 +360,17 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
     String? remarks,
   }) async {
     final current = state.value;
-    if (current == null) {
-      return;
-    }
-    final txn = EditableCounterTxn(
-      clientId: _uuid.v4(),
-      counterId: counterId,
-      saleAmount: saleAmount,
-      payments: payments,
-      remarks: remarks,
-      dirty: true,
-    );
-    await _update(
-      current.copyWith(counterTransactions: [...current.counterTransactions, txn]),
-    );
+    if (current == null) return;
+    await _update(current.copyWith(counterTransactions: [
+      ...current.counterTransactions,
+      EditableCounterTxn(
+          clientId: _uuid.v4(),
+          counterId: counterId,
+          saleAmount: saleAmount,
+          payments: payments,
+          remarks: remarks,
+          dirty: true),
+    ]));
   }
 
   Future<void> updateCounterTxn({
@@ -416,67 +381,68 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
     Object? remarks = _kUnset,
   }) async {
     final current = state.value;
-    if (current == null) {
-      return;
-    }
-    final txns = current.counterTransactions.map((t) {
-      if (t.clientId != clientId) {
-        return t;
-      }
-      return t.copyWith(
-        counterId: counterId ?? t.counterId,
-        saleAmount: saleAmount ?? t.saleAmount,
-        payments: payments ?? t.payments,
-        remarks: identical(remarks, _kUnset) ? t.remarks : remarks as String?,
-        dirty: true,
-      );
-    }).toList();
-    await _update(current.copyWith(counterTransactions: txns));
+    if (current == null) return;
+    await _update(current.copyWith(
+        counterTransactions: current.counterTransactions.map((t) => t.clientId != clientId
+            ? t
+            : t.copyWith(
+                counterId: counterId ?? t.counterId,
+                saleAmount: saleAmount ?? t.saleAmount,
+                payments: payments ?? t.payments,
+                remarks: identical(remarks, _kUnset)
+                    ? t.remarks
+                    : remarks as String?,
+                dirty: true)).toList()));
   }
 
   Future<void> deleteCounterTxn(String clientId) async {
     final current = state.value;
-    if (current == null) {
-      return;
-    }
-    final txns = current.counterTransactions.map((t) {
-      if (t.clientId != clientId) {
-        return t;
-      }
-      return t.copyWith(deleted: true, dirty: true);
-    }).toList();
-    await _update(current.copyWith(counterTransactions: txns));
+    if (current == null) return;
+    await _update(current.copyWith(
+        counterTransactions: current.counterTransactions.map((t) => t.clientId != clientId
+            ? t
+            : t.copyWith(deleted: true, dirty: true)).toList()));
   }
 
   // -------------------------------------------------------------------------
-  // Save (sync to server)
+  // Save / Finalize
   // -------------------------------------------------------------------------
 
-  Future<void> save() async {
+  Future<void> _syncNow() async {
     final current = state.value;
-    if (current == null) {
-      return;
-    }
-    final syncService = ref.read(closingSyncServiceProvider);
-    final fresh = await syncService.sync(current);
-    final store = ref.read(editableClosingStoreProvider);
-    await store.save(fresh, dirty: false);
+    if (current == null) return;
+    final fresh = await ref.read(closingSyncServiceProvider).sync(current);
+    await ref.read(editableClosingStoreProvider).save(fresh, dirty: false);
     state = AsyncData(fresh);
   }
 
+  Future<void> save() async {
+    if (_syncing) return;
+    _syncing = true;
+    try {
+      await _syncNow();
+    } finally {
+      _syncing = false;
+    }
+  }
+
   Future<void> finalize() async {
-    // Push any pending edits first so the server has the latest data.
-    await save();
-    final current = state.value;
-    if (current == null) return;
-    final serverId = current.serverId;
-    if (serverId == null) throw StateError('Closing has no server ID after save');
-    final api = ref.read(closingApiServiceProvider);
-    final finalized = await api.finalize(serverId);
-    final updated = EditableClosingMapper.fromDailyClosing(finalized, branchId: current.branchId);
-    final store = ref.read(editableClosingStoreProvider);
-    await store.save(updated, dirty: false);
-    state = AsyncData(updated);
+    if (_syncing) return;
+    _syncing = true;
+    try {
+      await _syncNow();
+      final current = state.value;
+      if (current == null) return;
+      final serverId = current.serverId;
+      if (serverId == null) throw StateError('Closing has no server ID after save');
+      final finalized = await ref.read(closingApiServiceProvider).finalize(serverId);
+      final updated = EditableClosingMapper.fromDailyClosing(finalized,
+          branchId: current.branchId);
+      await ref.read(editableClosingStoreProvider).save(updated, dirty: false);
+      state = AsyncData(updated);
+    } finally {
+      _syncing = false;
+    }
   }
 }
 

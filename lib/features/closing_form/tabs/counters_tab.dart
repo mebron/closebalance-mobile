@@ -7,19 +7,46 @@ import '../closing_form_controller.dart';
 import '../sheets/counter_sheet.dart';
 import '../widgets/line_card.dart';
 
-class CountersTab extends ConsumerWidget {
+class CountersTab extends ConsumerStatefulWidget {
   const CountersTab({super.key, required this.arg, required this.currencySymbol});
 
   final ClosingFormArg arg;
   final String currencySymbol;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final closing = ref.watch(closingFormControllerProvider(arg)).value;
+  ConsumerState<CountersTab> createState() => _CountersTabState();
+}
+
+class _CountersTabState extends ConsumerState<CountersTab> {
+  bool _adding = false;
+
+  Future<void> _addCounter(BuildContext context) async {
+    if (_adding) return;
+    setState(() => _adding = true);
+    try {
+      final result = await showCounterSheet(context);
+      if (result != null && mounted) {
+        await ref
+            .read(closingFormControllerProvider(widget.arg).notifier)
+            .addCounterTxn(
+              counterId: result.counterId,
+              saleAmount: result.saleAmount,
+              payments: result.payments,
+              remarks: result.remarks,
+            );
+      }
+    } finally {
+      if (mounted) setState(() => _adding = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final closing = ref.watch(closingFormControllerProvider(widget.arg)).value;
     if (closing == null) {
       return const SizedBox.shrink();
     }
-    final ctrl = ref.read(closingFormControllerProvider(arg).notifier);
+    final ctrl = ref.read(closingFormControllerProvider(widget.arg).notifier);
     final isFinalized = closing.status.isFinalized;
     final refData = ref.watch(referenceDataProvider);
     final counterNames = {
@@ -38,7 +65,7 @@ class CountersTab extends ConsumerWidget {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
-              Text('Paid: ${formatMoney(ClosingMath.counterPaid(closing), currencySymbol)}'),
+              Text('Paid: ${formatMoney(ClosingMath.counterPaid(closing), widget.currencySymbol)}'),
             ],
           ),
         ),
@@ -46,8 +73,8 @@ class CountersTab extends ConsumerWidget {
               (t) => LineCard(
                 title: counterNames[t.counterId] ?? 'Counter ${t.counterId}',
                 subtitle:
-                    'Sale: ${formatMoney(t.saleAmount, currencySymbol)} · Paid: ${formatMoney(t.paidAmount, currencySymbol)}',
-                amount: formatMoney(t.saleAmount - t.paidAmount, currencySymbol),
+                    'Sale: ${formatMoney(t.saleAmount, widget.currencySymbol)} · Paid: ${formatMoney(t.paidAmount, widget.currencySymbol)}',
+                amount: formatMoney(t.saleAmount - t.paidAmount, widget.currencySymbol),
                 onTap: isFinalized
                     ? null
                     : () async {
@@ -58,7 +85,7 @@ class CountersTab extends ConsumerWidget {
                           initialPayments: t.payments,
                           initialRemarks: t.remarks,
                         );
-                        if (result != null) {
+                        if (result != null && mounted) {
                           await ctrl.updateCounterTxn(
                             clientId: t.clientId,
                             counterId: result.counterId,
@@ -77,17 +104,7 @@ class CountersTab extends ConsumerWidget {
             child: OutlinedButton.icon(
               icon: const Icon(Icons.add),
               label: const Text('Add counter'),
-              onPressed: () async {
-                final result = await showCounterSheet(context);
-                if (result != null) {
-                  await ctrl.addCounterTxn(
-                    counterId: result.counterId,
-                    saleAmount: result.saleAmount,
-                    payments: result.payments,
-                    remarks: result.remarks,
-                  );
-                }
-              },
+              onPressed: _adding ? null : () => _addCounter(context),
             ),
           ),
       ],
