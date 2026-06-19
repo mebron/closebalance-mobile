@@ -93,13 +93,16 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
     final today = _todayIso();
     final store = ref.read(editableClosingStoreProvider);
 
-    // 1. Try local store first (local-first: avoids network on every open).
-    final local = await store.load(branchId, today);
-    if (local != null) {
-      return local;
+    // If there are unsaved local edits, return them immediately — don't
+    // overwrite with server data and lose the user's in-progress changes.
+    final hasDirty = await store.isDirty(branchId, today);
+    if (hasDirty) {
+      final local = await store.load(branchId, today);
+      if (local != null) return local;
     }
 
-    // 2. Try server — fetch today's closing if it already exists there.
+    // Always fetch fresh from server so entries added via the web panel
+    // (expenses, sales, etc.) appear without requiring a logout/login.
     try {
       final api = ref.read(closingApiServiceProvider);
       final page = await api.list(dateFrom: today, dateTo: today, branchId: branchId);
@@ -110,10 +113,12 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
         return e;
       }
     } on Object {
-      // offline — fall through to fresh draft
+      // Offline — fall back to local cache if available.
+      final local = await store.load(branchId, today);
+      if (local != null) return local;
     }
 
-    // 3. Fresh draft — the first save() call will sync it to the server.
+    // No closing on server and no local cache — create a fresh draft.
     final draft = EditableClosing(
       branchId: branchId,
       date: today,

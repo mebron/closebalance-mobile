@@ -5,6 +5,7 @@ import 'app_database.dart';
 
 abstract interface class EditableClosingStore {
   Future<EditableClosing?> load(int branchId, String date);
+  Future<bool> isDirty(int branchId, String date);
   Future<void> save(EditableClosing closing, {required bool dirty});
   Future<List<EditableClosing>> dirtyClosings();
   Future<void> delete(int branchId, String date);
@@ -23,6 +24,14 @@ class DriftEditableClosingStore implements EditableClosingStore {
           ..where((t) => t.branchId.equals(branchId) & t.date.equals(date)))
         .getSingleOrNull();
     return row == null ? null : _decode(row);
+  }
+
+  @override
+  Future<bool> isDirty(int branchId, String date) async {
+    final row = await (_db.select(_db.editableClosings)
+          ..where((t) => t.branchId.equals(branchId) & t.date.equals(date)))
+        .getSingleOrNull();
+    return row?.dirty ?? false;
   }
 
   @override
