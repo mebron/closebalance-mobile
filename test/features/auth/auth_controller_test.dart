@@ -1,5 +1,6 @@
 import 'package:closebalance_mobile/core/providers.dart';
 import 'package:closebalance_mobile/core/storage/secure_token_store.dart';
+import 'package:closebalance_mobile/core/storage/user_cache_service.dart';
 import 'package:closebalance_mobile/data/models/reference_data.dart';
 import 'package:closebalance_mobile/data/models/user.dart';
 import 'package:closebalance_mobile/data/repos/auth_repository.dart';
@@ -26,6 +27,17 @@ class _FakeTokenStore implements TokenStore {
   Future<void> write(String token) async => _t = token;
 }
 
+class _FakeUserCache extends UserCacheService {
+  @override
+  Future<User?> load() async => null;
+
+  @override
+  Future<void> save(User user) async {}
+
+  @override
+  Future<void> clear() async {}
+}
+
 User _user() => User.fromJson({
       'id': 1,
       'name': 'Mujeeb',
@@ -40,6 +52,7 @@ ProviderContainer _container(_MockAuthRepo auth, _MockReferenceRepo ref_) {
     authRepositoryProvider.overrideWithValue(auth),
     referenceRepositoryProvider.overrideWithValue(ref_),
     tokenStoreProvider.overrideWithValue(_FakeTokenStore()),
+    userCacheProvider.overrideWithValue(_FakeUserCache()),
   ]);
   addTearDown(c.dispose);
   return c;
@@ -48,6 +61,8 @@ ProviderContainer _container(_MockAuthRepo auth, _MockReferenceRepo ref_) {
 void main() {
   late _MockAuthRepo auth;
   late _MockReferenceRepo refRepo;
+
+  setUpAll(() => registerFallbackValue(_user()));
 
   setUp(() {
     auth = _MockAuthRepo();
@@ -109,7 +124,9 @@ void main() {
 
   test('logout clears the current user', () async {
     when(() => auth.currentToken()).thenAnswer((_) async => 'tok');
+    when(() => auth.cachedUser()).thenAnswer((_) async => _user());
     when(() => auth.refreshUser()).thenAnswer((_) async => _user());
+    when(() => auth.cacheUser(any())).thenAnswer((_) async {});
     when(() => auth.logout()).thenAnswer((_) async {});
 
     final c = _container(auth, refRepo);
@@ -122,7 +139,9 @@ void main() {
 
   test('forceSignOut clears the user without calling the API logout', () async {
     when(() => auth.currentToken()).thenAnswer((_) async => 'tok');
+    when(() => auth.cachedUser()).thenAnswer((_) async => _user());
     when(() => auth.refreshUser()).thenAnswer((_) async => _user());
+    when(() => auth.cacheUser(any())).thenAnswer((_) async {});
 
     final c = _container(auth, refRepo);
     await c.read(authControllerProvider.future);
