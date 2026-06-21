@@ -293,7 +293,7 @@ as bool,
 /// @nodoc
 mixin _$EditableExpense {
 
- String get clientId;@JsonKey(name: 'server_id') int? get serverId;@JsonKey(name: 'expense_category_id') int get expenseCategoryId; String? get description; double get amount;@JsonKey(name: 'payment_method') String get paymentMethod; bool get dirty; bool get deleted;
+ String get clientId;@JsonKey(name: 'server_id') int? get serverId;@JsonKey(name: 'expense_category_id') int get expenseCategoryId; String? get description; double get amount;@JsonKey(name: 'payment_channel_id') int? get paymentChannelId; bool get dirty; bool get deleted;
 /// Create a copy of EditableExpense
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -306,16 +306,16 @@ $EditableExpenseCopyWith<EditableExpense> get copyWith => _$EditableExpenseCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EditableExpense&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.serverId, serverId) || other.serverId == serverId)&&(identical(other.expenseCategoryId, expenseCategoryId) || other.expenseCategoryId == expenseCategoryId)&&(identical(other.description, description) || other.description == description)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.dirty, dirty) || other.dirty == dirty)&&(identical(other.deleted, deleted) || other.deleted == deleted));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EditableExpense&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.serverId, serverId) || other.serverId == serverId)&&(identical(other.expenseCategoryId, expenseCategoryId) || other.expenseCategoryId == expenseCategoryId)&&(identical(other.description, description) || other.description == description)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.paymentChannelId, paymentChannelId) || other.paymentChannelId == paymentChannelId)&&(identical(other.dirty, dirty) || other.dirty == dirty)&&(identical(other.deleted, deleted) || other.deleted == deleted));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,clientId,serverId,expenseCategoryId,description,amount,paymentMethod,dirty,deleted);
+int get hashCode => Object.hash(runtimeType,clientId,serverId,expenseCategoryId,description,amount,paymentChannelId,dirty,deleted);
 
 @override
 String toString() {
-  return 'EditableExpense(clientId: $clientId, serverId: $serverId, expenseCategoryId: $expenseCategoryId, description: $description, amount: $amount, paymentMethod: $paymentMethod, dirty: $dirty, deleted: $deleted)';
+  return 'EditableExpense(clientId: $clientId, serverId: $serverId, expenseCategoryId: $expenseCategoryId, description: $description, amount: $amount, paymentChannelId: $paymentChannelId, dirty: $dirty, deleted: $deleted)';
 }
 
 
@@ -326,7 +326,7 @@ abstract mixin class $EditableExpenseCopyWith<$Res>  {
   factory $EditableExpenseCopyWith(EditableExpense value, $Res Function(EditableExpense) _then) = _$EditableExpenseCopyWithImpl;
 @useResult
 $Res call({
- String clientId,@JsonKey(name: 'server_id') int? serverId,@JsonKey(name: 'expense_category_id') int expenseCategoryId, String? description, double amount,@JsonKey(name: 'payment_method') String paymentMethod, bool dirty, bool deleted
+ String clientId,@JsonKey(name: 'server_id') int? serverId,@JsonKey(name: 'expense_category_id') int expenseCategoryId, String? description, double amount,@JsonKey(name: 'payment_channel_id') int? paymentChannelId, bool dirty, bool deleted
 });
 
 
@@ -343,15 +343,15 @@ class _$EditableExpenseCopyWithImpl<$Res>
 
 /// Create a copy of EditableExpense
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? clientId = null,Object? serverId = freezed,Object? expenseCategoryId = null,Object? description = freezed,Object? amount = null,Object? paymentMethod = null,Object? dirty = null,Object? deleted = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? clientId = null,Object? serverId = freezed,Object? expenseCategoryId = null,Object? description = freezed,Object? amount = null,Object? paymentChannelId = freezed,Object? dirty = null,Object? deleted = null,}) {
   return _then(_self.copyWith(
 clientId: null == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
 as String,serverId: freezed == serverId ? _self.serverId : serverId // ignore: cast_nullable_to_non_nullable
 as int?,expenseCategoryId: null == expenseCategoryId ? _self.expenseCategoryId : expenseCategoryId // ignore: cast_nullable_to_non_nullable
 as int,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
-as double,paymentMethod: null == paymentMethod ? _self.paymentMethod : paymentMethod // ignore: cast_nullable_to_non_nullable
-as String,dirty: null == dirty ? _self.dirty : dirty // ignore: cast_nullable_to_non_nullable
+as double,paymentChannelId: freezed == paymentChannelId ? _self.paymentChannelId : paymentChannelId // ignore: cast_nullable_to_non_nullable
+as int?,dirty: null == dirty ? _self.dirty : dirty // ignore: cast_nullable_to_non_nullable
 as bool,deleted: null == deleted ? _self.deleted : deleted // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
@@ -438,10 +438,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String clientId, @JsonKey(name: 'server_id')  int? serverId, @JsonKey(name: 'expense_category_id')  int expenseCategoryId,  String? description,  double amount, @JsonKey(name: 'payment_method')  String paymentMethod,  bool dirty,  bool deleted)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String clientId, @JsonKey(name: 'server_id')  int? serverId, @JsonKey(name: 'expense_category_id')  int expenseCategoryId,  String? description,  double amount, @JsonKey(name: 'payment_channel_id')  int? paymentChannelId,  bool dirty,  bool deleted)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _EditableExpense() when $default != null:
-return $default(_that.clientId,_that.serverId,_that.expenseCategoryId,_that.description,_that.amount,_that.paymentMethod,_that.dirty,_that.deleted);case _:
+return $default(_that.clientId,_that.serverId,_that.expenseCategoryId,_that.description,_that.amount,_that.paymentChannelId,_that.dirty,_that.deleted);case _:
   return orElse();
 
 }
@@ -459,10 +459,10 @@ return $default(_that.clientId,_that.serverId,_that.expenseCategoryId,_that.desc
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String clientId, @JsonKey(name: 'server_id')  int? serverId, @JsonKey(name: 'expense_category_id')  int expenseCategoryId,  String? description,  double amount, @JsonKey(name: 'payment_method')  String paymentMethod,  bool dirty,  bool deleted)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String clientId, @JsonKey(name: 'server_id')  int? serverId, @JsonKey(name: 'expense_category_id')  int expenseCategoryId,  String? description,  double amount, @JsonKey(name: 'payment_channel_id')  int? paymentChannelId,  bool dirty,  bool deleted)  $default,) {final _that = this;
 switch (_that) {
 case _EditableExpense():
-return $default(_that.clientId,_that.serverId,_that.expenseCategoryId,_that.description,_that.amount,_that.paymentMethod,_that.dirty,_that.deleted);case _:
+return $default(_that.clientId,_that.serverId,_that.expenseCategoryId,_that.description,_that.amount,_that.paymentChannelId,_that.dirty,_that.deleted);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -479,10 +479,10 @@ return $default(_that.clientId,_that.serverId,_that.expenseCategoryId,_that.desc
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String clientId, @JsonKey(name: 'server_id')  int? serverId, @JsonKey(name: 'expense_category_id')  int expenseCategoryId,  String? description,  double amount, @JsonKey(name: 'payment_method')  String paymentMethod,  bool dirty,  bool deleted)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String clientId, @JsonKey(name: 'server_id')  int? serverId, @JsonKey(name: 'expense_category_id')  int expenseCategoryId,  String? description,  double amount, @JsonKey(name: 'payment_channel_id')  int? paymentChannelId,  bool dirty,  bool deleted)?  $default,) {final _that = this;
 switch (_that) {
 case _EditableExpense() when $default != null:
-return $default(_that.clientId,_that.serverId,_that.expenseCategoryId,_that.description,_that.amount,_that.paymentMethod,_that.dirty,_that.deleted);case _:
+return $default(_that.clientId,_that.serverId,_that.expenseCategoryId,_that.description,_that.amount,_that.paymentChannelId,_that.dirty,_that.deleted);case _:
   return null;
 
 }
@@ -494,7 +494,7 @@ return $default(_that.clientId,_that.serverId,_that.expenseCategoryId,_that.desc
 @JsonSerializable()
 
 class _EditableExpense implements EditableExpense {
-  const _EditableExpense({required this.clientId, @JsonKey(name: 'server_id') this.serverId, @JsonKey(name: 'expense_category_id') required this.expenseCategoryId, this.description, required this.amount, @JsonKey(name: 'payment_method') this.paymentMethod = 'cash', this.dirty = false, this.deleted = false});
+  const _EditableExpense({required this.clientId, @JsonKey(name: 'server_id') this.serverId, @JsonKey(name: 'expense_category_id') required this.expenseCategoryId, this.description, required this.amount, @JsonKey(name: 'payment_channel_id') this.paymentChannelId, this.dirty = false, this.deleted = false});
   factory _EditableExpense.fromJson(Map<String, dynamic> json) => _$EditableExpenseFromJson(json);
 
 @override final  String clientId;
@@ -502,7 +502,7 @@ class _EditableExpense implements EditableExpense {
 @override@JsonKey(name: 'expense_category_id') final  int expenseCategoryId;
 @override final  String? description;
 @override final  double amount;
-@override@JsonKey(name: 'payment_method') final  String paymentMethod;
+@override@JsonKey(name: 'payment_channel_id') final  int? paymentChannelId;
 @override@JsonKey() final  bool dirty;
 @override@JsonKey() final  bool deleted;
 
@@ -519,16 +519,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EditableExpense&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.serverId, serverId) || other.serverId == serverId)&&(identical(other.expenseCategoryId, expenseCategoryId) || other.expenseCategoryId == expenseCategoryId)&&(identical(other.description, description) || other.description == description)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.dirty, dirty) || other.dirty == dirty)&&(identical(other.deleted, deleted) || other.deleted == deleted));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EditableExpense&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.serverId, serverId) || other.serverId == serverId)&&(identical(other.expenseCategoryId, expenseCategoryId) || other.expenseCategoryId == expenseCategoryId)&&(identical(other.description, description) || other.description == description)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.paymentChannelId, paymentChannelId) || other.paymentChannelId == paymentChannelId)&&(identical(other.dirty, dirty) || other.dirty == dirty)&&(identical(other.deleted, deleted) || other.deleted == deleted));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,clientId,serverId,expenseCategoryId,description,amount,paymentMethod,dirty,deleted);
+int get hashCode => Object.hash(runtimeType,clientId,serverId,expenseCategoryId,description,amount,paymentChannelId,dirty,deleted);
 
 @override
 String toString() {
-  return 'EditableExpense(clientId: $clientId, serverId: $serverId, expenseCategoryId: $expenseCategoryId, description: $description, amount: $amount, paymentMethod: $paymentMethod, dirty: $dirty, deleted: $deleted)';
+  return 'EditableExpense(clientId: $clientId, serverId: $serverId, expenseCategoryId: $expenseCategoryId, description: $description, amount: $amount, paymentChannelId: $paymentChannelId, dirty: $dirty, deleted: $deleted)';
 }
 
 
@@ -539,7 +539,7 @@ abstract mixin class _$EditableExpenseCopyWith<$Res> implements $EditableExpense
   factory _$EditableExpenseCopyWith(_EditableExpense value, $Res Function(_EditableExpense) _then) = __$EditableExpenseCopyWithImpl;
 @override @useResult
 $Res call({
- String clientId,@JsonKey(name: 'server_id') int? serverId,@JsonKey(name: 'expense_category_id') int expenseCategoryId, String? description, double amount,@JsonKey(name: 'payment_method') String paymentMethod, bool dirty, bool deleted
+ String clientId,@JsonKey(name: 'server_id') int? serverId,@JsonKey(name: 'expense_category_id') int expenseCategoryId, String? description, double amount,@JsonKey(name: 'payment_channel_id') int? paymentChannelId, bool dirty, bool deleted
 });
 
 
@@ -556,15 +556,15 @@ class __$EditableExpenseCopyWithImpl<$Res>
 
 /// Create a copy of EditableExpense
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? clientId = null,Object? serverId = freezed,Object? expenseCategoryId = null,Object? description = freezed,Object? amount = null,Object? paymentMethod = null,Object? dirty = null,Object? deleted = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? clientId = null,Object? serverId = freezed,Object? expenseCategoryId = null,Object? description = freezed,Object? amount = null,Object? paymentChannelId = freezed,Object? dirty = null,Object? deleted = null,}) {
   return _then(_EditableExpense(
 clientId: null == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
 as String,serverId: freezed == serverId ? _self.serverId : serverId // ignore: cast_nullable_to_non_nullable
 as int?,expenseCategoryId: null == expenseCategoryId ? _self.expenseCategoryId : expenseCategoryId // ignore: cast_nullable_to_non_nullable
 as int,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
-as double,paymentMethod: null == paymentMethod ? _self.paymentMethod : paymentMethod // ignore: cast_nullable_to_non_nullable
-as String,dirty: null == dirty ? _self.dirty : dirty // ignore: cast_nullable_to_non_nullable
+as double,paymentChannelId: freezed == paymentChannelId ? _self.paymentChannelId : paymentChannelId // ignore: cast_nullable_to_non_nullable
+as int?,dirty: null == dirty ? _self.dirty : dirty // ignore: cast_nullable_to_non_nullable
 as bool,deleted: null == deleted ? _self.deleted : deleted // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
@@ -577,7 +577,7 @@ as bool,
 /// @nodoc
 mixin _$EditableDeduction {
 
- String get clientId;@JsonKey(name: 'server_id') int? get serverId; String get type; String? get description; double get amount;@JsonKey(name: 'payment_method') String get paymentMethod; bool get dirty; bool get deleted;
+ String get clientId;@JsonKey(name: 'server_id') int? get serverId; String get type; String? get description; double get amount;@JsonKey(name: 'payment_channel_id') int? get paymentChannelId; bool get dirty; bool get deleted;
 /// Create a copy of EditableDeduction
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -590,16 +590,16 @@ $EditableDeductionCopyWith<EditableDeduction> get copyWith => _$EditableDeductio
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EditableDeduction&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.serverId, serverId) || other.serverId == serverId)&&(identical(other.type, type) || other.type == type)&&(identical(other.description, description) || other.description == description)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.dirty, dirty) || other.dirty == dirty)&&(identical(other.deleted, deleted) || other.deleted == deleted));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EditableDeduction&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.serverId, serverId) || other.serverId == serverId)&&(identical(other.type, type) || other.type == type)&&(identical(other.description, description) || other.description == description)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.paymentChannelId, paymentChannelId) || other.paymentChannelId == paymentChannelId)&&(identical(other.dirty, dirty) || other.dirty == dirty)&&(identical(other.deleted, deleted) || other.deleted == deleted));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,clientId,serverId,type,description,amount,paymentMethod,dirty,deleted);
+int get hashCode => Object.hash(runtimeType,clientId,serverId,type,description,amount,paymentChannelId,dirty,deleted);
 
 @override
 String toString() {
-  return 'EditableDeduction(clientId: $clientId, serverId: $serverId, type: $type, description: $description, amount: $amount, paymentMethod: $paymentMethod, dirty: $dirty, deleted: $deleted)';
+  return 'EditableDeduction(clientId: $clientId, serverId: $serverId, type: $type, description: $description, amount: $amount, paymentChannelId: $paymentChannelId, dirty: $dirty, deleted: $deleted)';
 }
 
 
@@ -610,7 +610,7 @@ abstract mixin class $EditableDeductionCopyWith<$Res>  {
   factory $EditableDeductionCopyWith(EditableDeduction value, $Res Function(EditableDeduction) _then) = _$EditableDeductionCopyWithImpl;
 @useResult
 $Res call({
- String clientId,@JsonKey(name: 'server_id') int? serverId, String type, String? description, double amount,@JsonKey(name: 'payment_method') String paymentMethod, bool dirty, bool deleted
+ String clientId,@JsonKey(name: 'server_id') int? serverId, String type, String? description, double amount,@JsonKey(name: 'payment_channel_id') int? paymentChannelId, bool dirty, bool deleted
 });
 
 
@@ -627,15 +627,15 @@ class _$EditableDeductionCopyWithImpl<$Res>
 
 /// Create a copy of EditableDeduction
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? clientId = null,Object? serverId = freezed,Object? type = null,Object? description = freezed,Object? amount = null,Object? paymentMethod = null,Object? dirty = null,Object? deleted = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? clientId = null,Object? serverId = freezed,Object? type = null,Object? description = freezed,Object? amount = null,Object? paymentChannelId = freezed,Object? dirty = null,Object? deleted = null,}) {
   return _then(_self.copyWith(
 clientId: null == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
 as String,serverId: freezed == serverId ? _self.serverId : serverId // ignore: cast_nullable_to_non_nullable
 as int?,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
-as double,paymentMethod: null == paymentMethod ? _self.paymentMethod : paymentMethod // ignore: cast_nullable_to_non_nullable
-as String,dirty: null == dirty ? _self.dirty : dirty // ignore: cast_nullable_to_non_nullable
+as double,paymentChannelId: freezed == paymentChannelId ? _self.paymentChannelId : paymentChannelId // ignore: cast_nullable_to_non_nullable
+as int?,dirty: null == dirty ? _self.dirty : dirty // ignore: cast_nullable_to_non_nullable
 as bool,deleted: null == deleted ? _self.deleted : deleted // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
@@ -722,10 +722,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String clientId, @JsonKey(name: 'server_id')  int? serverId,  String type,  String? description,  double amount, @JsonKey(name: 'payment_method')  String paymentMethod,  bool dirty,  bool deleted)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String clientId, @JsonKey(name: 'server_id')  int? serverId,  String type,  String? description,  double amount, @JsonKey(name: 'payment_channel_id')  int? paymentChannelId,  bool dirty,  bool deleted)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _EditableDeduction() when $default != null:
-return $default(_that.clientId,_that.serverId,_that.type,_that.description,_that.amount,_that.paymentMethod,_that.dirty,_that.deleted);case _:
+return $default(_that.clientId,_that.serverId,_that.type,_that.description,_that.amount,_that.paymentChannelId,_that.dirty,_that.deleted);case _:
   return orElse();
 
 }
@@ -743,10 +743,10 @@ return $default(_that.clientId,_that.serverId,_that.type,_that.description,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String clientId, @JsonKey(name: 'server_id')  int? serverId,  String type,  String? description,  double amount, @JsonKey(name: 'payment_method')  String paymentMethod,  bool dirty,  bool deleted)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String clientId, @JsonKey(name: 'server_id')  int? serverId,  String type,  String? description,  double amount, @JsonKey(name: 'payment_channel_id')  int? paymentChannelId,  bool dirty,  bool deleted)  $default,) {final _that = this;
 switch (_that) {
 case _EditableDeduction():
-return $default(_that.clientId,_that.serverId,_that.type,_that.description,_that.amount,_that.paymentMethod,_that.dirty,_that.deleted);case _:
+return $default(_that.clientId,_that.serverId,_that.type,_that.description,_that.amount,_that.paymentChannelId,_that.dirty,_that.deleted);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -763,10 +763,10 @@ return $default(_that.clientId,_that.serverId,_that.type,_that.description,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String clientId, @JsonKey(name: 'server_id')  int? serverId,  String type,  String? description,  double amount, @JsonKey(name: 'payment_method')  String paymentMethod,  bool dirty,  bool deleted)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String clientId, @JsonKey(name: 'server_id')  int? serverId,  String type,  String? description,  double amount, @JsonKey(name: 'payment_channel_id')  int? paymentChannelId,  bool dirty,  bool deleted)?  $default,) {final _that = this;
 switch (_that) {
 case _EditableDeduction() when $default != null:
-return $default(_that.clientId,_that.serverId,_that.type,_that.description,_that.amount,_that.paymentMethod,_that.dirty,_that.deleted);case _:
+return $default(_that.clientId,_that.serverId,_that.type,_that.description,_that.amount,_that.paymentChannelId,_that.dirty,_that.deleted);case _:
   return null;
 
 }
@@ -778,7 +778,7 @@ return $default(_that.clientId,_that.serverId,_that.type,_that.description,_that
 @JsonSerializable()
 
 class _EditableDeduction implements EditableDeduction {
-  const _EditableDeduction({required this.clientId, @JsonKey(name: 'server_id') this.serverId, required this.type, this.description, required this.amount, @JsonKey(name: 'payment_method') this.paymentMethod = 'cash', this.dirty = false, this.deleted = false});
+  const _EditableDeduction({required this.clientId, @JsonKey(name: 'server_id') this.serverId, required this.type, this.description, required this.amount, @JsonKey(name: 'payment_channel_id') this.paymentChannelId, this.dirty = false, this.deleted = false});
   factory _EditableDeduction.fromJson(Map<String, dynamic> json) => _$EditableDeductionFromJson(json);
 
 @override final  String clientId;
@@ -786,7 +786,7 @@ class _EditableDeduction implements EditableDeduction {
 @override final  String type;
 @override final  String? description;
 @override final  double amount;
-@override@JsonKey(name: 'payment_method') final  String paymentMethod;
+@override@JsonKey(name: 'payment_channel_id') final  int? paymentChannelId;
 @override@JsonKey() final  bool dirty;
 @override@JsonKey() final  bool deleted;
 
@@ -803,16 +803,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EditableDeduction&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.serverId, serverId) || other.serverId == serverId)&&(identical(other.type, type) || other.type == type)&&(identical(other.description, description) || other.description == description)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.dirty, dirty) || other.dirty == dirty)&&(identical(other.deleted, deleted) || other.deleted == deleted));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EditableDeduction&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.serverId, serverId) || other.serverId == serverId)&&(identical(other.type, type) || other.type == type)&&(identical(other.description, description) || other.description == description)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.paymentChannelId, paymentChannelId) || other.paymentChannelId == paymentChannelId)&&(identical(other.dirty, dirty) || other.dirty == dirty)&&(identical(other.deleted, deleted) || other.deleted == deleted));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,clientId,serverId,type,description,amount,paymentMethod,dirty,deleted);
+int get hashCode => Object.hash(runtimeType,clientId,serverId,type,description,amount,paymentChannelId,dirty,deleted);
 
 @override
 String toString() {
-  return 'EditableDeduction(clientId: $clientId, serverId: $serverId, type: $type, description: $description, amount: $amount, paymentMethod: $paymentMethod, dirty: $dirty, deleted: $deleted)';
+  return 'EditableDeduction(clientId: $clientId, serverId: $serverId, type: $type, description: $description, amount: $amount, paymentChannelId: $paymentChannelId, dirty: $dirty, deleted: $deleted)';
 }
 
 
@@ -823,7 +823,7 @@ abstract mixin class _$EditableDeductionCopyWith<$Res> implements $EditableDeduc
   factory _$EditableDeductionCopyWith(_EditableDeduction value, $Res Function(_EditableDeduction) _then) = __$EditableDeductionCopyWithImpl;
 @override @useResult
 $Res call({
- String clientId,@JsonKey(name: 'server_id') int? serverId, String type, String? description, double amount,@JsonKey(name: 'payment_method') String paymentMethod, bool dirty, bool deleted
+ String clientId,@JsonKey(name: 'server_id') int? serverId, String type, String? description, double amount,@JsonKey(name: 'payment_channel_id') int? paymentChannelId, bool dirty, bool deleted
 });
 
 
@@ -840,15 +840,15 @@ class __$EditableDeductionCopyWithImpl<$Res>
 
 /// Create a copy of EditableDeduction
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? clientId = null,Object? serverId = freezed,Object? type = null,Object? description = freezed,Object? amount = null,Object? paymentMethod = null,Object? dirty = null,Object? deleted = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? clientId = null,Object? serverId = freezed,Object? type = null,Object? description = freezed,Object? amount = null,Object? paymentChannelId = freezed,Object? dirty = null,Object? deleted = null,}) {
   return _then(_EditableDeduction(
 clientId: null == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
 as String,serverId: freezed == serverId ? _self.serverId : serverId // ignore: cast_nullable_to_non_nullable
 as int?,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
-as double,paymentMethod: null == paymentMethod ? _self.paymentMethod : paymentMethod // ignore: cast_nullable_to_non_nullable
-as String,dirty: null == dirty ? _self.dirty : dirty // ignore: cast_nullable_to_non_nullable
+as double,paymentChannelId: freezed == paymentChannelId ? _self.paymentChannelId : paymentChannelId // ignore: cast_nullable_to_non_nullable
+as int?,dirty: null == dirty ? _self.dirty : dirty // ignore: cast_nullable_to_non_nullable
 as bool,deleted: null == deleted ? _self.deleted : deleted // ignore: cast_nullable_to_non_nullable
 as bool,
   ));

@@ -34,7 +34,7 @@ class _ExpensesTabState extends ConsumerState<ExpensesTab> {
               expenseCategoryId: result.categoryId,
               description: result.description,
               amount: result.amount,
-              paymentMethod: result.paymentMethod,
+              paymentChannelId: result.paymentChannelId,
             );
       }
     } finally {
@@ -54,7 +54,7 @@ class _ExpensesTabState extends ConsumerState<ExpensesTab> {
               type: result.type,
               description: result.description,
               amount: result.amount,
-              paymentMethod: result.paymentMethod,
+              paymentChannelId: result.paymentChannelId,
             );
       }
     } finally {
@@ -73,6 +73,9 @@ class _ExpensesTabState extends ConsumerState<ExpensesTab> {
     final refData = ref.watch(referenceDataProvider);
     final categoryNames = {
       for (final c in refData.value?.expenseCategories ?? const []) c.id: c.name,
+    };
+    final channelNames = {
+      for (final c in refData.value?.paymentChannels ?? const []) c.id: c.name,
     };
 
     return ListView(
@@ -102,7 +105,7 @@ class _ExpensesTabState extends ConsumerState<ExpensesTab> {
                           initialCategoryId: e.expenseCategoryId,
                           initialDescription: e.description,
                           initialAmount: e.amount,
-                          initialPaymentMethod: e.paymentMethod,
+                          initialPaymentChannelId: e.paymentChannelId,
                         );
                         if (result != null && mounted) {
                           await ctrl.updateExpense(
@@ -110,7 +113,7 @@ class _ExpensesTabState extends ConsumerState<ExpensesTab> {
                             expenseCategoryId: result.categoryId,
                             description: result.description,
                             amount: result.amount,
-                            paymentMethod: result.paymentMethod,
+                            paymentChannelId: result.paymentChannelId,
                           );
                         }
                       },
@@ -142,7 +145,7 @@ class _ExpensesTabState extends ConsumerState<ExpensesTab> {
         ...closing.deductions.where((d) => !d.deleted).map(
               (d) => LineCard(
                 title: d.description ?? d.type,
-                subtitle: d.paymentMethod,
+                subtitle: channelNames[d.paymentChannelId],
                 amount: formatMoney(d.amount, widget.currencySymbol),
                 onTap: isFinalized
                     ? null
@@ -152,7 +155,7 @@ class _ExpensesTabState extends ConsumerState<ExpensesTab> {
                           initialType: d.type,
                           initialDescription: d.description,
                           initialAmount: d.amount,
-                          initialPaymentMethod: d.paymentMethod,
+                          initialPaymentChannelId: d.paymentChannelId,
                         );
                         if (result != null && mounted) {
                           await ctrl.updateDeduction(
@@ -160,7 +163,7 @@ class _ExpensesTabState extends ConsumerState<ExpensesTab> {
                             type: result.type,
                             description: result.description,
                             amount: result.amount,
-                            paymentMethod: result.paymentMethod,
+                            paymentChannelId: result.paymentChannelId,
                           );
                         }
                       },

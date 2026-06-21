@@ -18,31 +18,36 @@ void main() {
     expect(s.amount, 2000.0);
   });
 
-  test('ExpenseLine parses payment_method and nullable category', () {
+  test('ExpenseLine parses payment_channel_id and paid_via', () {
     final e = ExpenseLine.fromJson({
       'id': 2,
       'expense_category_id': 7,
       'category': {'id': 7, 'name': 'Rent'},
       'description': 'Monthly rent',
       'amount': 300.0,
-      'payment_method': 'cash',
+      'payment_channel_id': 1,
+      'paid_via': 'Cash Counter',
       'remarks': null,
     });
     expect(e.category?.name, 'Rent');
-    expect(e.paymentMethod, 'cash');
+    expect(e.paymentChannelId, 1);
+    expect(e.paidVia, 'Cash Counter');
     expect(e.remarks, isNull);
   });
 
-  test('Deduction parses type as string', () {
+  test('Deduction parses payment_channel_id', () {
     final d = Deduction.fromJson({
       'id': 3,
       'type': 'salary_advance',
       'description': 'Advance',
       'amount': 100.0,
-      'payment_method': 'cash',
+      'payment_channel_id': 2,
+      'paid_via': 'Bank Transfer',
     });
     expect(d.type, 'salary_advance');
     expect(d.amount, 100.0);
+    expect(d.paymentChannelId, 2);
+    expect(d.paidVia, 'Bank Transfer');
   });
 
   test('CounterTransaction parses nested counter name', () {

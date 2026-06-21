@@ -10,7 +10,8 @@ abstract class Deduction with _$Deduction {
     required String type,
     String? description,
     required double amount,
-    @JsonKey(name: 'payment_method') @Default('cash') String paymentMethod,
+    @JsonKey(name: 'payment_channel_id') int? paymentChannelId,
+    @JsonKey(name: 'paid_via') String? paidVia,
   }) = _Deduction;
 
   factory Deduction.fromJson(Map<String, dynamic> json) => _$DeductionFromJson(json);

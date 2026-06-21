@@ -77,12 +77,12 @@ void main() {
     when(() => closings.store(branchId: 1, date: '2026-06-14', totalSales: 0))
         .thenAnswer((_) async => _closing(id: 9));
     when(() => expenses.create(closingId: 9, expenseCategoryId: 7, description: 'Rent',
-        amount: 300, paymentMethod: 'cash', remarks: null)).thenAnswer((_) async =>
-        const ExpenseLine(id: 1, expenseCategoryId: 7, description: 'Rent', amount: 300, paymentMethod: 'cash'));
+        amount: 300, paymentChannelId: 1, remarks: null)).thenAnswer((_) async =>
+        const ExpenseLine(id: 1, expenseCategoryId: 7, description: 'Rent', amount: 300, paymentChannelId: 1));
     when(() => closings.show(9)).thenAnswer((_) async => _closing(id: 9));
 
     final c = await svc.addExpenseOnline(branchId: 1, today: '2026-06-14',
-        expenseCategoryId: 7, description: 'Rent', amount: 300, paymentMethod: 'cash');
+        expenseCategoryId: 7, description: 'Rent', amount: 300, paymentChannelId: 1);
     expect(c.id, 9);
   });
 }

@@ -1,49 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/providers.dart';
 import '../../../data/models/deduction_type.dart';
 
-Future<({String type, String description, double amount, String paymentMethod})?>
+Future<({String type, String description, double amount, int paymentChannelId})?>
     showDeductionSheet(
   BuildContext context, {
   String? initialType,
   String? initialDescription,
   double? initialAmount,
-  String? initialPaymentMethod,
+  int? initialPaymentChannelId,
 }) {
   return showModalBottomSheet<
-      ({String type, String description, double amount, String paymentMethod})>(
+      ({String type, String description, double amount, int paymentChannelId})>(
     context: context,
     isScrollControlled: true,
     builder: (ctx) => _DeductionSheet(
       initialType: initialType,
       initialDescription: initialDescription,
       initialAmount: initialAmount,
-      initialPaymentMethod: initialPaymentMethod,
+      initialPaymentChannelId: initialPaymentChannelId,
     ),
   );
 }
 
-class _DeductionSheet extends StatefulWidget {
+class _DeductionSheet extends ConsumerStatefulWidget {
   const _DeductionSheet({
     this.initialType,
     this.initialDescription,
     this.initialAmount,
-    this.initialPaymentMethod,
+    this.initialPaymentChannelId,
   });
 
   final String? initialType;
   final String? initialDescription;
   final double? initialAmount;
-  final String? initialPaymentMethod;
+  final int? initialPaymentChannelId;
 
   @override
-  State<_DeductionSheet> createState() => _DeductionSheetState();
+  ConsumerState<_DeductionSheet> createState() => _DeductionSheetState();
 }
 
-class _DeductionSheetState extends State<_DeductionSheet> {
+class _DeductionSheetState extends ConsumerState<_DeductionSheet> {
   String? _type;
   final _descCtrl = TextEditingController();
   final _amountCtrl = TextEditingController();
-  String _paymentMethod = 'cash';
+  int? _paymentChannelId;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -54,7 +56,7 @@ class _DeductionSheetState extends State<_DeductionSheet> {
     if (widget.initialAmount != null) {
       _amountCtrl.text = widget.initialAmount!.toStringAsFixed(2);
     }
-    _paymentMethod = widget.initialPaymentMethod ?? 'cash';
+    _paymentChannelId = widget.initialPaymentChannelId;
   }
 
   @override
@@ -66,6 +68,11 @@ class _DeductionSheetState extends State<_DeductionSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final refData = ref.watch(referenceDataProvider);
+    final channels = refData.value?.paymentChannels
+        .where((c) => c.type != 'aggregator')
+        .toList();
+
     return Padding(
       padding: EdgeInsets.only(
         left: 16,
@@ -82,7 +89,7 @@ class _DeductionSheetState extends State<_DeductionSheet> {
             Text('Deduction', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
-              initialValue: _type,
+              value: _type,
               decoration: const InputDecoration(labelText: 'Type'),
               items: DeductionType.values
                   .map((t) => DropdownMenuItem(value: t.value, child: Text(t.label)))
@@ -107,14 +114,18 @@ class _DeductionSheetState extends State<_DeductionSheet> {
               },
             ),
             const SizedBox(height: 12),
-            SegmentedButton<String>(
-              segments: const [
-                ButtonSegment(value: 'cash', label: Text('Cash')),
-                ButtonSegment(value: 'bank', label: Text('Bank')),
-              ],
-              selected: {_paymentMethod},
-              onSelectionChanged: (s) => setState(() => _paymentMethod = s.first),
-            ),
+            if (channels == null)
+              const LinearProgressIndicator()
+            else
+              DropdownButtonFormField<int>(
+                value: _paymentChannelId,
+                decoration: const InputDecoration(labelText: 'Paid Via'),
+                items: channels
+                    .map((c) => DropdownMenuItem(value: c.id, child: Text(c.name)))
+                    .toList(),
+                onChanged: (v) => setState(() => _paymentChannelId = v),
+                validator: (v) => v == null ? 'Select a payment channel' : null,
+              ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
@@ -123,7 +134,7 @@ class _DeductionSheetState extends State<_DeductionSheet> {
                     type: _type!,
                     description: _descCtrl.text.trim(),
                     amount: double.parse(_amountCtrl.text),
-                    paymentMethod: _paymentMethod,
+                    paymentChannelId: _paymentChannelId!,
                   ));
                 }
               },

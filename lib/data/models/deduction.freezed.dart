@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Deduction {
 
- int get id; String get type; String? get description; double get amount;@JsonKey(name: 'payment_method') String get paymentMethod;
+ int get id; String get type; String? get description; double get amount;@JsonKey(name: 'payment_channel_id') int? get paymentChannelId;@JsonKey(name: 'paid_via') String? get paidVia;
 /// Create a copy of Deduction
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $DeductionCopyWith<Deduction> get copyWith => _$DeductionCopyWithImpl<Deduction>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Deduction&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.description, description) || other.description == description)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Deduction&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.description, description) || other.description == description)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.paymentChannelId, paymentChannelId) || other.paymentChannelId == paymentChannelId)&&(identical(other.paidVia, paidVia) || other.paidVia == paidVia));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,type,description,amount,paymentMethod);
+int get hashCode => Object.hash(runtimeType,id,type,description,amount,paymentChannelId,paidVia);
 
 @override
 String toString() {
-  return 'Deduction(id: $id, type: $type, description: $description, amount: $amount, paymentMethod: $paymentMethod)';
+  return 'Deduction(id: $id, type: $type, description: $description, amount: $amount, paymentChannelId: $paymentChannelId, paidVia: $paidVia)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $DeductionCopyWith<$Res>  {
   factory $DeductionCopyWith(Deduction value, $Res Function(Deduction) _then) = _$DeductionCopyWithImpl;
 @useResult
 $Res call({
- int id, String type, String? description, double amount,@JsonKey(name: 'payment_method') String paymentMethod
+ int id, String type, String? description, double amount,@JsonKey(name: 'payment_channel_id') int? paymentChannelId,@JsonKey(name: 'paid_via') String? paidVia
 });
 
 
@@ -65,14 +65,15 @@ class _$DeductionCopyWithImpl<$Res>
 
 /// Create a copy of Deduction
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? type = null,Object? description = freezed,Object? amount = null,Object? paymentMethod = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? type = null,Object? description = freezed,Object? amount = null,Object? paymentChannelId = freezed,Object? paidVia = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
-as double,paymentMethod: null == paymentMethod ? _self.paymentMethod : paymentMethod // ignore: cast_nullable_to_non_nullable
-as String,
+as double,paymentChannelId: freezed == paymentChannelId ? _self.paymentChannelId : paymentChannelId // ignore: cast_nullable_to_non_nullable
+as int?,paidVia: freezed == paidVia ? _self.paidVia : paidVia // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -157,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String type,  String? description,  double amount, @JsonKey(name: 'payment_method')  String paymentMethod)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String type,  String? description,  double amount, @JsonKey(name: 'payment_channel_id')  int? paymentChannelId, @JsonKey(name: 'paid_via')  String? paidVia)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Deduction() when $default != null:
-return $default(_that.id,_that.type,_that.description,_that.amount,_that.paymentMethod);case _:
+return $default(_that.id,_that.type,_that.description,_that.amount,_that.paymentChannelId,_that.paidVia);case _:
   return orElse();
 
 }
@@ -178,10 +179,10 @@ return $default(_that.id,_that.type,_that.description,_that.amount,_that.payment
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String type,  String? description,  double amount, @JsonKey(name: 'payment_method')  String paymentMethod)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String type,  String? description,  double amount, @JsonKey(name: 'payment_channel_id')  int? paymentChannelId, @JsonKey(name: 'paid_via')  String? paidVia)  $default,) {final _that = this;
 switch (_that) {
 case _Deduction():
-return $default(_that.id,_that.type,_that.description,_that.amount,_that.paymentMethod);case _:
+return $default(_that.id,_that.type,_that.description,_that.amount,_that.paymentChannelId,_that.paidVia);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +199,10 @@ return $default(_that.id,_that.type,_that.description,_that.amount,_that.payment
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String type,  String? description,  double amount, @JsonKey(name: 'payment_method')  String paymentMethod)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String type,  String? description,  double amount, @JsonKey(name: 'payment_channel_id')  int? paymentChannelId, @JsonKey(name: 'paid_via')  String? paidVia)?  $default,) {final _that = this;
 switch (_that) {
 case _Deduction() when $default != null:
-return $default(_that.id,_that.type,_that.description,_that.amount,_that.paymentMethod);case _:
+return $default(_that.id,_that.type,_that.description,_that.amount,_that.paymentChannelId,_that.paidVia);case _:
   return null;
 
 }
@@ -213,14 +214,15 @@ return $default(_that.id,_that.type,_that.description,_that.amount,_that.payment
 @JsonSerializable()
 
 class _Deduction implements Deduction {
-  const _Deduction({required this.id, required this.type, this.description, required this.amount, @JsonKey(name: 'payment_method') this.paymentMethod = 'cash'});
+  const _Deduction({required this.id, required this.type, this.description, required this.amount, @JsonKey(name: 'payment_channel_id') this.paymentChannelId, @JsonKey(name: 'paid_via') this.paidVia});
   factory _Deduction.fromJson(Map<String, dynamic> json) => _$DeductionFromJson(json);
 
 @override final  int id;
 @override final  String type;
 @override final  String? description;
 @override final  double amount;
-@override@JsonKey(name: 'payment_method') final  String paymentMethod;
+@override@JsonKey(name: 'payment_channel_id') final  int? paymentChannelId;
+@override@JsonKey(name: 'paid_via') final  String? paidVia;
 
 /// Create a copy of Deduction
 /// with the given fields replaced by the non-null parameter values.
@@ -235,16 +237,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Deduction&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.description, description) || other.description == description)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Deduction&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.description, description) || other.description == description)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.paymentChannelId, paymentChannelId) || other.paymentChannelId == paymentChannelId)&&(identical(other.paidVia, paidVia) || other.paidVia == paidVia));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,type,description,amount,paymentMethod);
+int get hashCode => Object.hash(runtimeType,id,type,description,amount,paymentChannelId,paidVia);
 
 @override
 String toString() {
-  return 'Deduction(id: $id, type: $type, description: $description, amount: $amount, paymentMethod: $paymentMethod)';
+  return 'Deduction(id: $id, type: $type, description: $description, amount: $amount, paymentChannelId: $paymentChannelId, paidVia: $paidVia)';
 }
 
 
@@ -255,7 +257,7 @@ abstract mixin class _$DeductionCopyWith<$Res> implements $DeductionCopyWith<$Re
   factory _$DeductionCopyWith(_Deduction value, $Res Function(_Deduction) _then) = __$DeductionCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String type, String? description, double amount,@JsonKey(name: 'payment_method') String paymentMethod
+ int id, String type, String? description, double amount,@JsonKey(name: 'payment_channel_id') int? paymentChannelId,@JsonKey(name: 'paid_via') String? paidVia
 });
 
 
@@ -272,14 +274,15 @@ class __$DeductionCopyWithImpl<$Res>
 
 /// Create a copy of Deduction
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? type = null,Object? description = freezed,Object? amount = null,Object? paymentMethod = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? type = null,Object? description = freezed,Object? amount = null,Object? paymentChannelId = freezed,Object? paidVia = freezed,}) {
   return _then(_Deduction(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
-as double,paymentMethod: null == paymentMethod ? _self.paymentMethod : paymentMethod // ignore: cast_nullable_to_non_nullable
-as String,
+as double,paymentChannelId: freezed == paymentChannelId ? _self.paymentChannelId : paymentChannelId // ignore: cast_nullable_to_non_nullable
+as int?,paidVia: freezed == paidVia ? _self.paidVia : paidVia // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

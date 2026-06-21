@@ -11,7 +11,8 @@ _Deduction _$DeductionFromJson(Map<String, dynamic> json) => _Deduction(
   type: json['type'] as String,
   description: json['description'] as String?,
   amount: (json['amount'] as num).toDouble(),
-  paymentMethod: json['payment_method'] as String? ?? 'cash',
+  paymentChannelId: (json['payment_channel_id'] as num?)?.toInt(),
+  paidVia: json['paid_via'] as String?,
 );
 
 Map<String, dynamic> _$DeductionToJson(_Deduction instance) =>
@@ -20,5 +21,6 @@ Map<String, dynamic> _$DeductionToJson(_Deduction instance) =>
       'type': instance.type,
       'description': instance.description,
       'amount': instance.amount,
-      'payment_method': instance.paymentMethod,
+      'payment_channel_id': instance.paymentChannelId,
+      'paid_via': instance.paidVia,
     };

@@ -14,7 +14,8 @@ _ExpenseLine _$ExpenseLineFromJson(Map<String, dynamic> json) => _ExpenseLine(
       : ExpenseCategory.fromJson(json['category'] as Map<String, dynamic>),
   description: json['description'] as String?,
   amount: (json['amount'] as num).toDouble(),
-  paymentMethod: json['payment_method'] as String? ?? 'cash',
+  paymentChannelId: (json['payment_channel_id'] as num?)?.toInt(),
+  paidVia: json['paid_via'] as String?,
   remarks: json['remarks'] as String?,
 );
 
@@ -25,6 +26,7 @@ Map<String, dynamic> _$ExpenseLineToJson(_ExpenseLine instance) =>
       'category': instance.category?.toJson(),
       'description': instance.description,
       'amount': instance.amount,
-      'payment_method': instance.paymentMethod,
+      'payment_channel_id': instance.paymentChannelId,
+      'paid_via': instance.paidVia,
       'remarks': instance.remarks,
     };

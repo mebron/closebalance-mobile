@@ -24,13 +24,13 @@ abstract final class ClosingMath {
   static double totalDeductions(EditableClosing c) => _deductions(c).fold(0.0, (s, x) => s + x.amount);
   static double counterPaid(EditableClosing c) => _counters(c).fold(0.0, (s, x) => s + x.paidAmount);
 
-  static double _cashExpenses(EditableClosing c) =>
-      _expenses(c).where((e) => e.paymentMethod == 'cash').fold(0.0, (s, x) => s + x.amount);
-  static double _cashDeductions(EditableClosing c) =>
-      _deductions(c).where((d) => d.paymentMethod == 'cash').fold(0.0, (s, x) => s + x.amount);
+  static double _cashExpenses(EditableClosing c, Map<int, String> t) =>
+      _expenses(c).where((e) => t[e.paymentChannelId] == 'cash').fold(0.0, (s, x) => s + x.amount);
+  static double _cashDeductions(EditableClosing c, Map<int, String> t) =>
+      _deductions(c).where((d) => t[d.paymentChannelId] == 'cash').fold(0.0, (s, x) => s + x.amount);
 
   static double cashInHand(EditableClosing c, Map<int, String> t) =>
-      cashCollections(c, t) - counterPaid(c) - _cashExpenses(c) - _cashDeductions(c);
+      cashCollections(c, t) - counterPaid(c) - _cashExpenses(c, t) - _cashDeductions(c, t);
 
   static double netProfit(EditableClosing c) =>
       c.totalSales - totalExpenses(c) - totalDeductions(c);

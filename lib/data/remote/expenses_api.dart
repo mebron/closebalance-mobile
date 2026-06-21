@@ -12,7 +12,7 @@ class ExpensesApi {
     required int expenseCategoryId,
     String? description,
     required num amount,
-    required String paymentMethod,
+    required int paymentChannelId,
     String? remarks,
   }) async {
     return guardApi(() async {
@@ -20,7 +20,7 @@ class ExpensesApi {
         'expense_category_id': expenseCategoryId,
         if (description != null && description.isNotEmpty) 'description': description,
         'amount': amount,
-        'payment_method': paymentMethod,
+        'payment_channel_id': paymentChannelId,
         if (remarks != null) 'remarks': remarks,
       });
       return ExpenseLine.fromJson(
@@ -34,7 +34,7 @@ class ExpensesApi {
     required int expenseCategoryId,
     String? description,
     required num amount,
-    required String paymentMethod,
+    required int paymentChannelId,
     String? remarks,
   }) =>
       guardApi(() async {
@@ -42,7 +42,7 @@ class ExpensesApi {
           'expense_category_id': expenseCategoryId,
           'description': description,
           'amount': amount,
-          'payment_method': paymentMethod,
+          'payment_channel_id': paymentChannelId,
           if (remarks != null) 'remarks': remarks,
         });
         return ExpenseLine.fromJson(

@@ -12,7 +12,8 @@ abstract class ExpenseLine with _$ExpenseLine {
     ExpenseCategory? category,
     String? description,
     required double amount,
-    @JsonKey(name: 'payment_method') @Default('cash') String paymentMethod,
+    @JsonKey(name: 'payment_channel_id') int? paymentChannelId,
+    @JsonKey(name: 'paid_via') String? paidVia,
     String? remarks,
   }) = _ExpenseLine;
 

@@ -62,7 +62,7 @@ void main() {
       expenseCategoryId: 7,
       description: 'Rent',
       amount: 300,
-      paymentMethod: 'cash',
+      paymentChannelId: 1,
     );
 
     final state =
@@ -88,7 +88,7 @@ void main() {
     await ctrl.addExpense(
       expenseCategoryId: 3,
       amount: 100,
-      paymentMethod: 'card',
+      paymentChannelId: 1,
     );
 
     final clientId = c
@@ -119,7 +119,7 @@ void main() {
       type: 'discount',
       description: 'Staff discount',
       amount: 50,
-      paymentMethod: 'cash',
+      paymentChannelId: 1,
     );
 
     final state =

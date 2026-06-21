@@ -42,7 +42,7 @@ class ClosingApiService {
     required int expenseCategoryId,
     required String description,
     required num amount,
-    required String paymentMethod,
+    required int paymentChannelId,
     String? remarks,
   }) async {
     final closing = await ensureTodayClosing(branchId: branchId, today: today);
@@ -51,7 +51,7 @@ class ClosingApiService {
       expenseCategoryId: expenseCategoryId,
       description: description,
       amount: amount,
-      paymentMethod: paymentMethod,
+      paymentChannelId: paymentChannelId,
       remarks: remarks,
     );
     return _closings.show(closing.id);

@@ -32,14 +32,15 @@ void main() {
     when(() => dio.post('/daily-closings/9/expenses', data: any(named: 'data')))
         .thenAnswer((_) async => _res('/daily-closings/9/expenses', {
               'data': {'id': 1, 'expense_category_id': 7, 'category': {'id': 7, 'name': 'Rent'},
-                       'description': 'Rent', 'amount': 300.0, 'payment_method': 'cash', 'remarks': null},
+                       'description': 'Rent', 'amount': 300.0, 'payment_channel_id': 1, 'paid_via': 'Cash Counter', 'remarks': null},
             }));
 
     final e = await ExpensesApi(dio).create(
-      closingId: 9, expenseCategoryId: 7, description: 'Rent', amount: 300, paymentMethod: 'cash');
-    expect(e.paymentMethod, 'cash');
+      closingId: 9, expenseCategoryId: 7, description: 'Rent', amount: 300, paymentChannelId: 1);
+    expect(e.paymentChannelId, 1);
+    expect(e.paidVia, 'Cash Counter');
     verify(() => dio.post('/daily-closings/9/expenses', data: {
-          'expense_category_id': 7, 'description': 'Rent', 'amount': 300, 'payment_method': 'cash',
+          'expense_category_id': 7, 'description': 'Rent', 'amount': 300, 'payment_channel_id': 1,
         })).called(1);
   });
 }

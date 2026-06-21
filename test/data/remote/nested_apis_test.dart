@@ -26,12 +26,12 @@ void main() {
 
   test('DeductionsApi.create POSTs the body', () async {
     when(() => dio.post('/daily-closings/9/deductions', data: any(named: 'data'))).thenAnswer((_) async =>
-        _res('/x', {'data': {'id': 1, 'type': 'incentive', 'description': 'x', 'amount': 100.0, 'payment_method': 'cash'}}, 201));
+        _res('/x', {'data': {'id': 1, 'type': 'incentive', 'description': 'x', 'amount': 100.0, 'payment_channel_id': 1}}, 201));
     final d = await DeductionsApi(dio).create(
-        closingId: 9, type: 'incentive', description: 'x', amount: 100, paymentMethod: 'cash');
+        closingId: 9, type: 'incentive', description: 'x', amount: 100, paymentChannelId: 1);
     expect(d.type, 'incentive');
     verify(() => dio.post('/daily-closings/9/deductions',
-        data: {'type': 'incentive', 'description': 'x', 'amount': 100, 'payment_method': 'cash'})).called(1);
+        data: {'type': 'incentive', 'description': 'x', 'amount': 100, 'payment_channel_id': 1})).called(1);
   });
 
   test('CounterTransactionsApi.create POSTs the body', () async {
@@ -52,9 +52,10 @@ void main() {
 
   test('ExpensesApi.update PUTs fields', () async {
     when(() => dio.put('/daily-closings/9/expenses/3', data: any(named: 'data'))).thenAnswer((_) async =>
-        _res('/x', {'data': {'id': 3, 'expense_category_id': 7, 'description': 'Rent', 'amount': 50.0, 'payment_method': 'bank', 'remarks': null}}));
+        _res('/x', {'data': {'id': 3, 'expense_category_id': 7, 'description': 'Rent', 'amount': 50.0, 'payment_channel_id': 2, 'paid_via': 'Bank Transfer', 'remarks': null}}));
     final e = await ExpensesApi(dio).update(
-        closingId: 9, expenseId: 3, expenseCategoryId: 7, description: 'Rent', amount: 50, paymentMethod: 'bank');
-    expect(e.paymentMethod, 'bank');
+        closingId: 9, expenseId: 3, expenseCategoryId: 7, description: 'Rent', amount: 50, paymentChannelId: 2);
+    expect(e.paymentChannelId, 2);
+    expect(e.paidVia, 'Bank Transfer');
   });
 }

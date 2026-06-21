@@ -28,7 +28,7 @@ abstract class EditableExpense with _$EditableExpense {
     @JsonKey(name: 'expense_category_id') required int expenseCategoryId,
     String? description,
     required double amount,
-    @JsonKey(name: 'payment_method') @Default('cash') String paymentMethod,
+    @JsonKey(name: 'payment_channel_id') int? paymentChannelId,
     @Default(false) bool dirty,
     @Default(false) bool deleted,
   }) = _EditableExpense;
@@ -43,7 +43,7 @@ abstract class EditableDeduction with _$EditableDeduction {
     required String type,
     String? description,
     required double amount,
-    @JsonKey(name: 'payment_method') @Default('cash') String paymentMethod,
+    @JsonKey(name: 'payment_channel_id') int? paymentChannelId,
     @Default(false) bool dirty,
     @Default(false) bool deleted,
   }) = _EditableDeduction;

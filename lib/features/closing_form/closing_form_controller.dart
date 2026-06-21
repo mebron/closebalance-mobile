@@ -247,7 +247,7 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
     required int expenseCategoryId,
     String? description,
     required double amount,
-    required String paymentMethod,
+    required int paymentChannelId,
   }) async {
     final current = state.value;
     if (current == null) return;
@@ -258,7 +258,7 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
           expenseCategoryId: expenseCategoryId,
           description: description,
           amount: amount,
-          paymentMethod: paymentMethod,
+          paymentChannelId: paymentChannelId,
           dirty: true),
     ]));
   }
@@ -268,7 +268,7 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
     int? expenseCategoryId,
     Object? description = _kUnset,
     double? amount,
-    String? paymentMethod,
+    int? paymentChannelId,
   }) async {
     final current = state.value;
     if (current == null) return;
@@ -281,7 +281,7 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
                     ? e.description
                     : description as String?,
                 amount: amount ?? e.amount,
-                paymentMethod: paymentMethod ?? e.paymentMethod,
+                paymentChannelId: paymentChannelId ?? e.paymentChannelId,
                 dirty: true)).toList()));
   }
 
@@ -302,7 +302,7 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
     required String type,
     String? description,
     required double amount,
-    required String paymentMethod,
+    required int paymentChannelId,
   }) async {
     final current = state.value;
     if (current == null) return;
@@ -313,7 +313,7 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
           type: type,
           description: description,
           amount: amount,
-          paymentMethod: paymentMethod,
+          paymentChannelId: paymentChannelId,
           dirty: true),
     ]));
   }
@@ -323,7 +323,7 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
     String? type,
     Object? description = _kUnset,
     double? amount,
-    String? paymentMethod,
+    int? paymentChannelId,
   }) async {
     final current = state.value;
     if (current == null) return;
@@ -336,7 +336,7 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
                     ? d.description
                     : description as String?,
                 amount: amount ?? d.amount,
-                paymentMethod: paymentMethod ?? d.paymentMethod,
+                paymentChannelId: paymentChannelId ?? d.paymentChannelId,
                 dirty: true)).toList()));
   }
 

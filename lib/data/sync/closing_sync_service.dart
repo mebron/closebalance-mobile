@@ -62,21 +62,21 @@ class ClosingSyncService {
         if (e.serverId != null) {
           await _expenses.delete(closingId: serverId, expenseId: e.serverId!);
         }
-      } else if (e.serverId == null) {
+      } else if (e.serverId == null && e.paymentChannelId != null) {
         await _expenses.create(
             closingId: serverId,
             expenseCategoryId: e.expenseCategoryId,
             description: e.description,
             amount: e.amount,
-            paymentMethod: e.paymentMethod);
-      } else if (e.dirty) {
+            paymentChannelId: e.paymentChannelId!);
+      } else if (e.dirty && e.paymentChannelId != null) {
         await _expenses.update(
             closingId: serverId,
             expenseId: e.serverId!,
             expenseCategoryId: e.expenseCategoryId,
             description: e.description,
             amount: e.amount,
-            paymentMethod: e.paymentMethod);
+            paymentChannelId: e.paymentChannelId!);
       }
     }
     for (final d in c.deductions) {
@@ -84,21 +84,21 @@ class ClosingSyncService {
         if (d.serverId != null) {
           await _deductions.delete(closingId: serverId, deductionId: d.serverId!);
         }
-      } else if (d.serverId == null) {
+      } else if (d.serverId == null && d.paymentChannelId != null) {
         await _deductions.create(
             closingId: serverId,
             type: d.type,
             description: d.description ?? '',
             amount: d.amount,
-            paymentMethod: d.paymentMethod);
-      } else if (d.dirty) {
+            paymentChannelId: d.paymentChannelId!);
+      } else if (d.dirty && d.paymentChannelId != null) {
         await _deductions.update(
             closingId: serverId,
             deductionId: d.serverId!,
             type: d.type,
             description: d.description ?? '',
             amount: d.amount,
-            paymentMethod: d.paymentMethod);
+            paymentChannelId: d.paymentChannelId!);
       }
     }
     for (final t in c.counterTransactions) {

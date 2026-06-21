@@ -11,11 +11,11 @@ EditableClosing _c() => EditableClosing(
         EditableSale(clientId: 'd', paymentChannelId: 1, amount: 100, deleted: true),
       ],
       expenses: const [
-        EditableExpense(clientId: 'e', expenseCategoryId: 7, amount: 1000, paymentMethod: 'cash'),
-        EditableExpense(clientId: 'f', expenseCategoryId: 7, amount: 200, paymentMethod: 'bank'),
+        EditableExpense(clientId: 'e', expenseCategoryId: 7, amount: 1000, paymentChannelId: 4),
+        EditableExpense(clientId: 'f', expenseCategoryId: 7, amount: 200, paymentChannelId: 9),
       ],
       deductions: const [
-        EditableDeduction(clientId: 'g', type: 'incentive', amount: 100, paymentMethod: 'cash'),
+        EditableDeduction(clientId: 'g', type: 'incentive', amount: 100, paymentChannelId: 4),
       ],
       counterTransactions: const [
         EditableCounterTxn(

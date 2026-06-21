@@ -33,7 +33,7 @@ _EditableExpense _$EditableExpenseFromJson(Map<String, dynamic> json) =>
       expenseCategoryId: (json['expense_category_id'] as num).toInt(),
       description: json['description'] as String?,
       amount: (json['amount'] as num).toDouble(),
-      paymentMethod: json['payment_method'] as String? ?? 'cash',
+      paymentChannelId: (json['payment_channel_id'] as num?)?.toInt(),
       dirty: json['dirty'] as bool? ?? false,
       deleted: json['deleted'] as bool? ?? false,
     );
@@ -45,7 +45,7 @@ Map<String, dynamic> _$EditableExpenseToJson(_EditableExpense instance) =>
       'expense_category_id': instance.expenseCategoryId,
       'description': instance.description,
       'amount': instance.amount,
-      'payment_method': instance.paymentMethod,
+      'payment_channel_id': instance.paymentChannelId,
       'dirty': instance.dirty,
       'deleted': instance.deleted,
     };
@@ -57,7 +57,7 @@ _EditableDeduction _$EditableDeductionFromJson(Map<String, dynamic> json) =>
       type: json['type'] as String,
       description: json['description'] as String?,
       amount: (json['amount'] as num).toDouble(),
-      paymentMethod: json['payment_method'] as String? ?? 'cash',
+      paymentChannelId: (json['payment_channel_id'] as num?)?.toInt(),
       dirty: json['dirty'] as bool? ?? false,
       deleted: json['deleted'] as bool? ?? false,
     );
@@ -69,7 +69,7 @@ Map<String, dynamic> _$EditableDeductionToJson(_EditableDeduction instance) =>
       'type': instance.type,
       'description': instance.description,
       'amount': instance.amount,
-      'payment_method': instance.paymentMethod,
+      'payment_channel_id': instance.paymentChannelId,
       'dirty': instance.dirty,
       'deleted': instance.deleted,
     };

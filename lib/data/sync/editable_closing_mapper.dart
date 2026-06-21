@@ -31,7 +31,7 @@ abstract final class EditableClosingMapper {
                 expenseCategoryId: e.expenseCategoryId,
                 description: e.description,
                 amount: e.amount,
-                paymentMethod: e.paymentMethod,
+                paymentChannelId: e.paymentChannelId,
               ))
           .toList(),
       deductions: dc.deductions
@@ -41,7 +41,7 @@ abstract final class EditableClosingMapper {
                 type: d.type,
                 description: d.description,
                 amount: d.amount,
-                paymentMethod: d.paymentMethod,
+                paymentChannelId: d.paymentChannelId,
               ))
           .toList(),
       counterTransactions: dc.counterTransactions

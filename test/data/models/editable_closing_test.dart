@@ -8,7 +8,7 @@ void main() {
       serverId: 9, branchId: 1, date: '2026-06-15', status: ClosingStatus.draft,
       notes: 'n', totalSales: 25000,
       sales: [const EditableSale(clientId: 's1', serverId: 5, paymentChannelId: 4, amount: 12000)],
-      expenses: [const EditableExpense(clientId: 'e1', expenseCategoryId: 7, description: 'Rent', amount: 300, paymentMethod: 'cash')],
+      expenses: [const EditableExpense(clientId: 'e1', expenseCategoryId: 7, description: 'Rent', amount: 300, paymentChannelId: 4)],
       deductions: const [],
       counterTransactions: const [],
     );

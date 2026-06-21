@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers.dart';
 
-Future<({int categoryId, String? description, double amount, String paymentMethod})?>
+Future<({int categoryId, String? description, double amount, int paymentChannelId})?>
     showExpenseSheet(
   BuildContext context, {
   int? initialCategoryId,
   String? initialDescription,
   double? initialAmount,
-  String? initialPaymentMethod,
+  int? initialPaymentChannelId,
 }) {
   return showModalBottomSheet<
-      ({int categoryId, String? description, double amount, String paymentMethod})>(
+      ({int categoryId, String? description, double amount, int paymentChannelId})>(
     context: context,
     isScrollControlled: true,
     builder: (ctx) => _ExpenseSheet(
       initialCategoryId: initialCategoryId,
       initialDescription: initialDescription,
       initialAmount: initialAmount,
-      initialPaymentMethod: initialPaymentMethod,
+      initialPaymentChannelId: initialPaymentChannelId,
     ),
   );
 }
@@ -28,13 +28,13 @@ class _ExpenseSheet extends ConsumerStatefulWidget {
     this.initialCategoryId,
     this.initialDescription,
     this.initialAmount,
-    this.initialPaymentMethod,
+    this.initialPaymentChannelId,
   });
 
   final int? initialCategoryId;
   final String? initialDescription;
   final double? initialAmount;
-  final String? initialPaymentMethod;
+  final int? initialPaymentChannelId;
 
   @override
   ConsumerState<_ExpenseSheet> createState() => _ExpenseSheetState();
@@ -44,7 +44,7 @@ class _ExpenseSheetState extends ConsumerState<_ExpenseSheet> {
   int? _categoryId;
   final _descCtrl = TextEditingController();
   final _amountCtrl = TextEditingController();
-  String _paymentMethod = 'cash';
+  int? _paymentChannelId;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -55,7 +55,7 @@ class _ExpenseSheetState extends ConsumerState<_ExpenseSheet> {
     if (widget.initialAmount != null) {
       _amountCtrl.text = widget.initialAmount!.toStringAsFixed(2);
     }
-    _paymentMethod = widget.initialPaymentMethod ?? 'cash';
+    _paymentChannelId = widget.initialPaymentChannelId;
   }
 
   @override
@@ -68,9 +68,10 @@ class _ExpenseSheetState extends ConsumerState<_ExpenseSheet> {
   @override
   Widget build(BuildContext context) {
     final refData = ref.watch(referenceDataProvider);
-    // null means still loading — don't pass an empty list to DropdownButton,
-    // which would disable its tap handler and make the dropdown unresponsive.
     final categories = refData.value?.expenseCategories;
+    final channels = refData.value?.paymentChannels
+        .where((c) => c.type != 'aggregator')
+        .toList();
 
     return Padding(
       padding: EdgeInsets.only(
@@ -91,7 +92,7 @@ class _ExpenseSheetState extends ConsumerState<_ExpenseSheet> {
               const LinearProgressIndicator()
             else
               DropdownButtonFormField<int>(
-                initialValue: _categoryId,
+                value: _categoryId,
                 decoration: const InputDecoration(labelText: 'Category'),
                 items: categories
                     .map((c) => DropdownMenuItem(value: c.id, child: Text(c.name)))
@@ -115,14 +116,18 @@ class _ExpenseSheetState extends ConsumerState<_ExpenseSheet> {
               },
             ),
             const SizedBox(height: 12),
-            SegmentedButton<String>(
-              segments: const [
-                ButtonSegment(value: 'cash', label: Text('Cash')),
-                ButtonSegment(value: 'bank', label: Text('Bank')),
-              ],
-              selected: {_paymentMethod},
-              onSelectionChanged: (s) => setState(() => _paymentMethod = s.first),
-            ),
+            if (channels == null)
+              const LinearProgressIndicator()
+            else
+              DropdownButtonFormField<int>(
+                value: _paymentChannelId,
+                decoration: const InputDecoration(labelText: 'Paid Via'),
+                items: channels
+                    .map((c) => DropdownMenuItem(value: c.id, child: Text(c.name)))
+                    .toList(),
+                onChanged: (v) => setState(() => _paymentChannelId = v),
+                validator: (v) => v == null ? 'Select a payment channel' : null,
+              ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
@@ -132,7 +137,7 @@ class _ExpenseSheetState extends ConsumerState<_ExpenseSheet> {
                     categoryId: _categoryId!,
                     description: desc.isEmpty ? null : desc,
                     amount: double.parse(_amountCtrl.text),
-                    paymentMethod: _paymentMethod,
+                    paymentChannelId: _paymentChannelId!,
                   ));
                 }
               },

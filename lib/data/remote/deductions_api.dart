@@ -12,14 +12,14 @@ class DeductionsApi {
     required String type,
     required String description,
     required num amount,
-    required String paymentMethod,
+    required int paymentChannelId,
   }) =>
       guardApi(() async {
         final res = await _dio.post('/daily-closings/$closingId/deductions', data: {
           'type': type,
           'description': description,
           'amount': amount,
-          'payment_method': paymentMethod,
+          'payment_channel_id': paymentChannelId,
         });
         return Deduction.fromJson(
             (res.data as Map<String, dynamic>)['data'] as Map<String, dynamic>);
@@ -31,14 +31,14 @@ class DeductionsApi {
     required String type,
     required String description,
     required num amount,
-    required String paymentMethod,
+    required int paymentChannelId,
   }) =>
       guardApi(() async {
         final res = await _dio.put('/daily-closings/$closingId/deductions/$deductionId', data: {
           'type': type,
           'description': description,
           'amount': amount,
-          'payment_method': paymentMethod,
+          'payment_channel_id': paymentChannelId,
         });
         return Deduction.fromJson(
             (res.data as Map<String, dynamic>)['data'] as Map<String, dynamic>);

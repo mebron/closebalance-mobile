@@ -44,7 +44,7 @@ void main() {
       ],
       'expenses': [
         {'id': 1, 'expense_category_id': 7, 'category': {'id': 7, 'name': 'Rent'},
-         'description': 'Rent', 'amount': 300.0, 'payment_method': 'cash', 'remarks': null},
+         'description': 'Rent', 'amount': 300.0, 'payment_channel_id': 4, 'paid_via': 'Cash Counter', 'remarks': null},
       ],
       'deductions': [],
       'counter_transactions': [],
