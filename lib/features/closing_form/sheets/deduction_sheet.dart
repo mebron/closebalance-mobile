@@ -73,13 +73,15 @@ class _DeductionSheetState extends ConsumerState<_DeductionSheet> {
         .where((c) => c.type != 'aggregator')
         .toList();
 
-    return Padding(
-      padding: EdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: 24,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-      ),
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: 24,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+        ),
       child: Form(
         key: _formKey,
         child: Column(
@@ -142,6 +144,7 @@ class _DeductionSheetState extends ConsumerState<_DeductionSheet> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

@@ -123,13 +123,15 @@ class _CounterSheetState extends ConsumerState<_CounterSheet> {
     final counters = refData.value?.counters;
     final currencySymbol = refData.value?.currencySymbol ?? '';
 
-    return Padding(
-      padding: EdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: 24,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-      ),
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: 24,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+        ),
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -252,6 +254,7 @@ class _CounterSheetState extends ConsumerState<_CounterSheet> {
             ],
           ),
         ),
+      ),
       ),
     );
   }
