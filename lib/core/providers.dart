@@ -89,16 +89,29 @@ final connectivityServiceProvider =
 final reportsRepositoryProvider =
     Provider<ReportsRepository>((ref) => ReportsRepository(ref.read(reportsApiProvider)));
 
-/// Active branch for data scoping. Defaults to the user's branch (locked users)
-/// or the first available branch for multi-branch/admin users. Switcher UI arrives in Phase 4.
-final selectedBranchProvider = Provider<int?>((ref) {
-  final user = ref.watch(authControllerProvider).value;
-  if (user == null) return null;
-  if (user.branchId != null) return user.branchId;
-  // Multi-branch / admin user: default to the first branch from reference data.
-  final refData = ref.watch(referenceDataProvider);
-  return refData.value?.branches.firstOrNull?.id;
-});
+/// Active branch for data scoping.
+/// - Branch-restricted users: locked to their assigned branch.
+/// - Admin users: starts on the first available branch, switchable via [SelectedBranchNotifier.select].
+final selectedBranchProvider =
+    NotifierProvider<SelectedBranchNotifier, int?>(SelectedBranchNotifier.new);
+
+class SelectedBranchNotifier extends Notifier<int?> {
+  @override
+  int? build() {
+    final user = ref.watch(authControllerProvider).value;
+    if (user == null) return null;
+    if (user.branchId != null) return user.branchId;
+    final refData = ref.watch(referenceDataProvider);
+    return refData.value?.branches.firstOrNull?.id;
+  }
+
+  /// Switch to [branchId]. No-op for branch-restricted users.
+  void select(int branchId) {
+    final user = ref.read(authControllerProvider).value;
+    if (user?.branchId != null) return;
+    state = branchId;
+  }
+}
 
 /// Cached reference data (branches, payment channels, expense categories, etc.).
 /// Returns the last locally cached version; null items are treated as empty lists

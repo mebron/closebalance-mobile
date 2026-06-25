@@ -6,6 +6,7 @@ import 'package:closebalance_mobile/features/closings/closings_list_controller.d
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import '../../support/fixed_branch_notifier.dart';
 
 class _MockClosingApiService extends Mock implements ClosingApiService {}
 
@@ -31,7 +32,7 @@ void main() {
 
     final c = ProviderContainer(overrides: [
       closingApiServiceProvider.overrideWithValue(service),
-      selectedBranchProvider.overrideWith((ref) => 1),
+      selectedBranchProvider.overrideWith(() => FixedBranchNotifier(1)),
     ]);
     addTearDown(c.dispose);
 

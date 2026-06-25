@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import '../../support/fake_editable_closing_store.dart';
+import '../../support/fixed_branch_notifier.dart';
 
 class _MockReportsRepo extends Mock implements ReportsRepository {}
 
@@ -25,7 +26,7 @@ void main() {
 
     final c = ProviderContainer(overrides: [
       reportsRepositoryProvider.overrideWithValue(repo),
-      selectedBranchProvider.overrideWith((ref) => 2),
+      selectedBranchProvider.overrideWith(() => FixedBranchNotifier(2)),
       editableClosingStoreProvider.overrideWithValue(FakeEditableClosingStore()),
     ]);
     addTearDown(c.dispose);

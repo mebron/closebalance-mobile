@@ -14,6 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import '../../support/fake_editable_closing_store.dart';
+import '../../support/fixed_branch_notifier.dart';
 
 class _MockSync extends Mock implements ClosingSyncService {}
 
@@ -25,7 +26,7 @@ ProviderContainer _container(
     editableClosingStoreProvider.overrideWithValue(store),
     closingSyncServiceProvider.overrideWithValue(sync),
     closingApiServiceProvider.overrideWithValue(api),
-    selectedBranchProvider.overrideWith((ref) => 1),
+    selectedBranchProvider.overrideWith(() => FixedBranchNotifier(1)),
   ]);
   addTearDown(c.dispose);
   return c;

@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/config/flavor_config.dart';
 import '../../core/money.dart';
+import '../../core/providers.dart';
+import '../../data/models/branch.dart';
 import '../../data/models/report_summary.dart';
 import '../../core/theme/app_colors.dart';
 import '../auth/auth_controller.dart';
@@ -68,17 +70,19 @@ class DashboardScreen extends ConsumerWidget {
   }
 }
 
-class _Header extends StatelessWidget {
+class _Header extends ConsumerWidget {
   const _Header({required this.name, required this.symbol, required this.summaryAsync});
   final String name;
   final String symbol;
   final AsyncValue<ReportSummary> summaryAsync;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final primary = Theme.of(context).colorScheme.primary;
     final primaryDark = Color.alphaBlend(Colors.black.withValues(alpha: 0.25), primary);
     final flavor = FlavorConfig.instance;
+    final user = ref.watch(authControllerProvider).value;
+    final isAdmin = user?.branchId == null;
 
     return Container(
       decoration: BoxDecoration(
@@ -131,6 +135,10 @@ class _Header extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
+            if (isAdmin) ...[
+              const SizedBox(height: 8),
+              _BranchSelector(ref: ref),
+            ],
             const SizedBox(height: 14),
             summaryAsync.when(
               loading: () => const _HeroCardSkeleton(),
@@ -355,6 +363,79 @@ class _SecondaryCard extends StatelessWidget {
             Text(hint, style: const TextStyle(fontSize: 12, color: AppColors.slate)),
           ]),
         ),
+      ),
+    );
+  }
+}
+
+class _BranchSelector extends ConsumerWidget {
+  const _BranchSelector({required this.ref});
+  final WidgetRef ref;
+
+  void _showPicker(BuildContext context, List<Branch> branches, int? selectedId) {
+    showModalBottomSheet<void>(
+      context: context,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (_) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.fromLTRB(20, 18, 20, 8),
+              child: Text('Select Branch',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.navy)),
+            ),
+            const Divider(height: 1),
+            ...branches.map((b) => ListTile(
+                  leading: const Icon(Icons.store_rounded, color: AppColors.slate, size: 20),
+                  title: Text(b.name,
+                      style: TextStyle(
+                          fontWeight: b.id == selectedId ? FontWeight.w700 : FontWeight.normal,
+                          color: AppColors.navy)),
+                  trailing: b.id == selectedId
+                      ? const Icon(Icons.check_rounded, color: AppColors.green)
+                      : null,
+                  onTap: () {
+                    ref.read(selectedBranchProvider.notifier).select(b.id);
+                    Navigator.of(context).pop();
+                  },
+                )),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final branches = ref.watch(referenceDataProvider).value?.branches ?? [];
+    final selectedId = ref.watch(selectedBranchProvider);
+    final selectedName =
+        branches.where((b) => b.id == selectedId).firstOrNull?.name ?? 'All Branches';
+
+    return GestureDetector(
+      onTap: () => _showPicker(context, branches, selectedId),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.15),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(mainAxisSize: MainAxisSize.min, children: [
+          const Icon(Icons.store_rounded, color: Colors.white70, size: 14),
+          const SizedBox(width: 5),
+          Text(selectedName,
+              style: const TextStyle(
+                  color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
+          const SizedBox(width: 4),
+          const Icon(Icons.expand_more_rounded, color: Colors.white70, size: 16),
+        ]),
       ),
     );
   }
