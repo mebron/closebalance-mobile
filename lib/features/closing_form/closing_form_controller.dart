@@ -110,14 +110,44 @@ class ClosingFormController extends AsyncNotifier<EditableClosing> {
       int serverId, int branchId, String date) async {
     try {
       final api = ref.read(closingApiServiceProvider);
-      final store = ref.read(editableClosingStoreProvider);
       final dc = await api.detail(serverId);
       final fresh = EditableClosingMapper.fromDailyClosing(dc, branchId: branchId);
+      // Discard if the user made edits while the network call was in-flight, or
+      // if the response is stale (fetched before a concurrent save completed).
+      final current = state.value;
+      if (current != null &&
+          (_hasLocalEdits(current) || _isFreshDataStale(current, fresh))) {
+        return;
+      }
+      final store = ref.read(editableClosingStoreProvider);
       await store.save(fresh, dirty: false);
       state = AsyncData(fresh);
     } catch (_) {
       // Network error or provider disposed — the cached data is still valid.
     }
+  }
+
+  bool _hasLocalEdits(EditableClosing c) =>
+      c.headerDirty ||
+      c.expenses.any((e) => e.dirty || e.deleted) ||
+      c.sales.any((s) => s.dirty || s.deleted) ||
+      c.deductions.any((d) => d.dirty || d.deleted) ||
+      c.counterTransactions.any((t) => t.dirty || t.deleted);
+
+  /// Returns true when [fresh] is missing server-confirmed IDs from [current],
+  /// indicating the background fetch raced with a concurrent save.
+  bool _isFreshDataStale(EditableClosing current, EditableClosing fresh) {
+    Set<int> ids<T>(Iterable<T> items, int? Function(T) id, bool Function(T) del) =>
+        {for (final e in items) if (id(e) != null && !del(e)) id(e)!};
+
+    return !ids(fresh.expenses, (e) => e.serverId, (e) => e.deleted)
+            .containsAll(ids(current.expenses, (e) => e.serverId, (e) => e.deleted)) ||
+        !ids(fresh.sales, (e) => e.serverId, (e) => e.deleted)
+            .containsAll(ids(current.sales, (e) => e.serverId, (e) => e.deleted)) ||
+        !ids(fresh.deductions, (e) => e.serverId, (e) => e.deleted)
+            .containsAll(ids(current.deductions, (e) => e.serverId, (e) => e.deleted)) ||
+        !ids(fresh.counterTransactions, (e) => e.serverId, (e) => e.deleted)
+            .containsAll(ids(current.counterTransactions, (e) => e.serverId, (e) => e.deleted));
   }
 
   Future<EditableClosing> _fetchOrCreateToday(int branchId, String today,
