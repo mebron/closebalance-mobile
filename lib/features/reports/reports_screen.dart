@@ -102,6 +102,31 @@ class ReportsScreen extends ConsumerWidget {
               ),
             ),
 
+            // ── Cash Flow ──────────────────────────────────────────────
+            _Section(
+              title: 'Cash Flow',
+              child: report.when(
+                loading: () => const _Loading(),
+                error: (e, _) => _Err(e),
+                data: (r) => Column(children: [
+                  _CashFlowRow(label: 'Cash collected', value: r.cashCollections, symbol: symbol),
+                  if (r.totalCounterPaid != 0)
+                    _CashFlowRow(label: 'Counter paid', value: -r.totalCounterPaid, symbol: symbol),
+                  if (r.cashExpenses != 0)
+                    _CashFlowRow(label: 'Cash expenses', value: -r.cashExpenses, symbol: symbol),
+                  if (r.cashDeductions != 0)
+                    _CashFlowRow(label: 'Cash deductions', value: -r.cashDeductions, symbol: symbol),
+                  const Divider(height: 20, thickness: 0.5),
+                  _CashFlowRow(
+                    label: 'Cash in hand',
+                    value: r.cashInHand,
+                    symbol: symbol,
+                    isTotalRow: true,
+                  ),
+                ]),
+              ),
+            ),
+
             // ── Sales by Channel ───────────────────────────────────────
             _Section(
               title: 'Sales by Channel',
@@ -350,4 +375,53 @@ class _Empty extends StatelessWidget {
   Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Text(message, style: const TextStyle(color: AppColors.slate, fontSize: 13)));
+}
+
+class _CashFlowRow extends StatelessWidget {
+  const _CashFlowRow({
+    required this.label,
+    required this.value,
+    required this.symbol,
+    this.isTotalRow = false,
+  });
+
+  final String label;
+  final double value;
+  final String symbol;
+  final bool isTotalRow;
+
+  @override
+  Widget build(BuildContext context) {
+    final isNegative = value < 0;
+    final color = isTotalRow
+        ? (value >= 0 ? AppColors.green : Colors.red.shade600)
+        : (isNegative ? AppColors.slate : AppColors.navy);
+    final displayValue = isNegative
+        ? '-${formatMoney(-value, symbol)}'
+        : formatMoney(value, symbol);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(children: [
+        Expanded(
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 14,
+              color: isTotalRow ? AppColors.navy : AppColors.slate,
+              fontWeight: isTotalRow ? FontWeight.w700 : FontWeight.normal,
+            ),
+          ),
+        ),
+        Text(
+          displayValue,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: isTotalRow ? FontWeight.w800 : FontWeight.w600,
+            color: color,
+          ),
+        ),
+      ]),
+    );
+  }
 }
