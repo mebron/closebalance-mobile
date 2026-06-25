@@ -6,9 +6,9 @@ import 'core/config/flavor_config.dart';
 void main() {
   FlavorConfig.setInstance(const FlavorConfig(
     flavor: Flavor.cupcake,
-    primaryColor: Color(0xFF00182A),
-    accentColor: Color(0xFF22C55E),
-    bgColor: Color(0xFF00182A),
+    primaryColor: Color(0xFFFF9900),
+    accentColor: Color(0xFF0099FF),
+    bgColor: Color(0xFF0099FF),
     appName: 'CupCake',
   ));
   runApp(const ProviderScope(child: CloseBalanceApp()));

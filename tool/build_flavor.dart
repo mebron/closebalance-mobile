@@ -18,6 +18,7 @@ import 'dart:io';
 const Map<String, String> flavorSlugs = {
   'closebalance': 'closebalance',
   'juicy': 'juicy',
+  'cupcake': 'cupcake',
 };
 
 const String apiBaseUrl = 'https://closebalance.com';
@@ -62,6 +63,7 @@ Future<void> main(List<String> args) async {
     final adaptiveBg = (branding['primary_color'] as String?) ?? '#00182A';
     await _patchIconYaml(flavor, adaptiveBg);
     await _patchSplashYaml(flavor, splashBg);
+    await _patchMainDart(flavor, branding);
   } else {
     _log('Could not load branding from server — using existing YAML and icon files.');
   }
@@ -149,6 +151,39 @@ Future<void> _patchIconYaml(String flavor, String adaptiveBg) async {
     'adaptive_icon_background: "$adaptiveBg"',
   );
   await file.writeAsString(content);
+}
+
+Future<void> _patchMainDart(String flavor, Map<String, dynamic> branding) async {
+  final entryFile = flavor == 'closebalance' ? 'lib/main.dart' : 'lib/main_$flavor.dart';
+  final file = File(entryFile);
+  if (!file.existsSync()) return;
+
+  String toHex(String? color) {
+    if (color == null) return '0xFF000000';
+    final hex = color.replaceFirst('#', '');
+    return '0xFF${hex.toUpperCase()}';
+  }
+
+  var content = await file.readAsString();
+  final primary = toHex(branding['primary_color'] as String?);
+  final accent = toHex(branding['accent_color'] as String?);
+  final splash = toHex(branding['splash_bg_color'] as String?);
+
+  content = content.replaceAll(
+    RegExp(r'primaryColor: Color\(0x[0-9A-Fa-f]+\)'),
+    'primaryColor: Color($primary)',
+  );
+  content = content.replaceAll(
+    RegExp(r'accentColor: Color\(0x[0-9A-Fa-f]+\)'),
+    'accentColor: Color($accent)',
+  );
+  content = content.replaceAll(
+    RegExp(r'bgColor: Color\(0x[0-9A-Fa-f]+\)'),
+    'bgColor: Color($splash)',
+  );
+
+  await file.writeAsString(content);
+  _log('Patched $entryFile with server colors.');
 }
 
 Future<void> _patchSplashYaml(String flavor, String splashBg) async {
