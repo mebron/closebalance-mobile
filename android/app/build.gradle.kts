@@ -38,6 +38,11 @@ android {
             applicationId = "com.closebalance.juicy"
             resValue("string", "app_name", "Juicy")
         }
+        create("cupcake") {
+            dimension = "brand"
+            applicationId = "com.closebalance.cupcake"
+            resValue("string", "app_name", "CupCake")
+        }
     }
 
     buildTypes {

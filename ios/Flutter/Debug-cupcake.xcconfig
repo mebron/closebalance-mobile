@@ -1,0 +1,4 @@
+#include "Debug.xcconfig"
+PRODUCT_BUNDLE_IDENTIFIER=com.closebalance.cupcake
+DISPLAY_NAME=CupCake
+FLUTTER_TARGET=lib/main_cupcake.dart
