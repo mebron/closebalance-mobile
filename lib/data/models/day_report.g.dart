@@ -19,6 +19,10 @@ _DayReport _$DayReportFromJson(Map<String, dynamic> json) => _DayReport(
   cashExpenses: (json['cash_expenses'] as num?)?.toDouble() ?? 0.0,
   cashDeductions: (json['cash_deductions'] as num?)?.toDouble() ?? 0.0,
   totalCounterPaid: (json['total_counter_paid'] as num?)?.toDouble() ?? 0.0,
+  onlineCollections: (json['online_collections'] as num?)?.toDouble() ?? 0.0,
+  onlineExpenses: (json['online_expenses'] as num?)?.toDouble() ?? 0.0,
+  onlineDeductions: (json['online_deductions'] as num?)?.toDouble() ?? 0.0,
+  onlineNet: (json['online_net'] as num?)?.toDouble() ?? 0.0,
   channels:
       (json['channels'] as List<dynamic>?)
           ?.map((e) => ChannelSaleTotal.fromJson(e as Map<String, dynamic>))
@@ -55,6 +59,10 @@ Map<String, dynamic> _$DayReportToJson(_DayReport instance) =>
       'cash_expenses': instance.cashExpenses,
       'cash_deductions': instance.cashDeductions,
       'total_counter_paid': instance.totalCounterPaid,
+      'online_collections': instance.onlineCollections,
+      'online_expenses': instance.onlineExpenses,
+      'online_deductions': instance.onlineDeductions,
+      'online_net': instance.onlineNet,
       'channels': instance.channels.map((e) => e.toJson()).toList(),
       'expenses': instance.expenses.map((e) => e.toJson()).toList(),
       'deductions': instance.deductions.map((e) => e.toJson()).toList(),

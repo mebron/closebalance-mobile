@@ -127,6 +127,30 @@ class ReportsScreen extends ConsumerWidget {
               ),
             ),
 
+            // ── Online Flow ────────────────────────────────────────────
+            if (report.value?.onlineCollections != 0)
+              _Section(
+                title: 'Online Flow',
+                child: report.when(
+                  loading: () => const _Loading(),
+                  error: (e, _) => _Err(e),
+                  data: (r) => Column(children: [
+                    _CashFlowRow(label: 'Online collected', value: r.onlineCollections, symbol: symbol),
+                    if (r.onlineExpenses != 0)
+                      _CashFlowRow(label: 'Online expenses', value: -r.onlineExpenses, symbol: symbol),
+                    if (r.onlineDeductions != 0)
+                      _CashFlowRow(label: 'Online deductions', value: -r.onlineDeductions, symbol: symbol),
+                    const Divider(height: 20, thickness: 0.5),
+                    _CashFlowRow(
+                      label: 'Online net',
+                      value: r.onlineNet,
+                      symbol: symbol,
+                      isTotalRow: true,
+                    ),
+                  ]),
+                ),
+              ),
+
             // ── Sales by Channel ───────────────────────────────────────
             _Section(
               title: 'Sales by Channel',
