@@ -83,6 +83,7 @@ class _Header extends ConsumerWidget {
     final flavor = FlavorConfig.instance;
     final user = ref.watch(authControllerProvider).value;
     final isAdmin = user?.branchId == null;
+    final logoUrl = user?.company.branding.logoUrl;
 
     return Container(
       decoration: BoxDecoration(
@@ -105,7 +106,11 @@ class _Header extends ConsumerWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image.asset(flavor.iconAsset, height: 28, width: 28, fit: BoxFit.cover),
+                      child: logoUrl != null && logoUrl.isNotEmpty
+                          ? Image.network(logoUrl, height: 28, width: 28, fit: BoxFit.cover,
+                              errorBuilder: (_, _, _) =>
+                                  Image.asset(flavor.iconAsset, height: 28, width: 28, fit: BoxFit.cover))
+                          : Image.asset(flavor.iconAsset, height: 28, width: 28, fit: BoxFit.cover),
                     ),
                     const SizedBox(width: 8),
                     Text(
