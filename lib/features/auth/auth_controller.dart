@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/error/app_exception.dart';
+import '../../core/notifications/notification_service.dart';
 import '../../core/providers.dart';
 import '../../data/models/user.dart';
 import '../../data/repos/auth_repository.dart';
@@ -73,12 +74,23 @@ class AuthController extends AsyncNotifier<User?> {
       try {
         await ref.read(referenceRepositoryProvider).refresh();
       } catch (_) {}
+      try {
+        await NotificationService.instance.requestPermission();
+        await NotificationService.instance.registerToken(
+          ref.read(deviceTokenApiProvider),
+        );
+      } catch (_) {}
       return user;
     });
     if (state.hasError) throw state.error!;
   }
 
   Future<void> logout() async {
+    try {
+      await NotificationService.instance.deregisterToken(
+        ref.read(deviceTokenApiProvider),
+      );
+    } catch (_) {}
     await ref.read(authRepositoryProvider).logout();
     state = const AsyncData(null);
   }

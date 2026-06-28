@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../notifications/notification_service.dart';
 import '../providers.dart';
 import '../../features/closings/closings_list_controller.dart';
 import '../../features/dashboard/dashboard_controller.dart';
@@ -84,7 +85,13 @@ class _SyncCoordinatorState extends ConsumerState<SyncCoordinator>
           await store.save(fresh, dirty: false);
           synced++;
         } on Object {
-          break; // network/validation — keep dirty, retry later
+          try {
+            NotificationService.instance.showLocalNotification(
+              'Sync Failed',
+              'Some offline changes could not be synced. Tap to review.',
+            );
+          } catch (_) {}
+          break;
         }
       }
       if (synced > 0 && mounted) {
