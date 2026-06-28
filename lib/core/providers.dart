@@ -4,6 +4,7 @@ import '../data/local/app_database.dart';
 import '../data/local/editable_closing_store.dart';
 import '../data/models/reference_data.dart';
 import '../data/remote/auth_api.dart';
+import '../data/remote/device_token_api.dart';
 import '../data/remote/closing_api_service.dart';
 import '../data/remote/closings_api.dart';
 import '../data/remote/counter_transactions_api.dart';
@@ -129,3 +130,6 @@ final referenceDataProvider = FutureProvider<ReferenceData>((ref) async {
 
 final onlineStatusProvider = StreamProvider<bool>(
     (ref) => ref.read(connectivityServiceProvider).onlineChanges);
+
+final deviceTokenApiProvider =
+    Provider<DeviceTokenApi>((ref) => DeviceTokenApi(ref.read(dioProvider)));
