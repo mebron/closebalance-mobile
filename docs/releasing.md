@@ -34,9 +34,21 @@ In the **App Branding** section on the company form:
 - **In-App Logo** — PNG shown in the app header/login (optional)
 - **App Icon (512×512)** — PNG used as the Android/iOS launcher icon
 
-Save the company. The branding is now available at:
+### Configure Firebase / Push Notifications (optional)
+
+In the **Firebase / Push Notifications** section on the company form:
+
+1. Create a Firebase project at [console.firebase.google.com](https://console.firebase.google.com)
+2. Add an Android app — package name must match the one above (e.g. `com.closebalance.juicy`)
+3. Download `google-services.json` and paste its contents into **google-services.json**
+4. Go to **Project Settings → Service Accounts → Generate new private key**, download the JSON, and paste it into **FCM Service Account JSON**
+
+Leave both fields blank to build without push notifications — the build still succeeds.
+
+Save the company. Branding and FCM config are now available at:
 ```
 GET https://closebalance.com/api/v1/branding/<slug>
+GET https://closebalance.com/api/v1/branding/<slug>/fcm-config
 ```
 
 ---
@@ -60,8 +72,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'app.dart';
 import 'core/config/flavor_config.dart';
+import 'core/notifications/notification_service.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.initialize();
   FlavorConfig.setInstance(const FlavorConfig(
     flavor: Flavor.yournewflavor,
     primaryColor: Color(0xFF000000), // placeholder — overwritten by build script
@@ -156,12 +171,13 @@ dart tool/build_flavor.dart yournewflavor
 What the script does automatically:
 1. Fetches branding JSON from `https://closebalance.com/api/v1/branding/<slug>`
 2. Downloads the app icon and writes it to `assets/icon/<flavor>/app_icon.png`
-3. Patches `flutter_launcher_icons-<flavor>.yaml` with the adaptive icon background color
-4. Patches `flutter_native_splash-<flavor>.yaml` with the splash background color
-5. Patches `lib/main_<flavor>.dart` with the primary / accent / bg colors
-6. Runs `dart run flutter_launcher_icons -f flutter_launcher_icons-<flavor>.yaml`
-7. Runs `dart run flutter_native_splash:create --flavor=<flavor>`
-8. Builds the release APK
+3. Fetches FCM config from `/api/v1/branding/<slug>/fcm-config` and writes it to `android/app/src/<flavor>/google-services.json` (skipped silently if not configured)
+4. Patches `flutter_launcher_icons-<flavor>.yaml` with the adaptive icon background color
+5. Patches `flutter_native_splash-<flavor>.yaml` with the splash background color
+6. Patches `lib/main_<flavor>.dart` with the primary / accent / bg colors
+7. Runs `dart run flutter_launcher_icons -f flutter_launcher_icons-<flavor>.yaml`
+8. Runs `dart run flutter_native_splash:create --flavor=<flavor>`
+9. Builds the release APK
 
 Output: `build/app/outputs/flutter-apk/app-<flavor>-release.apk`
 
@@ -211,3 +227,5 @@ flutter_native_splash:
 | Colors wrong in app | Ensure Primary/Accent/Splash colors are saved in App Branding on the server |
 | Gradle build fails | Run `flutter clean` first, then re-run the build script |
 | `assets/icon/<flavor>/` not found | Add the directory to `flutter.assets` in `pubspec.yaml` |
+| Push notifications not received | Paste FCM Service Account JSON and google-services.json into the company's Firebase settings on the admin panel, then rebuild |
+| `google-services.json` missing from build | Check that the FCM config endpoint returns 200 for the slug; the build skips it silently on 404 |
