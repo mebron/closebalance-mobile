@@ -47,6 +47,9 @@ Future<void> main(List<String> args) async {
   if (branding != null) {
     _log('Branding loaded from server.');
 
+    // Step 1b — Download google-services.json for this flavor.
+    await _downloadGoogleServicesJson(slug, flavor);
+
     // Step 2 — Download icon if available.
     final iconUrl = branding['icon_url'] as String?;
     if (iconUrl != null && iconUrl.isNotEmpty) {
@@ -115,6 +118,39 @@ Future<Map<String, dynamic>?> _fetchBranding(String slug) async {
   } catch (e) {
     _log('Could not reach branding API: $e');
     return null;
+  }
+}
+
+Future<void> _downloadGoogleServicesJson(String slug, String flavor) async {
+  try {
+    final client = HttpClient();
+    final req = await client.getUrl(
+      Uri.parse('$apiBaseUrl/api/v1/branding/$slug/fcm-config'),
+    );
+    final res = await req.close();
+
+    if (res.statusCode == 404) {
+      _log('FCM config not configured for $slug — skipping google-services.json');
+      client.close();
+      return;
+    }
+
+    if (res.statusCode != 200) {
+      _log('FCM config endpoint returned ${res.statusCode} — skipping');
+      client.close();
+      return;
+    }
+
+    final body = await res.transform(utf8.decoder).join();
+    client.close();
+
+    final targetPath = 'android/app/src/$flavor/google-services.json';
+    final file = File(targetPath);
+    await file.parent.create(recursive: true);
+    await file.writeAsString(body);
+    _log('google-services.json written to $targetPath');
+  } catch (e) {
+    _log('Could not download google-services.json: $e — using existing file');
   }
 }
 
