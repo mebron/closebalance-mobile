@@ -31,7 +31,7 @@ abstract class DailyClosing with _$DailyClosing {
     @JsonKey(name: 'aggregator_collections') @Default(0.0) double aggregatorCollections,
     @JsonKey(name: 'total_counter_paid') @Default(0.0) double totalCounterPaid,
     @JsonKey(name: 'cash_in_hand') @Default(0.0) double cashInHand,
-    @JsonKey(name: 'net_profit') @Default(0.0) double netProfit,
+    @JsonKey(name: 'net_balance') @Default(0.0) double netProfit,
     @Default(<SaleLine>[]) List<SaleLine> sales,
     @Default(<ExpenseLine>[]) List<ExpenseLine> expenses,
     @Default(<Deduction>[]) List<Deduction> deductions,

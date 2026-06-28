@@ -17,7 +17,7 @@ _DailyBranchRow _$DailyBranchRowFromJson(Map<String, dynamic> json) =>
       totalSales: (json['total_sales'] as num?)?.toDouble() ?? 0.0,
       totalExpenses: (json['total_expenses'] as num?)?.toDouble() ?? 0.0,
       cashInHand: (json['cash_in_hand'] as num?)?.toDouble() ?? 0.0,
-      netProfit: (json['net_profit'] as num?)?.toDouble() ?? 0.0,
+      netProfit: (json['net_balance'] as num?)?.toDouble() ?? 0.0,
     );
 
 Map<String, dynamic> _$DailyBranchRowToJson(_DailyBranchRow instance) =>
@@ -29,7 +29,7 @@ Map<String, dynamic> _$DailyBranchRowToJson(_DailyBranchRow instance) =>
       'total_sales': instance.totalSales,
       'total_expenses': instance.totalExpenses,
       'cash_in_hand': instance.cashInHand,
-      'net_profit': instance.netProfit,
+      'net_balance': instance.netProfit,
     };
 
 _ExpenseCategoryTotal _$ExpenseCategoryTotalFromJson(

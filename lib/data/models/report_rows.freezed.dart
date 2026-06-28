@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DailyBranchRow {
 
- int get id; String get date; String get status; Branch? get branch;@JsonKey(name: 'total_sales') double get totalSales;@JsonKey(name: 'total_expenses') double get totalExpenses;@JsonKey(name: 'cash_in_hand') double get cashInHand;@JsonKey(name: 'net_profit') double get netProfit;
+ int get id; String get date; String get status; Branch? get branch;@JsonKey(name: 'total_sales') double get totalSales;@JsonKey(name: 'total_expenses') double get totalExpenses;@JsonKey(name: 'cash_in_hand') double get cashInHand;@JsonKey(name: 'net_balance') double get netProfit;
 /// Create a copy of DailyBranchRow
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $DailyBranchRowCopyWith<$Res>  {
   factory $DailyBranchRowCopyWith(DailyBranchRow value, $Res Function(DailyBranchRow) _then) = _$DailyBranchRowCopyWithImpl;
 @useResult
 $Res call({
- int id, String date, String status, Branch? branch,@JsonKey(name: 'total_sales') double totalSales,@JsonKey(name: 'total_expenses') double totalExpenses,@JsonKey(name: 'cash_in_hand') double cashInHand,@JsonKey(name: 'net_profit') double netProfit
+ int id, String date, String status, Branch? branch,@JsonKey(name: 'total_sales') double totalSales,@JsonKey(name: 'total_expenses') double totalExpenses,@JsonKey(name: 'cash_in_hand') double cashInHand,@JsonKey(name: 'net_balance') double netProfit
 });
 
 
@@ -172,7 +172,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String date,  String status,  Branch? branch, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'net_profit')  double netProfit)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String date,  String status,  Branch? branch, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'net_balance')  double netProfit)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DailyBranchRow() when $default != null:
 return $default(_that.id,_that.date,_that.status,_that.branch,_that.totalSales,_that.totalExpenses,_that.cashInHand,_that.netProfit);case _:
@@ -193,7 +193,7 @@ return $default(_that.id,_that.date,_that.status,_that.branch,_that.totalSales,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String date,  String status,  Branch? branch, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'net_profit')  double netProfit)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String date,  String status,  Branch? branch, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'net_balance')  double netProfit)  $default,) {final _that = this;
 switch (_that) {
 case _DailyBranchRow():
 return $default(_that.id,_that.date,_that.status,_that.branch,_that.totalSales,_that.totalExpenses,_that.cashInHand,_that.netProfit);case _:
@@ -213,7 +213,7 @@ return $default(_that.id,_that.date,_that.status,_that.branch,_that.totalSales,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String date,  String status,  Branch? branch, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'net_profit')  double netProfit)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String date,  String status,  Branch? branch, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'net_balance')  double netProfit)?  $default,) {final _that = this;
 switch (_that) {
 case _DailyBranchRow() when $default != null:
 return $default(_that.id,_that.date,_that.status,_that.branch,_that.totalSales,_that.totalExpenses,_that.cashInHand,_that.netProfit);case _:
@@ -228,7 +228,7 @@ return $default(_that.id,_that.date,_that.status,_that.branch,_that.totalSales,_
 @JsonSerializable()
 
 class _DailyBranchRow implements DailyBranchRow {
-  const _DailyBranchRow({required this.id, required this.date, required this.status, this.branch, @JsonKey(name: 'total_sales') this.totalSales = 0.0, @JsonKey(name: 'total_expenses') this.totalExpenses = 0.0, @JsonKey(name: 'cash_in_hand') this.cashInHand = 0.0, @JsonKey(name: 'net_profit') this.netProfit = 0.0});
+  const _DailyBranchRow({required this.id, required this.date, required this.status, this.branch, @JsonKey(name: 'total_sales') this.totalSales = 0.0, @JsonKey(name: 'total_expenses') this.totalExpenses = 0.0, @JsonKey(name: 'cash_in_hand') this.cashInHand = 0.0, @JsonKey(name: 'net_balance') this.netProfit = 0.0});
   factory _DailyBranchRow.fromJson(Map<String, dynamic> json) => _$DailyBranchRowFromJson(json);
 
 @override final  int id;
@@ -238,7 +238,7 @@ class _DailyBranchRow implements DailyBranchRow {
 @override@JsonKey(name: 'total_sales') final  double totalSales;
 @override@JsonKey(name: 'total_expenses') final  double totalExpenses;
 @override@JsonKey(name: 'cash_in_hand') final  double cashInHand;
-@override@JsonKey(name: 'net_profit') final  double netProfit;
+@override@JsonKey(name: 'net_balance') final  double netProfit;
 
 /// Create a copy of DailyBranchRow
 /// with the given fields replaced by the non-null parameter values.
@@ -273,7 +273,7 @@ abstract mixin class _$DailyBranchRowCopyWith<$Res> implements $DailyBranchRowCo
   factory _$DailyBranchRowCopyWith(_DailyBranchRow value, $Res Function(_DailyBranchRow) _then) = __$DailyBranchRowCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String date, String status, Branch? branch,@JsonKey(name: 'total_sales') double totalSales,@JsonKey(name: 'total_expenses') double totalExpenses,@JsonKey(name: 'cash_in_hand') double cashInHand,@JsonKey(name: 'net_profit') double netProfit
+ int id, String date, String status, Branch? branch,@JsonKey(name: 'total_sales') double totalSales,@JsonKey(name: 'total_expenses') double totalExpenses,@JsonKey(name: 'cash_in_hand') double cashInHand,@JsonKey(name: 'net_balance') double netProfit
 });
 
 

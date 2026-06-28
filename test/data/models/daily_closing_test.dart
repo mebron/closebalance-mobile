@@ -37,7 +37,7 @@ void main() {
       'aggregator_collections': 500.0,
       'total_counter_paid': 150.0,
       'cash_in_hand': 1550.0,
-      'net_profit': 4600.0,
+      'net_balance': 4600.0,
       'sales': [
         {'id': 1, 'payment_channel_id': 4,
          'payment_channel': {'id': 4, 'name': 'Cash', 'type': 'cash'}, 'amount': 2000.0},

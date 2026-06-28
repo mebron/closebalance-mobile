@@ -25,7 +25,7 @@ _DailyClosing _$DailyClosingFromJson(
       (json['aggregator_collections'] as num?)?.toDouble() ?? 0.0,
   totalCounterPaid: (json['total_counter_paid'] as num?)?.toDouble() ?? 0.0,
   cashInHand: (json['cash_in_hand'] as num?)?.toDouble() ?? 0.0,
-  netProfit: (json['net_profit'] as num?)?.toDouble() ?? 0.0,
+  netProfit: (json['net_balance'] as num?)?.toDouble() ?? 0.0,
   sales:
       (json['sales'] as List<dynamic>?)
           ?.map((e) => SaleLine.fromJson(e as Map<String, dynamic>))
@@ -63,7 +63,7 @@ Map<String, dynamic> _$DailyClosingToJson(_DailyClosing instance) =>
       'aggregator_collections': instance.aggregatorCollections,
       'total_counter_paid': instance.totalCounterPaid,
       'cash_in_hand': instance.cashInHand,
-      'net_profit': instance.netProfit,
+      'net_balance': instance.netProfit,
       'sales': instance.sales.map((e) => e.toJson()).toList(),
       'expenses': instance.expenses.map((e) => e.toJson()).toList(),
       'deductions': instance.deductions.map((e) => e.toJson()).toList(),

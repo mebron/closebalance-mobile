@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ReportSummary {
 
- String get date;@JsonKey(name: 'total_sales') double get totalSales;@JsonKey(name: 'cash_in_hand') double get cashInHand;@JsonKey(name: 'draft_closings') int get draftClosings;@JsonKey(name: 'finalized_closings') int get finalizedClosings;@JsonKey(name: 'total_expenses') double get totalExpenses;@JsonKey(name: 'net_profit') double get netProfit;
+ String get date;@JsonKey(name: 'total_sales') double get totalSales;@JsonKey(name: 'cash_in_hand') double get cashInHand;@JsonKey(name: 'draft_closings') int get draftClosings;@JsonKey(name: 'finalized_closings') int get finalizedClosings;@JsonKey(name: 'total_expenses') double get totalExpenses;@JsonKey(name: 'net_balance') double get netProfit;
 /// Create a copy of ReportSummary
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $ReportSummaryCopyWith<$Res>  {
   factory $ReportSummaryCopyWith(ReportSummary value, $Res Function(ReportSummary) _then) = _$ReportSummaryCopyWithImpl;
 @useResult
 $Res call({
- String date,@JsonKey(name: 'total_sales') double totalSales,@JsonKey(name: 'cash_in_hand') double cashInHand,@JsonKey(name: 'draft_closings') int draftClosings,@JsonKey(name: 'finalized_closings') int finalizedClosings,@JsonKey(name: 'total_expenses') double totalExpenses,@JsonKey(name: 'net_profit') double netProfit
+ String date,@JsonKey(name: 'total_sales') double totalSales,@JsonKey(name: 'cash_in_hand') double cashInHand,@JsonKey(name: 'draft_closings') int draftClosings,@JsonKey(name: 'finalized_closings') int finalizedClosings,@JsonKey(name: 'total_expenses') double totalExpenses,@JsonKey(name: 'net_balance') double netProfit
 });
 
 
@@ -159,7 +159,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String date, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'draft_closings')  int draftClosings, @JsonKey(name: 'finalized_closings')  int finalizedClosings, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'net_profit')  double netProfit)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String date, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'draft_closings')  int draftClosings, @JsonKey(name: 'finalized_closings')  int finalizedClosings, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'net_balance')  double netProfit)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ReportSummary() when $default != null:
 return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings,_that.finalizedClosings,_that.totalExpenses,_that.netProfit);case _:
@@ -180,7 +180,7 @@ return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String date, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'draft_closings')  int draftClosings, @JsonKey(name: 'finalized_closings')  int finalizedClosings, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'net_profit')  double netProfit)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String date, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'draft_closings')  int draftClosings, @JsonKey(name: 'finalized_closings')  int finalizedClosings, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'net_balance')  double netProfit)  $default,) {final _that = this;
 switch (_that) {
 case _ReportSummary():
 return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings,_that.finalizedClosings,_that.totalExpenses,_that.netProfit);case _:
@@ -200,7 +200,7 @@ return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String date, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'draft_closings')  int draftClosings, @JsonKey(name: 'finalized_closings')  int finalizedClosings, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'net_profit')  double netProfit)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String date, @JsonKey(name: 'total_sales')  double totalSales, @JsonKey(name: 'cash_in_hand')  double cashInHand, @JsonKey(name: 'draft_closings')  int draftClosings, @JsonKey(name: 'finalized_closings')  int finalizedClosings, @JsonKey(name: 'total_expenses')  double totalExpenses, @JsonKey(name: 'net_balance')  double netProfit)?  $default,) {final _that = this;
 switch (_that) {
 case _ReportSummary() when $default != null:
 return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings,_that.finalizedClosings,_that.totalExpenses,_that.netProfit);case _:
@@ -215,7 +215,7 @@ return $default(_that.date,_that.totalSales,_that.cashInHand,_that.draftClosings
 @JsonSerializable()
 
 class _ReportSummary implements ReportSummary {
-  const _ReportSummary({required this.date, @JsonKey(name: 'total_sales') required this.totalSales, @JsonKey(name: 'cash_in_hand') required this.cashInHand, @JsonKey(name: 'draft_closings') required this.draftClosings, @JsonKey(name: 'finalized_closings') required this.finalizedClosings, @JsonKey(name: 'total_expenses') required this.totalExpenses, @JsonKey(name: 'net_profit') this.netProfit = 0.0});
+  const _ReportSummary({required this.date, @JsonKey(name: 'total_sales') required this.totalSales, @JsonKey(name: 'cash_in_hand') required this.cashInHand, @JsonKey(name: 'draft_closings') required this.draftClosings, @JsonKey(name: 'finalized_closings') required this.finalizedClosings, @JsonKey(name: 'total_expenses') required this.totalExpenses, @JsonKey(name: 'net_balance') this.netProfit = 0.0});
   factory _ReportSummary.fromJson(Map<String, dynamic> json) => _$ReportSummaryFromJson(json);
 
 @override final  String date;
@@ -224,7 +224,7 @@ class _ReportSummary implements ReportSummary {
 @override@JsonKey(name: 'draft_closings') final  int draftClosings;
 @override@JsonKey(name: 'finalized_closings') final  int finalizedClosings;
 @override@JsonKey(name: 'total_expenses') final  double totalExpenses;
-@override@JsonKey(name: 'net_profit') final  double netProfit;
+@override@JsonKey(name: 'net_balance') final  double netProfit;
 
 /// Create a copy of ReportSummary
 /// with the given fields replaced by the non-null parameter values.
@@ -259,7 +259,7 @@ abstract mixin class _$ReportSummaryCopyWith<$Res> implements $ReportSummaryCopy
   factory _$ReportSummaryCopyWith(_ReportSummary value, $Res Function(_ReportSummary) _then) = __$ReportSummaryCopyWithImpl;
 @override @useResult
 $Res call({
- String date,@JsonKey(name: 'total_sales') double totalSales,@JsonKey(name: 'cash_in_hand') double cashInHand,@JsonKey(name: 'draft_closings') int draftClosings,@JsonKey(name: 'finalized_closings') int finalizedClosings,@JsonKey(name: 'total_expenses') double totalExpenses,@JsonKey(name: 'net_profit') double netProfit
+ String date,@JsonKey(name: 'total_sales') double totalSales,@JsonKey(name: 'cash_in_hand') double cashInHand,@JsonKey(name: 'draft_closings') int draftClosings,@JsonKey(name: 'finalized_closings') int finalizedClosings,@JsonKey(name: 'total_expenses') double totalExpenses,@JsonKey(name: 'net_balance') double netProfit
 });
 
 
