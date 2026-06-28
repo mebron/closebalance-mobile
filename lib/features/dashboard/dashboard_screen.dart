@@ -206,7 +206,7 @@ class _HeroCard extends StatelessWidget {
             _divider(),
             _stat('Expenses', formatMoney(s.totalExpenses, symbol)),
             _divider(),
-            _stat('Net Profit', formatMoney(s.netProfit, symbol), green: true),
+            _stat('Net Balance', formatMoney(s.netProfit, symbol)),
           ]),
         ],
       ),
@@ -217,7 +217,7 @@ class _HeroCard extends StatelessWidget {
       width: 1, height: 28, color: Colors.white24,
       margin: const EdgeInsets.symmetric(horizontal: 12));
 
-  Widget _stat(String label, String value, {bool green = false}) => Expanded(
+  Widget _stat(String label, String value) => Expanded(
         child: Builder(
           builder: (context) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -232,9 +232,7 @@ class _HeroCard extends StatelessWidget {
               Text(
                 value,
                 style: TextStyle(
-                  color: green
-                      ? Theme.of(context).colorScheme.secondary
-                      : Theme.of(context).colorScheme.onPrimary,
+                  color: Theme.of(context).colorScheme.onPrimary,
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                 ),

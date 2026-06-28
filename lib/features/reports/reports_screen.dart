@@ -94,10 +94,13 @@ class ReportsScreen extends ConsumerWidget {
                   _Row(label: 'Expenses', value: formatMoney(r.totalExpenses, symbol)),
                   _Row(label: 'Deductions', value: formatMoney(r.totalDeductions, symbol)),
                   _Row(
-                      label: 'Net Profit',
+                      label: 'Net Balance',
                       value: formatMoney(r.netProfit, symbol),
                       green: true),
-                  _Row(label: 'Closings finalized', value: '${r.finalizedClosings}'),
+                  _Row(
+                      label: 'Closings finalized',
+                      value: r.finalizedClosings > 0 ? 'Finalized' : 'Open',
+                      green: r.finalizedClosings > 0),
                 ]),
               ),
             ),

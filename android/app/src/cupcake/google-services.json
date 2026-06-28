@@ -1,9 +1,1 @@
-{
-  "project_info": {
-    "project_number": "000000000000",
-    "project_id": "placeholder",
-    "storage_bucket": "placeholder.appspot.com"
-  },
-  "client": [],
-  "configuration_version": "1"
-}
+{"project_info":{"project_number":"133031084022","project_id":"cupcake-e0a96","storage_bucket":"cupcake-e0a96.firebasestorage.app"},"client":[{"client_info":{"mobilesdk_app_id":"1:133031084022:android:5e01c17669e22c961291d7","android_client_info":{"package_name":"com.closebalance.cupcake"}},"oauth_client":[],"api_key":[{"current_key":"AIzaSyCIhi6i6FhVSUWNK6Rk0SS3nOvGyNaZOyE"}],"services":{"appinvite_service":{"other_platform_oauth_client":[]}}}],"configuration_version":"1"}
